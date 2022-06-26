@@ -1,5 +1,7 @@
 
-class TableData:
+class TableData():
+
+
 
     users = """ CREATE TABLE IF NOT EXISTS users (
 					id integer PRIMARY KEY,
@@ -52,4 +54,13 @@ class TableData:
 					image TEXT NOT NULL
 					); """
 
+
+
+    Tables = [
+        users,
+        orders,
+        menus,
+        gift_cards,
+        foods,
+    ]
 

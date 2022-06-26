@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Error
-
+from TablesData import TableData
 
 class Database:
 
@@ -44,3 +44,13 @@ class Database:
 
         except Error as e:
             return e
+
+
+
+    @staticmethod
+    def Initialize():
+        """create all database tables"""
+
+        for tableData in TableData.Tables:
+            Database.CreateTable(tableData)
+        
