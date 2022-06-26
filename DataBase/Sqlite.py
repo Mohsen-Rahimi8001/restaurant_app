@@ -1,11 +1,11 @@
 import sqlite3
 from sqlite3 import Error
-from TablesData import TableData
+from DataBase.TablesData import TableData
 
 class Database:
 
     DatabaseName = "database.db"
-    DatabaseDir = ".\\"
+    DatabaseDir = "./DataBase/"
 
 
     @staticmethod
@@ -16,9 +16,9 @@ class Database:
 
     @staticmethod
     def Connection():
-        """make an sqlite connection"""
+        """make an sqlite Database.Connection"""
 
-        sqlite_file = Database.GetDatabasePath()
+        sqlite_file : str = Database.GetDatabasePath()
         if not sqlite_file:
             return
 
@@ -37,7 +37,7 @@ class Database:
         """add table to database"""
 
         try:
-            handle = connection( Database.GetDatabasePath() )
+            handle = Database.Connection()
             curs = handle.cursor()
             curs.execute(SqliteTableData)
             handle.close()
@@ -53,4 +53,3 @@ class Database:
 
         for tableData in TableData.Tables:
             Database.CreateTable(tableData)
-        
