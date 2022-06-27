@@ -4,7 +4,7 @@ class TableData():
 
 
     users = """ CREATE TABLE IF NOT EXISTS users (
-				id integer PRIMARY KEY,
+				id integer PRIMARY KEY AUTOINCREMENT,
 				first_name TEXT NOT NULL,
 				last_name TEXT NOT NULL,
 				email TEXT NOT NULL,
@@ -19,7 +19,7 @@ class TableData():
 
 
     orders = """ CREATE TABLE IF NOT EXISTS orders (
-    			id integer PRIMARY KEY,
+    			id integer PRIMARY KEY AUTOINCREMENT,
     			foods TEXT,
     			date TEXT NOT NULL,
     			paid INTEGER DEFAULT 0,
@@ -29,21 +29,21 @@ class TableData():
 
 
     menus = """ CREATE TABLE IF NOT EXISTS menus (
-        		id integer PRIMARY KEY,
+        		id integer PRIMARY KEY AUTOINCREMENT,
         		foods TEXT,
         		date TEXT NOT NULL
         		); """
 
 
     gift_cards = """ CREATE TABLE IF NOT EXISTS gift_cards (
-            		id integer PRIMARY KEY,
+            		id integer PRIMARY KEY AUTOINCREMENT,
             		code TEXT NOT NULL,
             		expiration_date TEXT NOT NULL
             		); """
 
 
     foods = """ CREATE TABLE IF NOT EXISTS foods (
-				id integer PRIMARY KEY,
+				id integer PRIMARY KEY AUTOINCREMENT,
 				title TEXT NOT NULL,
 				stock INTEGER NOT NULL DEFAULT 1,
 				fixed_price INTEGER NOT NULL,
