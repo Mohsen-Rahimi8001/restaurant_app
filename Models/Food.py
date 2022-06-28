@@ -1,11 +1,13 @@
 from Models.Model import Model
 from DataBase.Sqlite import Database
-
+import os
 
 class Food(Model):
+    
+    default_image = r'.\Resources\Images\food_default.png'
 
     def __init__(self, id:int, title:str, stock:int, sale_price:int, fixed_price:int,\
-         description:str, category:str, materials:str, image:str) -> None:
+         description:str, category:str, materials:str, image:str=None) -> None:
         """
         Constructor for Food class
         :param id: The id of the food
@@ -26,7 +28,11 @@ class Food(Model):
         self.description = description
         self.category = category
         self.materials = materials
-        self.image = image
+        
+        if image is None:
+            self.image = Food.default_image
+        else:
+            self.image = image
     
     @property
     def stock(self):
@@ -68,7 +74,12 @@ class Food(Model):
     @image.setter
     def image(self, new_image:str):
         if not isinstance(new_image, str):
-            raise TypeError("image must be a string")
+            self._image = Food.default_image
+            raise TypeError("image must be a string.")
+
+        if not os.path.exists(new_image):
+            self._image = Food.default_image
+            raise FileNotFoundError("image file not found.")    
 
         self._image = new_image
 
