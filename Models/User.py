@@ -1,6 +1,8 @@
 from Models.Model import Model
 from DataBase.Sqlite import Database
 import json
+from Models.Order import Order
+from Models.Food import Food
 
 class User(Model):
 
@@ -26,6 +28,7 @@ class User(Model):
 
     @staticmethod
     def Create(data : dict):
+        """create new user in database"""
 
         data["orders"] = ""
         data["cart"] = ""
@@ -43,7 +46,8 @@ class User(Model):
 
 
     @staticmethod
-    def Get(id: int):
+    def Get(id: int) -> "User":
+        """returns a user Model object representing a row in users table"""
 
         if not User.Exists(id):
             raise RuntimeError("user does not exists")
@@ -66,12 +70,40 @@ class User(Model):
 
 
     @staticmethod
+    def GetAll() -> list:
+        """get all users"""
+
+        rows = Database.ReadAll(User.TableName)
+
+        users = list()
+
+        for row in rows:
+            users.append(User(
+                id = row[0],
+                first_name = row[1],
+                last_name = row[2],
+                email = row[3],
+                phone_number = row[4],
+                social_number = row[5],
+                image = row[6],
+                password = row[7],
+                role = row[8],
+                orders = json.loads(row[9]),
+                cart = json.loads(row[10])
+        ))
+
+        return users
+
+
+    @staticmethod
     def Exists(id: int):
+        """check if a user exists in database or not"""
         return Database.Exists(User.TableName, User.PrimaryKey, id)
 
 
     @staticmethod
     def Update(id: int, data : dict):
+        """update user"""
 
         if not User.Exists(id):
             raise RuntimeError("user does not exists")
@@ -97,6 +129,7 @@ class User(Model):
 
     @staticmethod
     def Delete(id: int):
+        """delete user"""
 
         if not User.Exists(id):
             raise RuntimeError("user does not exists")
@@ -105,6 +138,46 @@ class User(Model):
 
 
 
+    #cart methods
 
+    def addFoodToCart(self, food) -> None:
+        """add a food to user cart
+            :param food can be Food object or food table id
+        """
+
+        if isinstance(food, Food):
+            self.cart.append(food.id)
+
+        if isinstance(food, int):
+            if Food.Exists(food):
+                self.cart.append(food)
+
+        User.Update(self.id, {"cart": self.cart})
+
+
+    def removeFoodFromCart(self, food) -> None:
+        """remove a food from user cart
+            :param food can be Food object or food table id
+        """
+
+        if isinstance(food, Food):
+            id = food.id
+        else:
+            id = food
+
+        if id in self.cart:
+            self.cart.remove(id)
+            User.Update(self.id, {"cart": self.cart})
+
+
+    def getCartFoods(self) -> list:
+        """get Food object for each food in user cart"""
+
+        foods = []
+
+        for foodId in self.cart:
+            foods.append(Food.Get(foodId))
+
+        return foods
 
 
