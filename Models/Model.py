@@ -12,6 +12,10 @@ class Model:
         raise NotImplementedError
 
     @staticmethod
+    def GetAll():
+        raise NotImplementedError
+
+    @staticmethod
     def Exists(id : int):
         raise NotImplementedError
 
