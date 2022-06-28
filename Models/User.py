@@ -1,5 +1,6 @@
 from Models.Model import Model
 from DataBase.Sqlite import Database
+import json
 
 class User(Model):
 
@@ -33,6 +34,10 @@ class User(Model):
         if not "role" in data.keys():
             data["role"] = 1
 
+        #set default value for image
+        if not "image" in data.keys():
+            data["image"] = "default_user.png"
+
         lastRow = Database.Create(User.TableName, data)
         return lastRow
 
@@ -55,8 +60,8 @@ class User(Model):
             image = row[6],
             password = row[7],
             role = row[8],
-            orders = row[9].split(),
-            cart = row[10].split()
+            orders = json.loads(row[9]),
+            cart = json.loads(row[10])
         )
 
 
@@ -74,6 +79,18 @@ class User(Model):
         #update the role is forbidden
         if "role" in data.keys():
             data.pop("role")
+
+        #can't update id
+        if "id" in data.keys():
+            data.pop("id")
+
+        #convert lists to json
+        if "orders" in data.keys():
+            data["orders"] = json.dumps(data["order"])
+
+        if "cart" in data.keys():
+            data["cart"] = json.dumps(data["cart"])
+
 
         Database.Update(User.TableName, User.PrimaryKey, id, data)
 
