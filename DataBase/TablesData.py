@@ -24,7 +24,9 @@ class TableData():
     			date TEXT NOT NULL,
     			paid INTEGER DEFAULT 0,
     			reference_number TEXT,
-    			delivered INTEGER DEFAULT 0
+    			delivered INTEGER DEFAULT 0,
+    			user_id INTEGER NOT NULL,
+    			account_number TEXT,
     			); """
 
 
