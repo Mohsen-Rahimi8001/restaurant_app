@@ -1,5 +1,6 @@
 import unittest
 from Unittests.Models import FoodTest
+from Unittests.Database import SqliteTest
 
 
 def run(test_class):
@@ -12,6 +13,7 @@ def run(test_class):
 def run_tests():
     """run tests on models"""
     run(FoodTest.TestFood)
+    run(SqliteTest.TestDataBase)
 
 if __name__ == "__main__":
     run_tests()
