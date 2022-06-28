@@ -1,5 +1,7 @@
 from Models.Model import Model
 from DataBase.Sqlite import Database
+from Models.Food import Food
+import json
 
 class Order(Model):
 
@@ -26,7 +28,7 @@ class Order(Model):
         """create new order in database"""
 
         #initial conditions
-        data["foods"] = ""
+        data["foods"] = json.dumps(data["foods"])
         data["paid"] = 0
         data["reference_number"] = ""
         data["delivered"] = 0
@@ -46,7 +48,7 @@ class Order(Model):
 
         return Order(
             id = row[0],
-            foods = row[1].split(),
+            foods = json.loads(row[1]),
             date = row[2],
             paid = row[3],
             reference_number = row[4],
@@ -64,10 +66,10 @@ class Order(Model):
 
         orders = list()
 
-        for date in rows:
+        for row in rows:
             orders.append(Order(
                 id=row[0],
-                foods=row[1].split(),
+                foods=json.loads(row[1]),
                 date=row[2],
                 paid=row[3],
                 reference_number=row[4],
@@ -97,6 +99,8 @@ class Order(Model):
         if "id" in data.keys():
             data.pop("id")
 
+        data["foods"] = json.dumps(data["foods"])
+
         Database.Update(Order.TableName, Order.PrimaryKey, id)
 
 
@@ -111,7 +115,53 @@ class Order(Model):
 
 
 
-    
+    #work with foods
+
+    def addFood(self, food) -> None:
+        """add a food to order
+            :param food can be Food object or food table id
+        """
+
+        if isinstance(food, Food):
+            self.foods.append(food.id)
+
+        if isinstance(food, int):
+            if Food.Exists(food):
+                self.foods.append(food)
+
+        Order.Update(self.id, {"foods" : self.foods})
+
+
+    def removeFood(self, food) -> None:
+        """remove a food from order
+            :param food can be Food object or food table id
+        """
+
+        if isinstance(food, Food):
+            id = food.id
+        else:
+            id = food
+
+        if id in self.foods:
+            self.foods.remove(id)
+            Order.Update(self.id, {"foods": self.foods})
+
+
+    def getAllFoods(self) -> list:
+        """get Food object for each food in order"""
+
+        foods = []
+
+        for foodId in self.foods:
+            foods.append(Food.Get(foodId))
+
+        return foods
+
+
+
+
+
+
 
 
 
