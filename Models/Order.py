@@ -147,7 +147,7 @@ class Order(Model):
             Order.Update(self.id, {"foods": self.foods})
 
 
-    def getAllFoods(self) -> list:
+    def getFoods(self) -> list:
         """get Food object for each food in order"""
 
         foods = []
@@ -159,8 +159,23 @@ class Order(Model):
 
 
 
+    #properties
 
+    foods = property(fget = getFoods)
 
+    def getUserId(self):
+        return self.__user_id
+
+    def setUserId(self, id):
+
+        if not isinstance(id, int) or not id >= 0:
+            raise TypeError("invalid user_id")
+
+        self.__user_id = id
+
+    user_id = property(fget = getUserId, fset = setUserId)
+
+    
 
 
 
