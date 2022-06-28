@@ -82,9 +82,13 @@ class Database:
         data = dict(data)
         if not data:
             return False
-
-        query = """ INSERT INTO {tablename} {keys} VALUES {values}""".format(tablename=table, keys=tuple(data),
+        
+        if len(data) == 1:
+            query = f"""INSERT INTO {table} VALUES ({data.popitem()[1]})"""
+        else:
+            query = """ INSERT INTO {tablename} {keys} VALUES {values}""".format(tablename=table, keys=tuple(data),
                                                                              values=tuple(data.values()))
+
         try:
             handle = Database.Connection()
             curs = handle.cursor()
@@ -93,6 +97,27 @@ class Database:
             handle.close()
             return curs.lastrowid
 
+        except Error as e:
+            raise e
+
+
+    @staticmethod
+    def CreateMany(table : str, records : list[tuple]):
+        """add multiple rows to table"""
+
+        if not records:
+            return None
+        
+        query = f"""INSERT INTO {table} VALUES ({('?,' * len(records[0]))[:-1]})"""
+        
+        try:
+            handle = Database.Connection()
+            curs = handle.cursor()
+            curs.executemany(query, records)
+            handle.commit()
+            handle.close()
+            return curs.lastrowid
+        
         except Error as e:
             return e
 
