@@ -3,24 +3,22 @@ class Model:
     def __init__(self, id : int):
         self.id : int = id
 
+    @staticmethod
+    def Create(data):
+        raise NotImplementedError
 
-    def Create(self, data):
-        pass
+    @staticmethod
+    def Get(id : int):
+        raise NotImplementedError
 
+    @staticmethod
+    def Exists(id : int):
+        raise NotImplementedError
 
-    def Get(self, id : int):
-        pass
+    @staticmethod
+    def Update(id : int, data):
+        raise NotImplementedError
 
-
-    def Exists(self, id : int):
-        pass
-
-
-    def Update(self, id : int, data):
-        pass
-
-
-    def Delete(self, id : int):
-        pass
-
-
+    @staticmethod
+    def Delete(id : int):
+        raise NotImplementedError
