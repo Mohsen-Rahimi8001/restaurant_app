@@ -22,3 +22,18 @@ class Model:
     @staticmethod
     def Delete(id : int):
         raise NotImplementedError
+
+
+    #properties
+
+    def getId(self) -> int:
+        return self.__id
+
+    def setId(self, id):
+
+        if not isinstance(id, int) or not id >= 0:
+            raise TypeError("invalid id")
+
+        self.__id = id
+
+    id = property(fget = getId, fset = setId)
