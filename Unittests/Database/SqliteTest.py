@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, Mock
+from unittest.mock import Mock
 from DataBase.Sqlite import Database
 from DataBase.TablesData import TableData
 import sqlite3

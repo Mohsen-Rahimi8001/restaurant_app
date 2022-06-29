@@ -8,12 +8,12 @@ class GiftCard(Model):
     PrimaryKey = 'id'
     TableName = 'gift_cards'
 
-    def __init__(self, id:int, start_date:"dt.datetime", expiration_date:"dt.datetime", code:str=None) -> None:
+    def __init__(self, id:int, start_date:str, expiration_date:str, code:str=None) -> None:
         """
-        :param id: int
-        :param code: str
-        :param start_date: dt.datetime
-        :param expiration_date: dt.datetime
+        :param id: The id of the gift card
+        :param code: The code of the gift card
+        :param start_date: Use the format Year-Month-Day
+        :param expiration_date: Use the format Year-Month-Day
         """
         super(GiftCard, self).__init__(id)
         self.id = id
@@ -22,13 +22,14 @@ class GiftCard(Model):
         self.expiration_date = expiration_date
     
     def __str__(self):
-        return f'GiftCard({self.id}-{self.code}-{self.expiration_date})'
+        return f'GiftCard({self.id},{self.code},{self.start_date.date()},{self.expiration_date.date()})'
     
     def __repr__(self):
-        return f'GiftCard({self.id}-{self.code}-{self.expiration_date})'
+        return f'GiftCard({self.id},{self.code},{self.start_date.date()},{self.expiration_date.date()})'
 
     @staticmethod
-    def GetDefaultCode():
+    def GetDefaultCode() -> str:
+        """Returns the current system datetime as the default code"""
         return dt.datetime.now().strftime("%Y%m%d%H%M%S")
     
     @property
@@ -44,10 +45,6 @@ class GiftCard(Model):
         elif not isinstance(new_code, str):
             raise TypeError("invalid code")
 
-        # check if the code is already in the database
-        elif GiftCard.GetByCode(new_code) is not None:
-            raise ValueError("code already exists")
-        
         else:
             self._code = new_code
 
@@ -58,8 +55,28 @@ class GiftCard(Model):
     @expiration_date.setter
     def expiration_date(self, new_expiration_date:str):
         try:
-            expiration_data_dt = dt.datetime.strptime(new_expiration_date, '%Y-%m-%d')
-            self._expiration_date = expiration_data_dt
+            expiration_date_dt = dt.datetime.strptime(new_expiration_date, '%Y-%m-%d')
+            
+            if expiration_date_dt < self.start_date:
+                raise ValueError("expiration date must be after start date")
+
+            self._expiration_date = expiration_date_dt
+        except ValueError:
+            raise ValueError('Invalid date format. Use this format "Year-Month-Day"')
+
+    @property
+    def start_date(self):
+        return self._start_date
+    
+    @start_date.setter
+    def start_date(self, new_start_date:str):
+        try:
+            start_date_dt = dt.datetime.strptime(new_start_date, '%Y-%m-%d')
+            
+            if start_date_dt < dt.datetime.now():
+                raise ValueError('Start date must be today or after today')
+            
+            self._start_date = start_date_dt
         except ValueError:
             raise ValueError('Invalid date format. Use this format "Year-Month-Day"')
 
@@ -69,6 +86,10 @@ class GiftCard(Model):
         
         if 'code' not in data:
             data['code'] = GiftCard.GetDefaultCode()
+
+        # check if the code is already in the database
+        elif GiftCard.ExistsByKey('code', data['code']):
+            raise ValueError("code already exists")
 
         return Database.Create(GiftCard.TableName, data)
         
@@ -82,7 +103,7 @@ class GiftCard(Model):
 
         fetched_row = fetched_row[0]
 
-        return GiftCard(fetched_row[0], fetched_row[1], fetched_row[2], fetched_row[3])
+        return GiftCard(id=fetched_row[0], code=fetched_row[1], start_date=fetched_row[2], expiration_date=fetched_row[3])
 
     @staticmethod
     def GetAll() -> list['GiftCard']:
@@ -92,15 +113,25 @@ class GiftCard(Model):
         giftCards = []
 
         for row in fetched_rows:
-            giftCards.append(GiftCard(row[0], row[1], row[2], row[3]))
+            giftCards.append(GiftCard(
+                id=row[0],
+                code=row[1],
+                start_date=row[2],
+                expiration_date=row[3]
+                ))
 
         return giftCards
 
     @staticmethod
     def Exists(id: int) -> bool:
         """Check if a GiftCard exists in the database."""
-        return Database.Exists(GiftCard.TableName, id)
-        
+        return Database.Exists(GiftCard.TableName, GiftCard.PrimaryKey, id)
+    
+    @staticmethod
+    def ExistsByKey(key:str, value):
+        """Check if a GiftCard exists in the database."""
+        return Database.Exists(GiftCard.TableName, key, value)
+
     @staticmethod
     def Update(id:int, data:dict) -> None:
         """Update a GiftCard in the database."""
@@ -116,9 +147,9 @@ class GiftCard(Model):
         Database.Delete(GiftCard.TableName, id)
 
     @staticmethod
-    def GetByCode(code:str) -> 'GiftCard':
+    def GetByKey(key:str, value) -> 'GiftCard':
         """Get a GiftCard from the database by its code."""
-        fetched_data = Database.Read(GiftCard.TableName, 'code', code)
+        fetched_data = Database.Read(GiftCard.TableName, key, value)
         
         if not len(fetched_data):
             return None
@@ -127,7 +158,7 @@ class GiftCard(Model):
 
         id = fetched_data[0]
         code = fetched_data[1]
-        start_date = dt.datetime.strptime(fetched_data[2], '%Y%m%d%H%M%S')
+        start_date = dt.datetime.strptime(fetched_data[2], '%Y-%m-%d')
         expiration_date = dt.datetime.strptime(fetched_data[3], '%Y-%m-%d')
 
-        return GiftCard(id=id, code=code,start_data=start_date, expiration_date=expiration_date)
+        return GiftCard(id=id, code=code, start_date=start_date, expiration_date=expiration_date)
