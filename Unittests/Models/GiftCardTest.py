@@ -9,14 +9,17 @@ import os
 class TestGiftCard(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        """Mock the Database"""
+        # Mock the Database functionalities
         Database.GetDatabasePath = Mock(return_value='test.db')
         Database.Initialize()
     
     @classmethod
     def tearDownClass(cls):
-        """Delete the test db"""
+        # Delete the test db
         os.remove('test.db')
+
+    def setUp(self):
+        Database.DeleteAll('gift_cards') # deletes all rows of the gift_cards table
 
     def test_init(self):
         with patch('Models.GiftCard.GiftCard.GetDefaultCode', return_value='123456789'):
@@ -29,7 +32,6 @@ class TestGiftCard(unittest.TestCase):
             self.assertEqual(gc.expiration_date, dt.datetime.strptime(expiration_date, '%Y-%m-%d'))
 
     def test_setters(self):
-        """Check for error raises in setters"""
         gc = GiftCard(2, '2029-01-01', '2029-01-02', '123456')
 
         with self.assertRaises(TypeError):
@@ -46,3 +48,71 @@ class TestGiftCard(unittest.TestCase):
         
         with self.assertRaises(ValueError):
             gc.expiration_date = '2029,01,02'
+
+    def test_Create(self):
+        # Add a new gift card
+        Database.Create('gift_cards', {'start_date': '2029-01-01', 'expiration_date': '2029-01-02', 'code': '123456'})
+        
+        # try add a gift card with the same code
+        with self.assertRaises(ValueError):
+            GiftCard.Create({'start_date': '2029-01-01', 'expiration_date': '2029-01-02', 'code': '123456'})
+        
+        # check errors might happen
+        # wrong start_date
+        with self.assertRaises(ValueError):
+            GiftCard.Create({'start_date': '2020-01-01', 'expiration_date': '2029-01-02', 'code': '2589'})
+        
+        # wrong expiration_date
+        with self.assertRaises(ValueError):
+            GiftCard.Create({'start_date': '2029-01-01', 'expiration_date': '2020-01-02', 'code': '2589'})
+
+        GiftCard.Create({'id':15, 'start_date': '2029-01-01', 'expiration_date': '2029-01-02', 'code': '123457'})
+        self.assertTrue(Database.Exists('gift_cards', 'id', 15))
+
+    def test_Get(self):
+        Database.Create('gift_cards', {'id':10, 'start_date': '2029-01-01', 'expiration_date': '2029-01-02', 'code': 'test_get'})
+        gc = GiftCard.Get(10)
+        self.assertEqual(gc, GiftCard(10, '2029-01-01', '2029-01-02', 'test_get'))
+
+    def test_GetAll(self):
+        Database.Create('gift_cards', {'id':1, 'start_date': '2029-01-01', 'expiration_date': '2029-01-02', 'code': 'test_get_all'})
+        Database.Create('gift_cards', {'id':2, 'start_date': '2029-01-01', 'expiration_date': '2029-01-02', 'code': 'test_get_all2'})
+        gc = GiftCard.GetAll()
+        self.assertEqual(gc, [GiftCard(1, '2029-01-01', '2029-01-02', 'test_get_all'), GiftCard(2, '2029-01-01', '2029-01-02', 'test_get_all2')])
+
+    def test_GetByKey(self):
+        Database.Create('gift_cards', {'id':1, 'start_date': '2029-01-01', 'expiration_date': '2029-01-02', 'code': 'test_get_by_code'})
+        Database.Create('gift_cards', {'id':2, 'start_date': '2029-01-01', 'expiration_date': '2029-01-02', 'code': 'test_get_by_code2'})
+        Database.Create('gift_cards', {'id':3, 'start_date': '2029-01-02', 'expiration_date': '2029-01-02', 'code': 'test_get_by_code3'})
+        gc = GiftCard.GetByKey('start_date', '2029-01-01')
+        self.assertEqual(gc, [GiftCard(1, '2029-01-01', '2029-01-02', 'test_get_by_code'), GiftCard(2, '2029-01-01', '2029-01-02', 'test_get_by_code2')])
+
+    def test_Update(self):
+        # create a row
+        Database.Create('gift_cards', {'id':1, 'start_date': '2029-01-01', 'expiration_date': '2029-01-02', 'code': 'test_update'})
+        # update the row
+        GiftCard.Update(1, {'start_date': '2029-01-01', 'expiration_date': '2029-02-02', 'code': 'test_update2'})
+        
+        # check if the row was updated
+        gc = GiftCard.Get(1)
+        self.assertEqual(gc, GiftCard(1, '2029-01-01', '2029-02-02', 'test_update2'))
+
+        # check errors might happen
+
+        with self.assertRaises(ValueError):
+            GiftCard.Update(1, {'start_date': '1-01-01', 'expiration_date': '2029-02-02', 'code': 'test_update2'})
+        
+        with self.assertRaises(ValueError):
+            GiftCard.Update(1, {'start_date': '2029-01-01', 'expiration_date': '2028-02-02', 'code': 'test_update2'})
+
+        with self.assertRaises(ValueError):
+            GiftCard.Update(-1, {'start_date': '2029-01-01', 'expiration_date': '2029-02-02', 'code': 'test_update2'})
+        
+        with self.assertRaises(TypeError):
+            GiftCard.Update(1, {'start_date': '2029-01-01', 'expiration_date': '2029-02-02', 'code': 1})
+        
+        with self.assertRaises(ValueError):
+            GiftCard.Update('1', {'start_date': '2029-01-01', 'expiration_date': '2029-02-02', 'code': 'test_update2'})
+
+        with self.assertRaises(ValueError):
+            GiftCard.Update(1, {'id' : 2, 'start_date': '2029-01-01', 'expiration_date': '2029-02-02', 'code': 'test_update2'})
