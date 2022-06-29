@@ -40,6 +40,7 @@ class TableData():
     gift_cards = """ CREATE TABLE IF NOT EXISTS gift_cards (
             		id integer PRIMARY KEY AUTOINCREMENT,
             		code TEXT NOT NULL,
+					start_date TEXT NOT NULL,
             		expiration_date TEXT NOT NULL
             		); """
 
