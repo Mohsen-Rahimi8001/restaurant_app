@@ -94,3 +94,50 @@ class Menu(Model):
             raise RuntimeError("menu does not exist")
 
         Database.Delete(Menu.TableName, Menu.PrimaryKey, id)
+
+
+
+
+
+    #foods method
+
+
+    def addFood(self, food) -> None:
+        """add a food to menu
+            :param food can be Food object or food table id
+        """
+
+        if isinstance(food, Food):
+            self.foods.append(food.id)
+
+        if isinstance(food, int):
+            if Food.Exists(food):
+                self.foods.append(food)
+
+        Menu.Update(self.id, {"foods" : self.foods})
+
+
+    def removeFood(self, food) -> None:
+        """remove a food from menu
+            :param food can be Food object or food table id
+        """
+
+        if isinstance(food, Food):
+            id = food.id
+        else:
+            id = food
+
+        if id in self.foods:
+            self.foods.remove(id)
+            Menu.Update(self.id, {"foods": self.foods})
+
+
+    def getFoods(self) -> list:
+        """get Food object for each food in menu"""
+
+        foods = []
+
+        for foodId in self.foods:
+            foods.append(Food.Get(foodId))
+
+        return foods

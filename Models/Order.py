@@ -162,8 +162,6 @@ class Order(Model):
 
     #properties
 
-    foods = property(fget = getFoods)
-
     def getUserId(self):
         return self.__user_id
 
