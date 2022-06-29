@@ -32,6 +32,7 @@ class TableData():
 
     menus = """ CREATE TABLE IF NOT EXISTS menus (
         		id integer PRIMARY KEY AUTOINCREMENT,
+        		title TEXT,
         		foods TEXT,
         		date TEXT NOT NULL
         		); """

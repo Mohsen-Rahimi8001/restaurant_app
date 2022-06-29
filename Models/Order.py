@@ -99,9 +99,10 @@ class Order(Model):
         if "id" in data.keys():
             data.pop("id")
 
-        data["foods"] = json.dumps(data["foods"])
+        if "foods" in data.keys():
+            data["foods"] = json.dumps(data["foods"])
 
-        Database.Update(Order.TableName, Order.PrimaryKey, id)
+        Database.Update(Order.TableName, Order.PrimaryKey, id, data)
 
 
     @staticmethod
