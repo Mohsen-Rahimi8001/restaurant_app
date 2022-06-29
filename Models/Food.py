@@ -115,6 +115,9 @@ class Food(Model):
     
     @staticmethod
     def Update(id:int, data:dict):
+        if not data:
+            raise ValueError("data is empty")
+            
         Database.Update('foods', 'id', id, data)
 
     @staticmethod

@@ -221,6 +221,20 @@ class Database:
         except Error as e:
             return e
 
+    @staticmethod
+    def DeleteAll(table:str):
+        """delete all rows from table"""
+
+        query = """DELETE FROM {tablename}""".format(tablename=table)
+        try:
+            handle = Database.Connection()
+            curs = handle.cursor()
+            curs.execute(query)
+            handle.commit()
+            handle.close()
+
+        except Error as e:
+            return e
 
     @staticmethod
     def Flush(table : str):

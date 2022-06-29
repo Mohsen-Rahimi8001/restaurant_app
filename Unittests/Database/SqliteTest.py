@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import patch, Mock
+from unittest.mock import Mock
 from DataBase.Sqlite import Database
 from DataBase.TablesData import TableData
 import sqlite3
@@ -169,6 +169,25 @@ class TestDataBase(unittest.TestCase):
         result = self.get_all_the_rows('test_delete')
         
         self.assertEqual(result, [(2,)])
+
+    def test_delete_all(self):
+        self.create_test_table('test_delete_all')
+        
+        try:
+            conn = sqlite3.connect('test.db')
+            cur = conn.cursor()
+            records = [(1,), (2,)]
+            cur.executemany("INSERT INTO test_delete_all VALUES (?)", records)
+            conn.commit()
+        except sqlite3.Error as e:
+            return e
+
+        Database.DeleteAll('test_delete_all')
+
+        result = self.get_all_the_rows('test_delete_all')
+        
+        self.assertEqual(result, [])
+
 
     def test_create_many(self):
         self.create_test_table('test_create_many')
