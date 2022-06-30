@@ -3,18 +3,6 @@ from DataBase.Sqlite import Database
 import os
 
 
-foods = """ CREATE TABLE IF NOT EXISTS foods (
-            id integer PRIMARY KEY AUTOINCREMENT,
-            title TEXT NOT NULL,
-            stock INTEGER NOT NULL DEFAULT 1,
-            fixed_price INTEGER NOT NULL,
-            sale_price INTEGER NOT NULL,
-            description TEXT,
-            category TEXT NOT NULL,
-            materials TEXT NOT NULL,
-            image TEXT NOT NULL
-            ); """
-
 class Food(Model):
     
     TableName = 'foods'
