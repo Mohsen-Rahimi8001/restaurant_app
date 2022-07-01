@@ -1,4 +1,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+import sys
+from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+from functools import partial
+from Window import Routing
+
 
 
 class Ui_MainWindow(object):
@@ -30,6 +38,14 @@ class Ui_MainWindow(object):
         font.setFamily("Arial Rounded MT Bold")
         self.btnLogin.setFont(font)
         self.btnLogin.setObjectName("btnLogin")
+
+
+
+        b_back = partial(Routing.RedirectBack, MainWindow)
+
+        self.btnLogin.clicked.connect(b_back)
+
+
         self.btnHLayout.addWidget(self.btnLogin)
         self.mainGLayout.addLayout(self.btnHLayout, 4, 0, 1, 3)
         self.lblPassword = QtWidgets.QLabel(self.gridLayoutWidget)
@@ -128,11 +144,19 @@ class Ui_MainWindow(object):
         self.checkIsAdmin.setText(_translate("MainWindow", "As an admin"))
 
 
+
+
+
+
 if __name__ == "__main__":
     import sys
     app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
+
+    # MainWindow = QtWidgets.QMainWindow()
+    # ui = Ui_MainWindow()
+    # ui.setupUi(MainWindow)
+    # MainWindow.show()
+
+
+
     sys.exit(app.exec_())
