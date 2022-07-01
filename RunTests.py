@@ -3,6 +3,7 @@ from Unittests.Models import FoodTest
 from Unittests.Models import GiftCardTest
 from Unittests.Database import SqliteTest
 from Unittests.Models import RestaurantTest
+from Unittests.Models import CommentTest
 
 
 def run(test_class):
@@ -18,6 +19,7 @@ def run_tests():
     run(SqliteTest.TestDataBase)
     run(GiftCardTest.TestGiftCard)
     run(RestaurantTest.TestRestaurant)
+    run(CommentTest.TestComment)
 
 
 if __name__ == "__main__":
