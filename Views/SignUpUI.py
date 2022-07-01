@@ -1,8 +1,56 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
+#////////////////////////////EVENTS///////////////////////////
+
+def submit(ui : "Ui_MainWindow"):
+
+    data = \
+    {
+        "first_name" : getFirstName(ui),
+        "last_name" : getLastName(ui),
+        "email" : getEmail(ui),
+        "phone_number" : getPhoneNumber(ui),
+        "social_number" : getSocialNumber(ui),
+        "password" : getPassword(ui),
+        "password_verification" : getPasswordVerification(ui)
+    }
+
+
+#get inputs
+
+def getFirstName(ui : "Ui_MainWindow"):
+    return ui.lEditName.text().strip()
+
+def getLastName(ui : "Ui_MainWindow"):
+    return ui.lEditFamily.text().strip()
+
+def getPhoneNumber(ui : "Ui_MainWindow"):
+    return ui.lEditPhoneNumber.text().strip()
+
+def getEmail(ui : "Ui_MainWindow"):
+    return ui.lEditEmail.text().strip()
+
+def getSocialNumber(ui : "Ui_MainWindow"):
+    return ui.lEditSocialNumber.text().strip()
+
+def getPassword(ui : "Ui_MainWindow"):
+    return ui.lEditPassword.text().strip()
+
+def getPasswordVerification(ui : "Ui_MainWindow"):
+    return ui.lEditPasswordVerify.text().strip()
+
+
+
+#//////////////////////////////UI//////////////////////////////
 
 class Ui_MainWindow(object):
+
     def setupUi(self, MainWindow):
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
         MainWindow.setContextMenuPolicy(QtCore.Qt.NoContextMenu)
@@ -15,11 +63,13 @@ class Ui_MainWindow(object):
         self.gridLayout.setContentsMargins(10, 10, 10, 10)
         self.gridLayout.setSpacing(10)
         self.gridLayout.setObjectName("gridLayout")
+
         self.lEditName = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.lEditName.setAutoFillBackground(False)
         self.lEditName.setClearButtonEnabled(True)
         self.lEditName.setObjectName("lEditName")
         self.gridLayout.addWidget(self.lEditName, 1, 1, 1, 1)
+
         self.lblPassword = QtWidgets.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
@@ -40,10 +90,12 @@ class Ui_MainWindow(object):
         self.lblTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.lblTitle.setObjectName("lblTitle")
         self.gridLayout.addWidget(self.lblTitle, 0, 0, 1, 2)
+
         self.lEditFamily = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.lEditFamily.setClearButtonEnabled(True)
         self.lEditFamily.setObjectName("lEditFamily")
         self.gridLayout.addWidget(self.lEditFamily, 2, 1, 1, 1)
+
         self.lblEmail = QtWidgets.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
@@ -51,11 +103,13 @@ class Ui_MainWindow(object):
         self.lblEmail.setFont(font)
         self.lblEmail.setObjectName("lblEmail")
         self.gridLayout.addWidget(self.lblEmail, 4, 0, 1, 1)
+
         self.lEditPassword = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.lEditPassword.setEchoMode(QtWidgets.QLineEdit.Password)
         self.lEditPassword.setClearButtonEnabled(True)
         self.lEditPassword.setObjectName("lEditPassword")
         self.gridLayout.addWidget(self.lEditPassword, 6, 1, 1, 1)
+
         self.lEditPhoneNumber = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.lEditPhoneNumber.setClearButtonEnabled(True)
         self.lEditPhoneNumber.setObjectName("lEditPhoneNumber")
@@ -67,6 +121,7 @@ class Ui_MainWindow(object):
         self.lblPhoneNumber.setFont(font)
         self.lblPhoneNumber.setObjectName("lblPhoneNumber")
         self.gridLayout.addWidget(self.lblPhoneNumber, 3, 0, 1, 1)
+
         self.lblPassVerification = QtWidgets.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
@@ -74,14 +129,17 @@ class Ui_MainWindow(object):
         self.lblPassVerification.setFont(font)
         self.lblPassVerification.setObjectName("lblPassVerification")
         self.gridLayout.addWidget(self.lblPassVerification, 7, 0, 1, 1)
+
         self.lEditSocialNumber = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.lEditSocialNumber.setClearButtonEnabled(True)
         self.lEditSocialNumber.setObjectName("lEditSocialNumber")
+
         self.gridLayout.addWidget(self.lEditSocialNumber, 5, 1, 1, 1)
         self.lEditEmail = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.lEditEmail.setClearButtonEnabled(True)
         self.lEditEmail.setObjectName("lEditEmail")
         self.gridLayout.addWidget(self.lEditEmail, 4, 1, 1, 1)
+
         self.lblName = QtWidgets.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
@@ -89,6 +147,7 @@ class Ui_MainWindow(object):
         self.lblName.setFont(font)
         self.lblName.setObjectName("lblName")
         self.gridLayout.addWidget(self.lblName, 1, 0, 1, 1)
+
         self.lblFamily = QtWidgets.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
@@ -96,6 +155,7 @@ class Ui_MainWindow(object):
         self.lblFamily.setFont(font)
         self.lblFamily.setObjectName("lblFamily")
         self.gridLayout.addWidget(self.lblFamily, 2, 0, 1, 1)
+
         self.lblSocialNumber = QtWidgets.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
@@ -103,10 +163,14 @@ class Ui_MainWindow(object):
         self.lblSocialNumber.setFont(font)
         self.lblSocialNumber.setObjectName("lblSocialNumber")
         self.gridLayout.addWidget(self.lblSocialNumber, 5, 0, 1, 1)
+
         self.lEditPasswordVerify = QtWidgets.QLineEdit(self.gridLayoutWidget)
         self.lEditPasswordVerify.setEchoMode(QtWidgets.QLineEdit.Password)
         self.lEditPasswordVerify.setClearButtonEnabled(True)
         self.lEditPasswordVerify.setObjectName("lEditPasswordVerify")
+
+
+
         self.gridLayout.addWidget(self.lEditPasswordVerify, 7, 1, 1, 1)
         self.btnHLayout = QtWidgets.QHBoxLayout()
         self.btnHLayout.setSpacing(20)
@@ -136,6 +200,10 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+
+
+
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -156,6 +224,8 @@ class Ui_MainWindow(object):
         self.lEditPasswordVerify.setPlaceholderText(_translate("MainWindow", "Repeat your password"))
         self.btnClear.setText(_translate("MainWindow", "Clear"))
         self.btnSubmit.setText(_translate("MainWindow", "Submit"))
+
+
 
 
 if __name__ == "__main__":
