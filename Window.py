@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import *
-
+from Lib.Messages import Messages
 
 
 
@@ -40,6 +40,7 @@ class Window(QMainWindow):
     """ app main window class """
 
     def __init__(self):
+
         super().__init__()
 
         #get current window UI class
@@ -49,8 +50,12 @@ class Window(QMainWindow):
         #instantiate UI class and apply UI to window
         uiClass().setupUi(self)
 
+        # show messages
+        Messages.show()
+
         #show window
         self.show()
+
 
 
 
