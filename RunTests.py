@@ -4,6 +4,7 @@ from Unittests.Models import GiftCardTest
 from Unittests.Database import SqliteTest
 from Unittests.Models import RestaurantTest
 from Unittests.Models import CommentTest
+from Unittests.Controllers import ValidationTest
 
 
 def run(test_class):
@@ -20,6 +21,7 @@ def run_tests():
     run(GiftCardTest.TestGiftCard)
     run(RestaurantTest.TestRestaurant)
     run(CommentTest.TestComment)
+    run(ValidationTest.TestUserValidator)
 
 
 if __name__ == "__main__":
