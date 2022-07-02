@@ -19,6 +19,10 @@ class Routes:
         return Ui_MainWindow
 
 
+    def adminHome():
+        from Views.Admin.HomeUI import Ui_MainWindow
+        return Ui_MainWindow
+
 
     #UI table window { name : UI method }
     UiObjects = {
@@ -26,6 +30,7 @@ class Routes:
         "main" : landingPage,
         "login" : login,
         "signup" : signup,
+        "adminHome": adminHome,
     }
 
 
