@@ -28,7 +28,7 @@ def submit(window, ui : "Ui_MainWindow"):
 
     if result:
         Messages.push(Messages.Type.SUCCESS, "sign up completed")
-        Routing.Redirect(window, "main")
+        Routing.Redirect(window, "login")
         print(User.GetAll())
     else:
         Messages.push(Messages.Type.INFO, "sign up failed")

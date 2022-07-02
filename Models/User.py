@@ -64,8 +64,8 @@ class User(Model):
             image = row[6],
             password = row[7],
             role = row[8],
-            orders = json.loads(row[9]),
-            cart = json.loads(row[10])
+            orders = json.loads(row[9]) if row[9] else [],
+            cart = json.loads(row[10]) if row[10] else []
         )
 
 
@@ -88,8 +88,8 @@ class User(Model):
                 image = row[6],
                 password = row[7],
                 role = row[8],
-                orders = json.loads(row[9]),
-                cart = json.loads(row[10])
+                orders=json.loads(row[9]) if row[9] else [],
+                cart=json.loads(row[10]) if row[10] else []
         ))
 
         return users
