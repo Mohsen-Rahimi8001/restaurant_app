@@ -48,7 +48,7 @@ class Order(Model):
 
         return Order(
             id = row[0],
-            foods = json.loads(row[1]),
+            foods = json.loads(row[1]) if row[1] else [],
             date = row[2],
             paid = row[3],
             reference_number = row[4],
@@ -69,7 +69,7 @@ class Order(Model):
         for row in rows:
             orders.append(Order(
                 id=row[0],
-                foods=json.loads(row[1]),
+                foods=json.loads(row[1]) if row[1] else [],
                 date=row[2],
                 paid=row[3],
                 reference_number=row[4],

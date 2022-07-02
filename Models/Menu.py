@@ -39,7 +39,7 @@ class Menu(Model):
         return Menu(
             id = row[0],
             title = row[1],
-            foods = json.loads(row[2]),
+            foods = json.loads(row[2]) if row[2] else [],
             date = row[3]
         )
 
@@ -56,7 +56,7 @@ class Menu(Model):
             menus.append(Menu(
                 id=row[0],
                 title=row[1],
-                foods=json.loads(row[2]),
+                foods=json.loads(row[2]) if row[2] else [],
                 date=row[3]
             ))
 
