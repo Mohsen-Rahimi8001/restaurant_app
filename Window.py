@@ -43,6 +43,40 @@ class Routing:
 
 
 
+
+class Transfer:
+
+    #store data to transfer it to another window
+    Data = {}
+
+    @staticmethod
+    def Add(name : str, data) -> None:
+        """add data to transfer to another window"""
+        Transfer.Data.update({ name : data })
+
+
+    @staticmethod
+    def Exists(name : str) -> bool:
+        """check if a data is in transfer or not"""
+        return name in Transfer.Data.keys()
+
+
+    @staticmethod
+    def Get(name : str):
+        """get transferred data"""
+
+        if Transfer.Exists(name):
+
+            data = Transfer.Data[name]
+            Transfer.Data.pop(name)
+            return data
+
+        else:
+            return False
+
+
+
+
 class Window(QMainWindow):
     """ app main window class """
 
