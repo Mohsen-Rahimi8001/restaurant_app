@@ -3,10 +3,15 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from Lib.Messages import Messages
+from Window import Routing
+from Models.User import User
+from functools import partial
+#
+# #////////////////////////////EVENTS///////////////////////////
+from Controllers.AuthenticationController import Auth
 
-#////////////////////////////EVENTS///////////////////////////
-
-def submit(ui : "Ui_MainWindow"):
+def submit(window, ui : "Ui_MainWindow"):
 
     data = \
     {
@@ -18,6 +23,18 @@ def submit(ui : "Ui_MainWindow"):
         "password" : getPassword(ui),
         "password_verification" : getPasswordVerification(ui)
     }
+
+    result = Auth.SignUp(data)
+
+    if result:
+        Messages.push(Messages.Type.SUCCESS, "sign up completed")
+        Routing.Redirect(window, "main")
+        print(User.GetAll())
+    else:
+        Messages.push(Messages.Type.INFO, "sign up failed")
+        Routing.Refresh(window)
+
+
 
 
 #get inputs
@@ -186,6 +203,11 @@ class Ui_MainWindow(object):
         font.setFamily("Arial Rounded MT Bold")
         self.btnSubmit.setFont(font)
         self.btnSubmit.setObjectName("btnSubmit")
+
+        bound_signup = partial(submit, MainWindow, self)
+        self.btnSubmit.clicked.connect(bound_signup)
+
+
         self.btnHLayout.addWidget(self.btnSubmit)
         self.gridLayout.addLayout(self.btnHLayout, 8, 0, 1, 2)
         MainWindow.setCentralWidget(self.centralwidget)

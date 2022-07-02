@@ -6,6 +6,10 @@ class UserValidator:
     @staticmethod
     def ValidateName(name : str, inputName : str = "name") -> bool:
 
+        if not name:
+            Messages.push(Messages.Type.ERROR, f"{inputName} can't be empty")
+            return False
+
         if not name.isalpha():
             Messages.push(Messages.Type.ERROR, f"{inputName} can contain only letters")
             return False
@@ -16,6 +20,10 @@ class UserValidator:
     @staticmethod
     def ValidateEmail(email : str, inputName : str = "Email") -> bool:
 
+        if not email:
+            Messages.push(Messages.Type.ERROR, f"{inputName} can't be empty")
+            return False
+
         pattern = re.compile("([A-Za-z0-9]+[.-_])*[A-Za-z0-9]+@[A-Za-z0-9-]+(\.[A-Z|a-z]{2,})+")
         if not re.fullmatch(pattern, email):
             Messages.push(Messages.Type.ERROR, f"invalid {inputName}")
@@ -25,6 +33,10 @@ class UserValidator:
 
     @staticmethod
     def ValidatePhoneNumber(phone_number : str, inputName : str = "Phone Number") -> bool:
+
+        if not phone_number:
+            Messages.push(Messages.Type.ERROR, f"{inputName} can't be empty")
+            return False
 
         if len(phone_number) < 10:
             Messages.push(Messages.Type.ERROR, f"invalid {inputName}")
@@ -47,6 +59,10 @@ class UserValidator:
     @staticmethod
     def ValidateSocialNumber(socialNumber : str, inputName : str = "Social Number") -> bool:
 
+        if not socialNumber:
+            Messages.push(Messages.Type.ERROR, f"{inputName} can't be empty")
+            return False
+
         if len(socialNumber) != 10 or not socialNumber.isdigit():
             Messages.push(Messages.Type.ERROR, f"{inputName} must be ten digits")
             return False
@@ -56,6 +72,10 @@ class UserValidator:
 
     @staticmethod
     def ValidatePassword(password : str, inputName : str = "Password") -> bool:
+
+        if not password:
+            Messages.push(Messages.Type.ERROR, f"{inputName} can't be empty")
+            return False
 
         pattern = re.compile("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*?/])(?=.*[a-zA-Z]).{8,}$")
         if not re.fullmatch(pattern, password):

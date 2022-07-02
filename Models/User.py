@@ -137,6 +137,14 @@ class User(Model):
         Database.Delete(User.TableName, User.PrimaryKey, id)
 
 
+    @staticmethod
+    def SearchByEmail(email : str):
+        """check if an email exists in database or not"""
+        return Database.Exists(User.TableName, "email", email)
+
+
+
+
 
     #cart methods
 

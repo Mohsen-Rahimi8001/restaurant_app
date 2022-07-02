@@ -31,8 +31,15 @@ class Routing:
             Routing.Redirect(currentWindowObject, Routing.PreviousWindow)
 
 
+    @staticmethod
+    def Refresh(currentWindowObject):
+        """refresh window"""
 
+        # create new window
+        currentWindowObject.cams = Window()
 
+        # delete current window
+        currentWindowObject.close()
 
 
 
