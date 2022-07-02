@@ -43,3 +43,17 @@ class Auth:
 
         return User.Create(data)
 
+
+
+
+
+    @staticmethod
+    def GetUser() -> User:
+        """ returns logged in user object """
+        pass
+
+
+    @staticmethod
+    def CheckAdminCredentials() -> bool:
+        """returns true if logged in user is admin"""
+        return True
