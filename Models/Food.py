@@ -164,7 +164,10 @@ class Food(Model):
         else:
             data['materials'] = str(data['materials'])
 
-        Database.Create(Food.TableName, data)
+        lastRowId = Database.Create(Food.TableName, data)
+        return lastRowId
+
+
 
     @staticmethod
     def Get(id:int):

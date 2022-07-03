@@ -5,6 +5,7 @@ from Unittests.Database import SqliteTest
 from Unittests.Models import RestaurantTest
 from Unittests.Models import CommentTest
 from Unittests.Models import UserTest
+from Unittests.Models import OrderTest
 from Unittests.Controllers import ValidationTest
 
 
@@ -17,13 +18,13 @@ def run(test_class):
 
 def run_tests():
     """run tests"""
-    # run(FoodTest.TestFood)
-    # run(SqliteTest.TestDataBase)
-    # run(GiftCardTest.TestGiftCard)
-    # run(RestaurantTest.TestRestaurant)
-    # run(CommentTest.TestComment)
-
+    run(FoodTest.TestFood)
+    run(SqliteTest.TestDataBase)
+    run(GiftCardTest.TestGiftCard)
+    run(RestaurantTest.TestRestaurant)
+    run(CommentTest.TestComment)
     run(UserTest.TestUser)
+    run(OrderTest.TestOrder)
 
 
 
