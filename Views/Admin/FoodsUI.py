@@ -16,7 +16,7 @@ def setInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
         Auth.Logout()
         # go to the landing page
         Routing.Redirect(window, 'landingPage')
-        Routing.PreviousWindow = False # reset the previous window
+        Routing.ClearStack() # reset the previous window
         return
 
     # get all foods from database
@@ -93,7 +93,7 @@ class Ui_MainWindow(object):
         self.lblTitle.setFont(font)
         self.lblTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.lblTitle.setObjectName("lblTitle")
-        self.gridLayout.addWidget(self.lblTitle, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.lblTitle, 0, 0, 1, 2)
         
         self.tableFoods = QtWidgets.QTableWidget(self.gridLayoutWidget)
         self.tableFoods.setObjectName("tableFoods")
@@ -121,8 +121,20 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableFoods.setHorizontalHeaderItem(6, item)
 
-        self.gridLayout.addWidget(self.tableFoods, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.tableFoods, 1, 0, 1, 2)
         
+        # push button going to the previous window
+        self.btnBack = QtWidgets.QPushButton(self.gridLayoutWidget)
+        self.btnBack.setObjectName("btnBack")
+        self.gridLayout.addWidget(self.btnBack, 2, 0, 1, 1)
+        self.btnBack.clicked.connect(lambda: Routing.RedirectBack(MainWindow))
+
+        # push button for adding a new food
+        self.btnAddFood = QtWidgets.QPushButton(self.gridLayoutWidget)
+        self.btnAddFood.setObjectName("btnAddFood")
+        self.gridLayout.addWidget(self.btnAddFood, 2, 1, 1, 1)
+        self.btnAddFood.clicked.connect(lambda: Routing.Redirect(MainWindow, 'newFood'))
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -149,6 +161,8 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Sale Price"))
         item = self.tableFoods.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Action"))
+        self.btnBack.setText(_translate("MainWindow", "Back"))
+        self.btnAddFood.setText(_translate("MainWindow", "Add Food"))
 
         # set up initial information
         setInitInformation(self, MainWindow)
