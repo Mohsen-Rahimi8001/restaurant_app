@@ -2,6 +2,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from Models.Food import Food
 from Window import Routing
 from Window import Transfer
+from Controllers.AuthenticationController import Auth
 
 
 # ////////////////////////////EVENTS////////////////////////////
@@ -9,6 +10,15 @@ from Window import Transfer
 def setInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
     """Fetches foods from the database and show them in the table."""
     
+    # check if the user is admin
+    if not Auth.CheckAdminCredentials():
+        # logout the user
+        Auth.Logout()
+        # go to the landing page
+        Routing.Redirect(window, 'landingPage')
+        Routing.PreviousWindow = False # reset the previous window
+        return
+
     # get all foods from database
     foods = Food.GetAll()
 
