@@ -27,8 +27,10 @@ class User(Model):
 
 
     @staticmethod
-    def Create(data : dict):
+    def Create(userData : dict):
         """create new user in database"""
+
+        data = userData.copy()
 
         data["orders"] = ""
         data["cart"] = ""
@@ -102,11 +104,13 @@ class User(Model):
 
 
     @staticmethod
-    def Update(id: int, data : dict):
+    def Update(id: int, userData : dict):
         """update user"""
 
         if not User.Exists(id):
             raise RuntimeError("user does not exists")
+
+        data = userData.copy()
 
         #update the role is forbidden
         if "role" in data.keys():
@@ -118,7 +122,7 @@ class User(Model):
 
         #convert lists to json
         if "orders" in data.keys():
-            data["orders"] = json.dumps(data["order"])
+            data["orders"] = json.dumps(data["orders"])
 
         if "cart" in data.keys():
             data["cart"] = json.dumps(data["cart"])

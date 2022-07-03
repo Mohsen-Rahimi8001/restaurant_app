@@ -90,6 +90,8 @@ class TestOrder(unittest.TestCase):
 
         order = Order.Get(id)
 
+        self.assertTrue(isinstance(order, Order))
+
 
     def test_get_invalid_id(self):
 

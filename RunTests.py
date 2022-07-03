@@ -25,7 +25,6 @@ def run_tests():
     run(CommentTest.TestComment)
     run(UserTest.TestUser)
     run(OrderTest.TestOrder)
-
     run(ValidationTest.TestUserValidator)
 
 
