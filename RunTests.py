@@ -26,10 +26,7 @@ def run_tests():
     run(UserTest.TestUser)
     run(OrderTest.TestOrder)
 
-
-
-
-    # run(ValidationTest.TestUserValidator)
+    run(ValidationTest.TestUserValidator)
 
 
 if __name__ == "__main__":
