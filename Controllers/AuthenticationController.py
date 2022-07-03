@@ -23,14 +23,10 @@ class Auth:
         valid &= UserValidator.ValidatePhoneNumber(data["phone_number"])
         valid &= UserValidator.ValidateSocialNumber(data["social_number"])
         valid &= UserValidator.ValidatePassword(data["password"])
+        valid &= UserValidator.ValidatePasswordVerification(data["password"], data["password_verification"])
 
         if not valid:
             return False
-
-        if data["password_verification"] != data["password"]:
-            Messages.push(Messages.Type.ERROR, "password verification must be identical to password")
-            return False
-
 
         #check for previous signup
         if User.SearchByEmail(data["email"]):
