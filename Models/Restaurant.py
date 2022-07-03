@@ -1,5 +1,6 @@
 import json
 import re
+from Constants.RegExValidations import Patterns
 
 
 class Restaurant():
@@ -45,7 +46,7 @@ class Restaurant():
         if not isinstance(managerEmail, str):
             raise TypeError("managerEmail must be a string")
         
-        if not re.match('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-_]+\.[a-zA-Z0-9]+$', managerEmail):
+        if not re.match(Patterns.EMAIL.value, managerEmail):
             raise ValueError("managerEmail must be a valid email address")
         
         self._managerEmail = managerEmail
@@ -76,7 +77,7 @@ class Restaurant():
 
     @phone.setter
     def phone(self, phone:str) -> None:
-        if re.match('^(?:00989|\+9809|9|09)\d{9}$', phone):
+        if re.match(Patterns.PHONE.value, phone):
             self._phone = phone
         else:
             raise ValueError("phone must be a valid phone number")
