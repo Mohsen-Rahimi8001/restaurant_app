@@ -9,13 +9,17 @@ class Auth:
 
     @staticmethod
     def HashPassword(password) -> str:
-        return bcrypt.hashpw(password, bcrypt.gensalt(12))
+        return  bcrypt.hashpw(password, bcrypt.gensalt(1))
 
 
     @staticmethod
-    def SignUp(data):
+    def CheckPasswordMatch(password : str, hashed : str) -> bool:
+        return  bcrypt.checkpw(password, hashed)
 
-        #input validation
+
+    @staticmethod
+    def ValidateSignUpData(data : dict) -> bool:
+        """sign up input validation"""
 
         valid = UserValidator.ValidateName(data["first_name"], "First Name")
         valid &= UserValidator.ValidateName(data["last_name"], "Last Name")
@@ -23,26 +27,41 @@ class Auth:
         valid &= UserValidator.ValidatePhoneNumber(data["phone_number"])
         valid &= UserValidator.ValidateSocialNumber(data["social_number"])
         valid &= UserValidator.ValidatePassword(data["password"])
+        valid &= UserValidator.ValidatePasswordVerification(data["password"], data["password_verification"])
 
-        if not valid:
+        data.pop("password_verification")
+
+        return valid
+
+
+    @staticmethod
+    def CheckForPreviousSignUp(email : str) -> bool:
+        """check if there is an account with same email in database or not"""
+
+        if User.SearchByEmail(email):
+            Messages.push(Messages.Type.ERROR, "an account with this email address already exists")
+            return True
+
+        return False
+
+
+
+    @staticmethod
+    def SignUp(data : dict):
+
+        #input validation
+        if not Auth.ValidateSignUpData(data):
             return False
-
-        if data["password_verification"] != data["password"]:
-            Messages.push(Messages.Type.ERROR, "password verification must be identical to password")
-            return False
-
 
         #check for previous signup
-        if User.SearchByEmail(data["email"]):
-            Messages.push(Messages.Type.ERROR, "an account with this email address already exists")
+        if Auth.CheckForPreviousSignUp(data["email"]):
             return False
-
 
         #hash password
         data["password"] = Auth.HashPassword(data["password"])
 
+        #add user to data base
         return User.Create(data)
-
 
 
 

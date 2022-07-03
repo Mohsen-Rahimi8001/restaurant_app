@@ -5,7 +5,7 @@ from Lib.Messages import Messages
 
 class Routing:
 
-    CurrentWindow = "adminHome"
+    CurrentWindow = "main"
     PreviousWindow = []
 
 

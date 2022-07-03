@@ -81,4 +81,19 @@ class UserValidator:
         if not re.fullmatch(pattern, password):
             Messages.push(Messages.Type.ERROR, f"{inputName} must contain at least 1 digit, 1 capital letter, 1 symbol \n and it must be at least 8 digits")
             return False
+
+        return True
+
+
+    @staticmethod
+    def ValidatePasswordVerification(password : str, passwordVerification : str, inputName : str = "password verification") -> bool:
+
+        if not passwordVerification:
+            Messages.push(Messages.Type.ERROR, f"{inputName} can't be empty")
+            return False
+
+        if password != passwordVerification:
+            Messages.push(Messages.Type.ERROR, f"{inputName} must be identical to password")
+            return False
+
         return True

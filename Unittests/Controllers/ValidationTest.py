@@ -40,3 +40,9 @@ class TestUserValidator(unittest.TestCase):
         self.assertFalse(UserValidator.ValidatePassword("aA345678"))
         self.assertFalse(UserValidator.ValidatePassword("aA!4567"))
         self.assertTrue(UserValidator.ValidatePassword("aA!45678"))
+
+    def test_validation_password_verification(self):
+
+        self.assertFalse(UserValidator.ValidatePasswordVerification("123", 123))
+        self.assertFalse(UserValidator.ValidatePasswordVerification("123", "1234"))
+        self.assertTrue(UserValidator.ValidatePasswordVerification("123", "123"))
