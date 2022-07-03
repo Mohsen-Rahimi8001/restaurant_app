@@ -5,15 +5,21 @@ from Lib.Messages import Messages
 
 class Routing:
 
-    CurrentWindow = "main"
-    PreviousWindow = False
+    CurrentWindow = "adminHome"
+    PreviousWindow = []
+
+
+    @classmethod
+    def ClearStack(cls):
+        """Flush the routing stack"""
+        cls.PreviousWindow.clear()
 
 
     @staticmethod
     def Redirect(currentWindowObject, nextWindowName : str) -> None:
         """switch window to nextWindowName"""
 
-        Routing.PreviousWindow = Routing.CurrentWindow
+        Routing.PreviousWindow.append(Routing.CurrentWindow)
         Routing.CurrentWindow = nextWindowName
 
         #create new window
@@ -28,7 +34,14 @@ class Routing:
         """back to previous window"""
 
         if Routing.PreviousWindow:
-            Routing.Redirect(currentWindowObject, Routing.PreviousWindow)
+            Routing.CurrentWindow = Routing.PreviousWindow.pop()
+        
+            # create new window
+            currentWindowObject.cams = Window()
+
+            # delete current window
+            currentWindowObject.close()
+            
 
 
     @staticmethod
