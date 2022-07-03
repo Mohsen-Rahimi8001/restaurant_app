@@ -1,4 +1,5 @@
 import unittest
+from Unittests.Test import Test
 from unittest.mock import Mock
 from DataBase.Sqlite import Database
 from Models.User import User
@@ -8,21 +9,7 @@ import os
 import datetime
 
 
-class TestUser(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        # mock the database
-        Database.GetDatabasePath = Mock(return_value='test.db')
-        Database.Initialize()
-
-
-    @classmethod
-    def tearDownClass(cls):
-        # delete the database
-        if os.path.exists('test.db'):
-            os.remove('test.db')
-
+class TestUser(Test):
 
     def setUp(self):
         # Flush users table in the database
@@ -56,7 +43,8 @@ class TestUser(unittest.TestCase):
     #test the test class
     def test_nothing(self):
         pass
-    
+
+
     def test_create(self):
         data1 = TestUser.data.copy()
         id = User.Create(data1)
@@ -71,6 +59,7 @@ class TestUser(unittest.TestCase):
         data1 = TestUser.data.copy()
         id1 = User.Create(data1)
         self.assertTrue(User.Exists(id1))
+
 
     def test_create_with_missing_col(self):
 
@@ -152,7 +141,6 @@ class TestUser(unittest.TestCase):
             self.assertEqual(user.cart, [])
 
 
-
     def test_delete(self):
 
         data1 = TestUser.data.copy()
@@ -199,6 +187,25 @@ class TestUser(unittest.TestCase):
 
         self.assertTrue(User.SearchByEmail("email@gmail.com"))
         self.assertFalse(User.SearchByEmail("user@yahoo.com"))
+
+
+    def test_get_user_by_email(self):
+
+        data1 = TestUser.data.copy()
+        id = User.Create(data1)
+
+        userById = User.Get(id)
+        userByEmail = User.GetUserByEmail(data1["email"])
+
+        self.assertEqual(userById.first_name, userByEmail.first_name)
+        self.assertEqual(userById.last_name, userByEmail.last_name)
+        self.assertEqual(userById.email, userByEmail.email)
+        self.assertEqual(userById.phone_number, userByEmail.phone_number)
+        self.assertEqual(userById.social_number, userByEmail.social_number)
+        self.assertEqual(userById.password, userByEmail.password)
+        self.assertEqual(userById.image, userByEmail.image)
+        self.assertEqual(userById.orders, userByEmail.orders)
+        self.assertEqual(userById.cart, userByEmail.cart)
 
 
 

@@ -148,6 +148,30 @@ class User(Model):
 
 
 
+    @staticmethod
+    def GetUserByEmail(email : str):
+
+        if not User.SearchByEmail(email):
+            raise RuntimeError("user does not exists")
+
+        row : list = Database.Read(User.TableName, "email", email)[0]
+
+        return User(
+            id = row[0],
+            first_name = row[1],
+            last_name = row[2],
+            email = row[3],
+            phone_number = row[4],
+            social_number = row[5],
+            image = row[6],
+            password = row[7],
+            role = row[8],
+            orders = json.loads(row[9]) if row[9] else [],
+            cart = json.loads(row[10]) if row[10] else []
+        )
+
+
+
 
 
     #cart methods

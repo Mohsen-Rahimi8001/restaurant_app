@@ -7,6 +7,10 @@ import bcrypt
 
 class Auth:
 
+
+    CurrentUserId = False
+
+
     @staticmethod
     def HashPassword(password) -> str:
         return  bcrypt.hashpw(password, bcrypt.gensalt(1))
@@ -37,12 +41,8 @@ class Auth:
     @staticmethod
     def CheckForPreviousSignUp(email : str) -> bool:
         """check if there is an account with same email in database or not"""
+        return User.SearchByEmail(email)
 
-        if User.SearchByEmail(email):
-            Messages.push(Messages.Type.ERROR, "an account with this email address already exists")
-            return True
-
-        return False
 
 
     @staticmethod
@@ -54,6 +54,7 @@ class Auth:
 
         #check for previous signup
         if Auth.CheckForPreviousSignUp(data["email"]):
+            Messages.push(Messages.Type.ERROR, "an account with this email address already exists")
             return False
 
         #hash password
@@ -63,6 +64,46 @@ class Auth:
         return User.Create(data)
 
 
+    @staticmethod
+    def Login(data : dict) -> bool:
+
+        """input validation"""
+        if not Auth.ValidateLoginData(data):
+            return False
+
+        #check if account exists
+        if not Auth.CheckForPreviousSignUp(data["email"]):
+            Messages.push(Messages.Type.ERROR, "account does not exists")
+            return False
+
+        #get user
+        user = User.GetUserByEmail(data["email"])
+
+        #check for match password
+        if not Auth.CheckPasswordMatch(data["password"], user.password):
+            Messages.push(Messages.Type.ERROR, "wrong password")
+            return False
+
+        Auth.CurrentUserId = user.id
+        return True
+
+
+    @staticmethod
+    def IsUserLoggedIN():
+        return bool(Auth.CurrentUserId)
+
+    @staticmethod
+    def ValidateLoginData(data : dict) -> bool:
+
+        return UserValidator.ValidateEmail(data["email"]) and UserValidator.ValidatePassword(data["password"], justNotEmpty = True)
+
+
+    @staticmethod
+    def LogOut():
+        if Auth.IsUserLoggedIN():
+            Auth.CurrentUserId = False
+            return True
+        return False
 
     @staticmethod
     def GetUser() -> User:

@@ -19,7 +19,7 @@ def login(window, ui : "Ui_MainWindow"):
         "password" : getPassword(ui),
     }
 
-    
+
 
 
 

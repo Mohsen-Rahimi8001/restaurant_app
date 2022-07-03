@@ -6,10 +6,22 @@ from DataBase.Sqlite import Database
 
 class TestAuth(Test):
 
+    validData = {
+
+        "first_name": "user",
+        "last_name": "user",
+        "email": "user@gmail.com",
+        "phone_number": "09123456789",
+        "social_number": "0025111111",
+        "password": "aA!12345678",
+        "password_verification": "aA!12345678"
+    }
+
 
     def setUp(self):
         # Flush users in the database
         Database.Flush('users')
+        Auth.LogOut()
 
 
     def test_for_previous_signup(self):
@@ -29,18 +41,10 @@ class TestAuth(Test):
         self.assertFalse(Auth.CheckForPreviousSignUp("user@yahoo.com"))
 
 
-    def  test_signup(self):
+    def test_signup(self):
 
         #case of invalid data tested in validation tests
-        data = {
-            "first_name" : "user",
-            "last_name" : "useri",
-            "email" : "user@gmail.com",
-            "phone_number" : "09123456789",
-            "social_number" : "0025111111",
-            "password" : "aA!12345678",
-            "password_verification" : "aA!12345678"
-        }
+        data = TestAuth.validData.copy()
 
         id = Auth.SignUp(data)
 
@@ -57,4 +61,61 @@ class TestAuth(Test):
         self.assertTrue(Auth.CheckPasswordMatch("aA!12345678", user.password))
 
 
+    def test_login(self):
 
+        data = TestAuth.validData.copy()
+        Auth.SignUp(data)
+
+        loginData = {
+            "email" : "user@gmail.com",
+            "password" : "aA!12345678"
+        }
+
+        result = Auth.Login(loginData)
+
+        self.assertTrue(result)
+        self.assertTrue(Auth.IsUserLoggedIN())
+
+
+    def test_login_with_account_that_does_not_exists(self):
+        loginData = {
+            "email": "user@gmail.com",
+            "password": "aA!12345678"
+        }
+
+        result = Auth.Login(loginData)
+
+        self.assertFalse(result)
+        self.assertFalse(Auth.IsUserLoggedIN())
+
+
+    def test_login_with_wrong_password(self):
+        data = TestAuth.validData.copy()
+        Auth.SignUp(data)
+
+        loginData = {
+            "email": "user@gmail.com",
+            "password": "aA!1678"
+        }
+
+        result = Auth.Login(loginData)
+
+        self.assertFalse(result)
+        self.assertFalse(Auth.IsUserLoggedIN())
+
+
+    def test_logout(self):
+        data = TestAuth.validData.copy()
+        Auth.SignUp(data)
+
+        loginData = {
+            "email": "user@gmail.com",
+            "password": "aA!12345678"
+        }
+
+        Auth.Login(loginData)
+
+        Auth.LogOut()
+
+        self.assertFalse(Auth.CurrentUserId)
+        self.assertFalse(Auth.IsUserLoggedIN())

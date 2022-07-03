@@ -71,11 +71,14 @@ class UserValidator:
 
 
     @staticmethod
-    def ValidatePassword(password : str, inputName : str = "Password") -> bool:
+    def ValidatePassword(password : str, inputName : str = "Password", justNotEmpty = False) -> bool:
 
         if not password:
             Messages.push(Messages.Type.ERROR, f"{inputName} can't be empty")
             return False
+
+        if justNotEmpty:
+            return True
 
         pattern = re.compile("^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*?/])(?=.*[a-zA-Z]).{8,}$")
         if not re.fullmatch(pattern, password):
