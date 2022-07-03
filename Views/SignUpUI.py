@@ -7,7 +7,7 @@ from Lib.Messages import Messages
 from Window import Routing
 from Models.User import User
 from functools import partial
-#
+
 # #////////////////////////////EVENTS///////////////////////////
 from Controllers.AuthenticationController import Auth
 

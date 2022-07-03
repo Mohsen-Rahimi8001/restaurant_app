@@ -8,6 +8,38 @@ from functools import partial
 from Window import Routing
 
 
+# #////////////////////////////EVENTS///////////////////////////
+from Controllers.AuthenticationController import Auth
+
+
+def login(window, ui : "Ui_MainWindow"):
+
+    data = {
+        "email" : getEmail(ui),
+        "password" : getPassword(ui),
+    }
+
+    
+
+
+
+
+#get inputs
+
+def getEmail(ui : "Ui_MainWindow") -> str:
+    return ui.lineEditEmail.text().strip()
+
+
+def getPassword(ui : "Ui_MainWindow") -> str:
+    return ui.lineEditPassword.text().strip()
+
+
+
+
+
+#//////////////////////////////UI//////////////////////////////
+
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -27,23 +59,26 @@ class Ui_MainWindow(object):
         self.btnHLayout.setContentsMargins(-1, 0, -1, -1)
         self.btnHLayout.setSpacing(20)
         self.btnHLayout.setObjectName("btnHLayout")
+
         self.btnForgetPassword = QtWidgets.QPushButton(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
         self.btnForgetPassword.setFont(font)
         self.btnForgetPassword.setObjectName("btnForgetPassword")
         self.btnHLayout.addWidget(self.btnForgetPassword)
+
+
+
+
+
         self.btnLogin = QtWidgets.QPushButton(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
         self.btnLogin.setFont(font)
         self.btnLogin.setObjectName("btnLogin")
 
+        self.btnLogin.clicked.connect( partial(login, MainWindow, self  ) )
 
-
-        b_back = partial(Routing.RedirectBack, MainWindow)
-
-        self.btnLogin.clicked.connect(b_back)
 
 
         self.btnHLayout.addWidget(self.btnLogin)
@@ -75,6 +110,8 @@ class Ui_MainWindow(object):
         self.lblAdminEmail.setObjectName("lblAdminEmail")
         self.mainGLayout.addWidget(self.lblAdminEmail, 1, 0, 1, 1)
 
+
+
         self.lineEditPassword = QtWidgets.QLineEdit(self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -85,6 +122,8 @@ class Ui_MainWindow(object):
         self.lineEditPassword.setClearButtonEnabled(True)
         self.lineEditPassword.setObjectName("lineEditPassword")
         self.mainGLayout.addWidget(self.lineEditPassword, 2, 1, 1, 2)
+
+
 
         self.lineEditEmail = QtWidgets.QLineEdit(self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
@@ -97,6 +136,8 @@ class Ui_MainWindow(object):
         self.lineEditEmail.setClearButtonEnabled(True)
         self.lineEditEmail.setObjectName("lineEditEmail")
         self.mainGLayout.addWidget(self.lineEditEmail, 1, 1, 1, 2)
+
+
 
         self.lblTitle = QtWidgets.QLabel(self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
