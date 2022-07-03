@@ -45,12 +45,11 @@ def setProfileImage(ui: "Ui_MainWindow", image:str):
     ui.lblProf.setScaledContents(True)
 
     # resize the image
-    ui.lblProf.setFixedSize(180, 180)
+    ui.lblProf.setFixedSize(150, 120)
 
     ui.lblProf.setSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
     ui.lblProf.setAlignment(QtCore.Qt.AlignCenter)
     ui.lblProf.setObjectName("lblProf")
-    ui.verticalLayout_2.addWidget(ui.lblProf)
 
 
 def setAdminName(ui: "Ui_MainWindow", name:str):
@@ -74,7 +73,7 @@ def setAdminPhone(ui: "Ui_MainWindow", phone:str):
     sets the admin phone
     phone: phone of the admin
     """
-    ui.lblPhoneNumber.setText(ui.lblPhoneNumber.text() + phone)
+    ui.lblPhoneNumber.setText(ui.lblPhoneNumber.text() + phone + '\n\n')
 
 
 def setRestaurantName(ui: "Ui_MainWindow", name:str):
@@ -133,12 +132,6 @@ def goToStatus(window: 'QtWidgets.QMainWindow'):
     """redirects to status page"""
     Routing.Redirect(window, 'status')
 
-
-def goToEditInfo(window: 'QtWidgets.QMainWindow'):
-    """redirects to edit info page"""
-    Routing.Redirect(window, 'editAdminInfo')
-
-
 def goToEditRestaurant(window: 'QtWidgets.QMainWindow'):
     """redirects to edit restaurant page"""
     Routing.Redirect(window, 'editRestaurant')
@@ -147,11 +140,11 @@ def goToEditRestaurant(window: 'QtWidgets.QMainWindow'):
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow:'QtWidgets.QMainWindow'):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 700)
+        MainWindow.resize(750, 620)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.gridLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.gridLayoutWidget.setGeometry(QtCore.QRect(10, 10, 771, 650))
+        self.gridLayoutWidget.setGeometry(QtCore.QRect(10, 10, 720, 591))
         self.gridLayoutWidget.setObjectName("gridLayoutWidget")
         self.gridLayout = QtWidgets.QGridLayout(self.gridLayoutWidget)
         self.gridLayout.setContentsMargins(10, 10, 10, 10)
@@ -173,36 +166,49 @@ class Ui_MainWindow(object):
         self.verticalLayout.setObjectName("verticalLayout")
         
         self.btnFoods = QtWidgets.QPushButton(self.gridLayoutWidget)
+        font.setPointSize(9)
+        self.btnFoods.setFont(font)
+        self.btnFoods.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         self.btnFoods.setObjectName("btnFoods")
         self.verticalLayout.addWidget(self.btnFoods)
         self.btnFoods.clicked.connect(lambda: goToFoodsPage(MainWindow))
 
         self.btnMenus = QtWidgets.QPushButton(self.gridLayoutWidget)
+        font.setPointSize(9)
+        self.btnMenus.setFont(font)
+        self.btnMenus.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         self.btnMenus.setObjectName("btnMenus")
         self.verticalLayout.addWidget(self.btnMenus)
         self.btnMenus.clicked.connect(lambda: goToMenusPage(MainWindow))
         
         self.btnGiftCards = QtWidgets.QPushButton(self.gridLayoutWidget)
+        font.setPointSize(9)
+        self.btnGiftCards.setFont(font)
+        self.btnGiftCards.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         self.btnGiftCards.setObjectName("btnGiftCards")
         self.verticalLayout.addWidget(self.btnGiftCards)
         self.btnGiftCards.clicked.connect(lambda: goToGiftCards(MainWindow))
         
         self.btnOrders = QtWidgets.QPushButton(self.gridLayoutWidget)
+        font.setPointSize(9)
+        self.btnOrders.setFont(font)
+        self.btnOrders.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         self.btnOrders.setObjectName("btnOrders")
         self.verticalLayout.addWidget(self.btnOrders)
         self.btnOrders.clicked.connect(lambda: gotoOrders(MainWindow))
         
         self.btnEconomic = QtWidgets.QPushButton(self.gridLayoutWidget)
+        font.setPointSize(9)
+        self.btnEconomic.setFont(font)
+        self.btnEconomic.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         self.btnEconomic.setObjectName("btnEconomic")
         self.verticalLayout.addWidget(self.btnEconomic)
         self.btnEconomic.clicked.connect(lambda: goToStatus(MainWindow))
         
-        self.btnEditAdminInfo = QtWidgets.QPushButton(self.gridLayoutWidget)
-        self.btnEditAdminInfo.setObjectName("btnEditAdminInfo")
-        self.verticalLayout.addWidget(self.btnEditAdminInfo)
-        self.btnEditAdminInfo.clicked.connect(lambda: goToEditInfo(MainWindow))
-        
         self.btnEditRestaurantInfo = QtWidgets.QPushButton(self.gridLayoutWidget)
+        font.setPointSize(9)
+        self.btnEditRestaurantInfo.setFont(font)
+        self.btnEditRestaurantInfo.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
         self.btnEditRestaurantInfo.setObjectName("btnEditRestaurantInfo")
         self.verticalLayout.addWidget(self.btnEditRestaurantInfo)
         self.btnEditRestaurantInfo.clicked.connect(lambda: goToEditRestaurant(MainWindow))
@@ -210,7 +216,6 @@ class Ui_MainWindow(object):
         self.gridLayout.addLayout(self.verticalLayout, 1, 1, 6, 1)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setContentsMargins(5, 5, 5, 5)
-        self.verticalLayout_3.setSpacing(6)
         self.verticalLayout_3.setObjectName("verticalLayout_3")
         
         self.lblRestInfoTitle = QtWidgets.QLabel(self.gridLayoutWidget)
@@ -252,6 +257,13 @@ class Ui_MainWindow(object):
         self.lblRestAddress.setFont(font)
         self.lblRestAddress.setObjectName("lblRestAddress")
         self.verticalLayout_3.addWidget(self.lblRestAddress)
+
+        # create a verticalSpacer (w, h)
+        label = QtWidgets.QLabel()
+        self.verticalLayout_3.addWidget(label)
+        verticalSpacer = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Maximum, QtWidgets.QSizePolicy.Maximum)
+        self.verticalLayout_3.addItem(verticalSpacer)
+
         self.gridLayout.addLayout(self.verticalLayout_3, 4, 0, 3, 1)
         
         self.verticalLayout_2 = QtWidgets.QVBoxLayout()
@@ -317,14 +329,13 @@ class Ui_MainWindow(object):
         self.btnGiftCards.setText(_translate("MainWindow", "Gift Cards"))
         self.btnOrders.setText(_translate("MainWindow", "Orders"))
         self.btnEconomic.setText(_translate("MainWindow", "Economic Situation"))
-        self.btnEditAdminInfo.setText(_translate("MainWindow", "Edit Your Info"))
         self.btnEditRestaurantInfo.setText(_translate("MainWindow", "Edit Restaurant Info"))
-        self.lblRestInfoTitle.setText(_translate("MainWindow", "Restaurant Info\n"))
+        self.lblRestInfoTitle.setText(_translate("MainWindow", "Restaurant Info"))
         self.lblRestaurantName.setText(_translate("MainWindow", "Name: "))
         self.lblRestPhone.setText(_translate("MainWindow", "Phone Number: "))
         self.lblRestRegion.setText(_translate("MainWindow", "Region: "))
         self.lblRestAddress.setText(_translate("MainWindow", "Address: "))
-        self.lblAdminInfoTitle.setText(_translate("MainWindow", "Admin Info\n"))
+        self.lblAdminInfoTitle.setText(_translate("MainWindow", "Admin Info"))
         self.lblProf.setText(_translate("MainWindow", "TextLabel"))
         self.lblAFullName.setText(_translate("MainWindow", "Name:  "))
         self.lblEmail.setText(_translate("MainWindow", "Email: "))
