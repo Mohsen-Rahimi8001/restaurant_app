@@ -45,7 +45,6 @@ class Auth:
         return False
 
 
-
     @staticmethod
     def SignUp(data : dict):
 
@@ -62,7 +61,6 @@ class Auth:
 
         #add user to data base
         return User.Create(data)
-
 
 
 

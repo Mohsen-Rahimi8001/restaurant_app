@@ -74,6 +74,7 @@ class Ui_MainWindow(object):
         self.lblAdminEmail.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.lblAdminEmail.setObjectName("lblAdminEmail")
         self.mainGLayout.addWidget(self.lblAdminEmail, 1, 0, 1, 1)
+
         self.lineEditPassword = QtWidgets.QLineEdit(self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -84,6 +85,7 @@ class Ui_MainWindow(object):
         self.lineEditPassword.setClearButtonEnabled(True)
         self.lineEditPassword.setObjectName("lineEditPassword")
         self.mainGLayout.addWidget(self.lineEditPassword, 2, 1, 1, 2)
+
         self.lineEditEmail = QtWidgets.QLineEdit(self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
@@ -95,6 +97,7 @@ class Ui_MainWindow(object):
         self.lineEditEmail.setClearButtonEnabled(True)
         self.lineEditEmail.setObjectName("lineEditEmail")
         self.mainGLayout.addWidget(self.lineEditEmail, 1, 1, 1, 2)
+
         self.lblTitle = QtWidgets.QLabel(self.gridLayoutWidget)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Maximum)
         sizePolicy.setHorizontalStretch(0)
@@ -108,17 +111,8 @@ class Ui_MainWindow(object):
         self.lblTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.lblTitle.setObjectName("lblTitle")
         self.mainGLayout.addWidget(self.lblTitle, 0, 0, 1, 3)
-        self.checkIsAdmin = QtWidgets.QCheckBox(self.gridLayoutWidget)
-        font = QtGui.QFont()
-        font.setFamily("Arial Rounded MT Bold")
-        font.setPointSize(9)
-        self.checkIsAdmin.setFont(font)
-        self.checkIsAdmin.setChecked(False)
-        self.checkIsAdmin.setAutoRepeat(False)
-        self.checkIsAdmin.setAutoExclusive(False)
-        self.checkIsAdmin.setTristate(False)
-        self.checkIsAdmin.setObjectName("checkIsAdmin")
-        self.mainGLayout.addWidget(self.checkIsAdmin, 3, 0, 1, 3)
+
+
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 562, 26))
@@ -141,7 +135,6 @@ class Ui_MainWindow(object):
         self.lineEditPassword.setPlaceholderText(_translate("MainWindow", "Enter your password"))
         self.lineEditEmail.setPlaceholderText(_translate("MainWindow", "Enter your email address"))
         self.lblTitle.setText(_translate("MainWindow", "Login Page"))
-        self.checkIsAdmin.setText(_translate("MainWindow", "As an admin"))
 
 
 
