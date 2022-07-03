@@ -3,6 +3,9 @@ from Models.Food import Food
 from Window import Routing
 from Window import Transfer
 from Controllers.AuthenticationController import Auth
+from functools import partial
+from Lib.Questions import Questions
+from Lib.Messages import Messages
 
 
 # ////////////////////////////EVENTS////////////////////////////
@@ -27,16 +30,23 @@ def setInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
 
     # set table data
     for i, food in enumerate(foods):
-        
-        # create a icon of the food image
-        foodIcon = QtGui.QIcon(food.image)
+
+        # create a delete button
+        deleteIcon = QtGui.QIcon(r".\Resources\Images\delete_icon.png")
+        btnDelete = QtWidgets.QPushButton()
+        btnDelete.setIcon(deleteIcon)
+        btnDelete.setIconSize(QtCore.QSize(20, 20))
+        deleteSignal = partial(deleteFood, food.id, window)
 
         # create a button to go to the food edit window
         editIcon = QtGui.QIcon(r".\Resources\Images\edit_icon.png")
         btnGoToEdit = QtWidgets.QPushButton()
         btnGoToEdit.setIcon(editIcon)
         btnGoToEdit.setIconSize(QtCore.QSize(20, 20))
-        btnGoToEdit.clicked.connect(lambda: goToFoodEdit(food, window))
+        editSignal = partial(goToFoodEdit, food.id, window)
+
+        # create a icon of the food image
+        foodIcon = QtGui.QIcon(food.image)
 
         ui.tableFoods.setItem(i, 0, QtWidgets.QTableWidgetItem(str(food.id)))
         ui.tableFoods.setItem(i, 1, QtWidgets.QTableWidgetItem(foodIcon, "", QtCore.Qt.DecorationRole))
@@ -44,33 +54,44 @@ def setInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
         ui.tableFoods.setItem(i, 3, QtWidgets.QTableWidgetItem(str(food.stock)))
         ui.tableFoods.setItem(i, 4, QtWidgets.QTableWidgetItem(str(food.fixed_price)))
         ui.tableFoods.setItem(i, 5, QtWidgets.QTableWidgetItem(str(food.sale_price)))
-        # add the push button to action column
+        # add the edit button to edit column
         ui.tableFoods.setCellWidget(i, 6, btnGoToEdit)
 
-    # set table row height
-    ui.tableFoods.setRowHeight(0, 30)
+        # add the delete button to delete column
+        ui.tableFoods.setCellWidget(i, 7, btnDelete)
 
-    # set table column width
-    ui.tableFoods.setColumnWidth(0, 10) # id
-    ui.tableFoods.setColumnWidth(1, 70) # image
-    ui.tableFoods.setColumnWidth(2, 150) # title
-    ui.tableFoods.setColumnWidth(3, 150) # stock
-    ui.tableFoods.setColumnWidth(4, 150) # fixed price
-    ui.tableFoods.setColumnWidth(5, 150) # sale price
-    ui.tableFoods.setColumnWidth(6, 100) # action
+        # connect edit button to the partial function 
+        btnGoToEdit.clicked.connect(editSignal)
 
-    # set table edit behavior (not editable)
-    ui.tableFoods.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+        # connect delete button to the partial function
+        btnDelete.clicked.connect(deleteSignal)
 
 
-def goToFoodEdit(food:Food, window: 'QtWidgets.QMainWindow'):
+def goToFoodEdit(id: int, window: 'QtWidgets.QMainWindow'):
     """Go to the food edit window"""
 
     # save the food object in Transfer
-    Transfer.Add("food", food)
+    Transfer.Add("id", id)
     
     # go to the food edit window
     Routing.Redirect(window, 'foodEdit')
+
+
+def deleteFood(id: int, window: 'QtWidgets.QMainWindow'):
+    """Delete a food from the database"""
+
+    # Check if the user is sure
+    if not Questions.ask(Questions.Type.ASKOKCANCEL, "Are you sure you want to delete this food?"):
+        return
+
+    # delete the food from database
+    Food.Delete(id)
+
+    # show success message
+    Messages.push(Messages.Type.SUCCESS, "Food deleted successfully")
+
+    # refresh the page
+    Routing.Refresh(window)
 
 
 class Ui_MainWindow(object):
@@ -97,7 +118,7 @@ class Ui_MainWindow(object):
         
         self.tableFoods = QtWidgets.QTableWidget(self.gridLayoutWidget)
         self.tableFoods.setObjectName("tableFoods")
-        self.tableFoods.setColumnCount(7)
+        self.tableFoods.setColumnCount(8)
         self.tableFoods.setRowCount(0)
         
         item = QtWidgets.QTableWidgetItem()
@@ -121,8 +142,27 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableFoods.setHorizontalHeaderItem(6, item)
 
+        item = QtWidgets.QTableWidgetItem()
+        self.tableFoods.setHorizontalHeaderItem(7, item)
+
+        # set table row height
+        self.tableFoods.setRowHeight(0, 30)
+
+        # set table column width
+        self.tableFoods.setColumnWidth(0, 10) # id
+        self.tableFoods.setColumnWidth(1, 70) # image
+        self.tableFoods.setColumnWidth(2, 150) # title
+        self.tableFoods.setColumnWidth(3, 150) # stock
+        self.tableFoods.setColumnWidth(4, 150) # fixed price
+        self.tableFoods.setColumnWidth(5, 150) # sale price
+        self.tableFoods.setColumnWidth(6, 50) # edit
+        self.tableFoods.setColumnWidth(7, 50) # delete
+
+        # set table edit behavior (not editable)
+        self.tableFoods.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+
         self.gridLayout.addWidget(self.tableFoods, 1, 0, 1, 2)
-        
+
         # push button going to the previous window
         self.btnBack = QtWidgets.QPushButton(self.gridLayoutWidget)
         self.btnBack.setObjectName("btnBack")
@@ -160,7 +200,9 @@ class Ui_MainWindow(object):
         item = self.tableFoods.horizontalHeaderItem(5)
         item.setText(_translate("MainWindow", "Sale Price"))
         item = self.tableFoods.horizontalHeaderItem(6)
-        item.setText(_translate("MainWindow", "Action"))
+        item.setText(_translate("MainWindow", "Edit"))
+        item = self.tableFoods.horizontalHeaderItem(7)
+        item.setText(_translate("MainWindow", "Delete"))
         self.btnBack.setText(_translate("MainWindow", "Back"))
         self.btnAddFood.setText(_translate("MainWindow", "Add Food"))
 

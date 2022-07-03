@@ -7,7 +7,15 @@ import os
 
 
 # get the food object from Transfer
-FOOD: Food = Transfer.Get('food')
+FOOD: Food = None
+
+
+def setFoodObject():
+    """This function gets the food object from the Transfer"""
+    global FOOD
+    
+    foodId = Transfer.Get('id')
+    FOOD = Food.Get(foodId)
 
 
 # /////////////////////////////EVENTS////////////////////////////
@@ -23,8 +31,16 @@ def checkForCredentials(window: 'QtWidgets.QMainWindow'):
         return
 
 
-def setupInitInformation(ui: "Ui_MainWindow"):
+def setupInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
     """sets the information of the selected food to be edited"""
+
+    # check if the FOOD is not None
+    if not FOOD:
+        Messages.push(Messages.Type.ERROR, "Something wrong with initialization.")
+        Messages.show()
+        # redirect back
+        Routing.RedirectBack(window)
+        return
 
     # set the food image to lblFoodPicture as a QPixmap
     ui.lblFoodPicture.setPixmap(QtGui.QPixmap(FOOD.image))
@@ -344,7 +360,7 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         self.btnRefresh.setFont(font)
         self.btnRefresh.setObjectName("btnRefresh")
-        self.btnRefresh.clicked.connect(lambda : setupInitInformation(self))
+        self.btnRefresh.clicked.connect(lambda : setupInitInformation(self, MainWindow))
         self.btnHLayout.addWidget(self.btnRefresh)
         
         self.btnChange = QtWidgets.QPushButton(self.gridLayoutWidget)
@@ -391,8 +407,9 @@ class Ui_MainWindow(object):
         self.lEditNewDescription.setPlaceholderText(_translate("MainWindow", "New Description"))
         self.lEditNewSalePrice.setPlaceholderText(_translate("MainWindow", "New Sale Price"))
 
+        setFoodObject()
         checkForCredentials(MainWindow)
-        setupInitInformation(self)
+        setupInitInformation(self, MainWindow)
 
 
 
