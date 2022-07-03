@@ -18,8 +18,10 @@ class Menu(Model):
 
 
     @staticmethod
-    def Create(data):
+    def Create(menuData : dict):
         """create new menu in database"""
+
+        data = menuData.copy()
 
         data["foods"] = json.dumps(data["foods"])
 
@@ -39,7 +41,7 @@ class Menu(Model):
         return Menu(
             id = row[0],
             title = row[1],
-            foods = json.loads(row[2]) if row[2] else [],
+            foods = json.loads(row[2]) if row[2] else list(),
             date = row[3]
         )
 
@@ -56,7 +58,7 @@ class Menu(Model):
             menus.append(Menu(
                 id=row[0],
                 title=row[1],
-                foods=json.loads(row[2]) if row[2] else [],
+                foods=json.loads(row[2]) if row[2] else list(),
                 date=row[3]
             ))
 
@@ -71,11 +73,13 @@ class Menu(Model):
 
 
     @staticmethod
-    def Update(id : int, data):
+    def Update(id : int, menuData):
         """update menu"""
 
         if not Menu.Exists(id):
             raise RuntimeError("menu does not exist")
+
+        data = menuData.copy()
 
         if "id" in data.keys():
             data.pop("id")

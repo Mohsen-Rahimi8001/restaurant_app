@@ -6,6 +6,7 @@ from Unittests.Models import RestaurantTest
 from Unittests.Models import CommentTest
 from Unittests.Models import UserTest
 from Unittests.Models import OrderTest
+from Unittests.Models import MenuTest
 from Unittests.Controllers import ValidationTest
 
 
@@ -25,6 +26,7 @@ def run_tests():
     run(CommentTest.TestComment)
     run(UserTest.TestUser)
     run(OrderTest.TestOrder)
+    run(MenuTest.TestMenu)
     run(ValidationTest.TestUserValidator)
 
 
