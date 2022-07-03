@@ -34,6 +34,11 @@ class Routes:
         return Ui_MainWindow
 
 
+    def newFood():
+        from Views.Admin.NewFoodUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
     #UI table window { name : UI method }
     UiObjects = {
 
@@ -43,6 +48,7 @@ class Routes:
         "adminHome": adminHome,
         "foods" : foods,
         "foodEdit" : editFood,
+        "newFood" : newFood,
     }
 
 
