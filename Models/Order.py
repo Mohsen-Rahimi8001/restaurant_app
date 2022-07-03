@@ -24,8 +24,10 @@ class Order(Model):
 
 
     @staticmethod
-    def Create(data : dict):
+    def Create(order_data : dict):
         """create new order in database"""
+
+        data = order_data.copy()
 
         #initial conditions
         data["foods"] = json.dumps(data["foods"])
@@ -48,11 +50,11 @@ class Order(Model):
 
         return Order(
             id = row[0],
-            foods = json.loads(row[1]) if row[1] else [],
+            foods = json.loads(row[1]) if row[1] else list(),
             date = row[2],
-            paid = row[3],
+            paid = bool(row[3]),
             reference_number = row[4],
-            delivered = row[5],
+            delivered = bool(row[5]),
             user_id = row[6],
             account_number = row[7],
         )
@@ -69,11 +71,11 @@ class Order(Model):
         for row in rows:
             orders.append(Order(
                 id=row[0],
-                foods=json.loads(row[1]) if row[1] else [],
+                foods=json.loads(row[1]) if row[1] != "[ ]" else [],
                 date=row[2],
-                paid=row[3],
+                paid= bool(row[3]),
                 reference_number=row[4],
-                delivered=row[5],
+                delivered= bool(row[5]),
                 user_id=row[6],
                 account_number=row[7],
             ))
@@ -89,16 +91,26 @@ class Order(Model):
 
 
     @staticmethod
-    def Update(id: int, data : dict):
+    def Update(id: int, order_data : dict):
         """update order"""
 
         if not Order.Exists(id):
             raise RuntimeError("Order does not exist")
 
+        data = order_data.copy()
+
         #can't update id
         if "id" in data.keys():
             data.pop("id")
 
+        #convert booleans to int
+        if "paid" in data.keys():
+            data["paid"] = 1 if data["paid"] else 0
+
+        if "delivered" in data.keys():
+            data["delivered"] = 1 if data["delivered"] else 0
+
+        #converts lists to string
         if "foods" in data.keys():
             data["foods"] = json.dumps(data["foods"])
 

@@ -39,7 +39,7 @@ class User(Model):
 
         #set default value for image
         if not "image" in data.keys():
-            data["image"] = "default_user.png"
+            data["image"] = "user_default.png"
 
         lastRow = Database.Create(User.TableName, data)
         return lastRow

@@ -98,7 +98,7 @@ class Database:
             return curs.lastrowid
 
         except Error as e:
-            raise e
+             raise e
 
 
     @staticmethod
