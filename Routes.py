@@ -1,7 +1,7 @@
 class Routes:
 
-#UI class methods
-#each method returns UI class for a particular window
+    #UI class methods
+    #each method returns UI class for a particular window
 
 
     def landingPage():
@@ -23,6 +23,21 @@ class Routes:
         from Views.Admin.HomeUI import Ui_MainWindow
         return Ui_MainWindow
 
+    
+    def foods():
+        from Views.Admin.FoodsUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
+    def editFood():
+        from Views.Admin.EditFoodUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
+    def newFood():
+        from Views.Admin.NewFoodUI import Ui_MainWindow
+        return Ui_MainWindow
+
 
     #UI table window { name : UI method }
     UiObjects = {
@@ -31,6 +46,9 @@ class Routes:
         "login" : login,
         "signup" : signup,
         "adminHome": adminHome,
+        "foods" : foods,
+        "foodEdit" : editFood,
+        "newFood" : newFood,
     }
 
 

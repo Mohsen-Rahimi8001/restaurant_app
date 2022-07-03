@@ -14,7 +14,7 @@ def setInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
         Auth.Logout()
         # redirect to login page
         Routing.Redirect(window, 'login')
-        Routing.PreviousWindow = False # reset previous window
+        Routing.ClearStack() # reset previous window
 
     # get the admin information
     admin = Auth.GetUser()
