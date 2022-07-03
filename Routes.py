@@ -23,7 +23,7 @@ class Routes:
         from Views.Admin.HomeUI import Ui_MainWindow
         return Ui_MainWindow
 
-    
+
     def foods():
         from Views.Admin.FoodsUI import Ui_MainWindow
         return Ui_MainWindow
