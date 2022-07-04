@@ -13,7 +13,7 @@ class Auth:
 
     @staticmethod
     def HashPassword(password) -> str:
-        return  bcrypt.hashpw(password, bcrypt.gensalt(1))
+        return  bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt(5))
 
 
     @staticmethod
