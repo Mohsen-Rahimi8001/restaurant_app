@@ -39,6 +39,7 @@ class Defaults:
                 "password": "aA!12345678",
                 "password_verification": "aA!12345678",
                 "role" : 2,
+                "image" : r".\Resources\Images\user_default.png"
             }
 
         if not Auth.CheckForPreviousSignUp(data["email"]):
