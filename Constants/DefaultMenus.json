@@ -1,0 +1,121 @@
+[
+    {
+        "title": "saturday",
+        "foods": [
+            {
+                "title": "pizza1",
+                "fixed_price": 100,
+                "sale_price": 150,
+                "stock": 10,
+                "description": "a b c",
+                "materials": "1-2-3-4",
+                "category": "American",
+                "image": ".\\Resources\\Images\\food_default_20220704234102.png",
+                "id": 116
+            }
+        ],
+        "date": 0
+    },
+    {
+        "title": "sunday",
+        "foods": [
+            {
+                "title": "pizza2",
+                "fixed_price": 100,
+                "sale_price": 150,
+                "stock": 10,
+                "description": "a b c",
+                "materials": "1-2-3-4",
+                "category": "American",
+                "image": ".\\Resources\\Images\\food_default_20220704234102.png",
+                "id": 117
+            }
+        ],
+        "date": 1
+    },
+    {
+        "title": "monday",
+        "foods": [
+            {
+                "title": "pizza3",
+                "fixed_price": 100,
+                "sale_price": 150,
+                "stock": 10,
+                "description": "a b c",
+                "materials": "1-2-3-4",
+                "category": "American",
+                "image": ".\\Resources\\Images\\food_default_20220704234103.png",
+                "id": 118
+            }
+        ],
+        "date": 2
+    },
+    {
+        "title": "tuesday",
+        "foods": [
+            {
+                "title": "pizza4",
+                "fixed_price": 100,
+                "sale_price": 150,
+                "stock": 10,
+                "description": "a b c",
+                "materials": "1-2-3-4",
+                "category": "American",
+                "image": ".\\Resources\\Images\\food_default_20220704234103.png",
+                "id": 119
+            }
+        ],
+        "date": 3
+    },
+    {
+        "title": "wednesday",
+        "foods": [
+            {
+                "title": "pizza5",
+                "fixed_price": 100,
+                "sale_price": 150,
+                "stock": 10,
+                "description": "a b c",
+                "materials": "1-2-3-4",
+                "category": "American",
+                "image": ".\\Resources\\Images\\food_default_20220704234103.png",
+                "id": 120
+            }
+        ],
+        "date": 4
+    },
+    {
+        "title": "thursday",
+        "foods": [
+            {
+                "title": "pizza6",
+                "fixed_price": 100,
+                "sale_price": 150,
+                "stock": 10,
+                "description": "a b c",
+                "materials": "1-2-3-4",
+                "category": "American",
+                "image": ".\\Resources\\Images\\food_default_20220704234104.png",
+                "id": 121
+            }
+        ],
+        "date": 5
+    },
+    {
+        "title": "friday",
+        "foods": [
+            {
+                "title": "pizza7",
+                "fixed_price": 100,
+                "sale_price": 150,
+                "stock": 10,
+                "description": "a b c",
+                "materials": "1-2-3-4",
+                "category": "American",
+                "image": ".\\Resources\\Images\\food_default_20220704234104.png",
+                "id": 122
+            }
+        ],
+        "date": 6
+    }
+]

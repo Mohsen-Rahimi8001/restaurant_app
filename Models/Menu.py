@@ -47,7 +47,7 @@ class Menu(Model):
 
 
     @staticmethod
-    def GetAll():
+    def GetAll() -> list['Menu']:
         """get all orders"""
 
         rows = Database.ReadAll(Menu.TableName)
@@ -101,7 +101,10 @@ class Menu(Model):
         Database.Delete(Menu.TableName, Menu.PrimaryKey, id)
 
 
-
+    @staticmethod
+    def DeleteAll():
+        """Flush all the menus"""
+        Database.DeleteAll(Menu.TableName)
 
 
     #foods method

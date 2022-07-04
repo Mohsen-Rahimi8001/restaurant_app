@@ -8,6 +8,7 @@ class User(Model):
 
     TableName = "users"
     PrimaryKey = "id"
+    DefaultImage = r".\Resources\Images\user_default.png"
 
 
     def __init__(self, id: int, first_name : str, last_name : str, email : str, phone_number : str, social_number : str,
@@ -41,7 +42,7 @@ class User(Model):
 
         #set default value for image
         if not "image" in data.keys():
-            data["image"] = "user_default.png"
+            data["image"] = User.DefaultImage
 
         lastRow = Database.Create(User.TableName, data)
         return lastRow

@@ -1,6 +1,8 @@
 from DataBase.Sqlite import Database
 from Controllers.AuthenticationController import Auth
 
+
+
 class Initialize:
 
     @staticmethod
@@ -37,13 +39,8 @@ class Defaults:
                 "password": "aA!12345678",
                 "password_verification": "aA!12345678",
                 "role" : 2,
+                "image" : r".\Resources\Images\user_default.png"
             }
 
         if not Auth.CheckForPreviousSignUp(data["email"]):
             Auth.SignUp(data)
-
-
-
-
-
-

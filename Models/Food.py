@@ -1,5 +1,6 @@
 from Models.Model import Model
 from DataBase.Sqlite import Database
+from Lib.Image import Image
 import os
 
 
@@ -7,7 +8,7 @@ class Food(Model):
     
     TableName = 'foods'
     PrimaryKey = 'id'
-    DefaultImage = os.path.abspath('./Resources/Images/food_default.png')
+    DefaultImage = r'.\Resources\Images\food_default.png'
 
     def __init__(self, id:int, title:str, stock:int, fixed_price:int, sale_price:int,\
          description:str, category:str, materials:str, image:str=None) -> None:
@@ -73,7 +74,7 @@ class Food(Model):
         elif not os.path.isfile(image):
             raise FileNotFoundError('Image does not exist')
         
-        return os.path.abspath(image)
+        return image
 
     @staticmethod
     def ValidatePrice(price:int):
@@ -128,7 +129,7 @@ class Food(Model):
 
         if 'image' in data:
             try:
-                data['image'] = Food.ValidateImage(data['image'])
+                data['image'] = Image.GetFromDirectory(Food.ValidateImage(data['image']))
             except FileNotFoundError or TypeError:
                 data['image'] = Food.DefaultImage
         else:
@@ -204,7 +205,7 @@ class Food(Model):
 
         if 'image' in data:
             try:
-                data['image'] = Food.ValidateImage(data['image'])
+                data['image'] = Image.GetFromDirectory(Food.ValidateImage(data['image']))
             except FileNotFoundError or TypeError:
                 data.pop('image')
 
