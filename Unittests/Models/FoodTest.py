@@ -34,7 +34,7 @@ class TestFood(unittest.TestCase):
         self.assertEqual(food.description, 'bluh bluh')
         self.assertEqual(food.category, 'American')
         self.assertEqual(food.materials, '1-2-3-4')
-        self.assertEqual(food.image, os.path.abspath(r'.\Resources\Images\food_default.png'))
+        self.assertTrue(os.path.samefile(food.image, os.path.abspath(r'.\Resources\Images\food_default.png')))
         
     def test_setters(self):
         food = Food(1, 'Pizza', 1, 150, 120, 'bluh bluh', 'American', '1-2-3-4')
@@ -63,7 +63,7 @@ class TestFood(unittest.TestCase):
         with self.assertRaises(TypeError):
             food.image = 1.5
 
-        self.assertEqual(food.image, os.path.abspath(r'.\Resources\Images\food_default.png'))
+        self.assertTrue(os.path.samefile(food.image, os.path.abspath(r'.\Resources\Images\food_default.png')))
 
     def test_Create(self):
         Food.Create({'title': 'Pizza0', 'stock': 1, 'fixed_price': 120, 'sale_price': 150, 'description': 'bluh bluh', 'category': 'American', 'materials': '1-2-3-4'})
