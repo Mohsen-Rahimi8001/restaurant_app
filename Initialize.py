@@ -1,6 +1,8 @@
 from DataBase.Sqlite import Database
 from Controllers.AuthenticationController import Auth
 
+
+
 class Initialize:
 
     @staticmethod
@@ -41,9 +43,3 @@ class Defaults:
 
         if not Auth.CheckForPreviousSignUp(data["email"]):
             Auth.SignUp(data)
-
-
-
-
-
-
