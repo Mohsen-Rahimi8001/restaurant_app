@@ -7,9 +7,39 @@ from Lib.Messages import Messages
 from Window import Routing
 from Models.User import User
 from functools import partial
+from Controllers.AuthenticationController import Auth
+from Window import Transfer
+
+
+
 
 # #////////////////////////////EVENTS///////////////////////////
-from Controllers.AuthenticationController import Auth
+
+
+#init event
+
+def init(window, ui : "Ui_MainWindow"):
+
+    # if Auth.IsUserLoggedIN():
+    #     Routing.Redirect(window, "userHome")
+
+    if Transfer.Exists("signup_data"):
+
+        data = Transfer.Get("signup_data")
+
+        setFirstName(ui, data["first_name"])
+        setLastName(ui, data["last_name"])
+        setEmail(ui, data["email"])
+        setPhoneNumber(ui, data["phone_number"])
+        setSocialNumber(ui, data["social_number"])
+
+
+
+
+
+
+
+#bottun events
 
 def submit(window, ui : "Ui_MainWindow"):
 
@@ -27,13 +57,30 @@ def submit(window, ui : "Ui_MainWindow"):
     result = Auth.SignUp(data)
 
     if result:
+
+        #clear transfer
+        if Transfer.Exists("signup_data"):
+            Transfer.Get("signup_data")
+
         Messages.push(Messages.Type.SUCCESS, "sign up completed")
         Routing.Redirect(window, "login")
 
     else:
+        Transfer.Add("signup_data", data)
         Messages.push(Messages.Type.INFO, "sign up failed")
         Routing.Refresh(window)
 
+
+
+def clear(ui : "Ui_MainWindow"):
+    """clear inputs"""
+    setFirstName(ui, "")
+    setLastName(ui, "")
+    setEmail(ui, "")
+    setSocialNumber(ui, "")
+    setPhoneNumber(ui, "")
+    setPasswordVerification(ui, "")
+    setPassword(ui, "")
 
 
 
@@ -62,11 +109,39 @@ def getPasswordVerification(ui : "Ui_MainWindow"):
 
 
 
+#set inputs
+
+def setFirstName(ui : "Ui_MainWindow", value : str):
+    ui.lEditName.setText(str(value))
+
+def setLastName(ui : "Ui_MainWindow", value : str):
+    ui.lEditFamily.setText(str(value))
+
+def setPhoneNumber(ui : "Ui_MainWindow", value : str):
+    ui.lEditPhoneNumber.setText(str(value))
+
+def setEmail(ui : "Ui_MainWindow", value : str):
+    ui.lEditEmail.setText(str(value))
+
+def setSocialNumber(ui : "Ui_MainWindow", value : str):
+    ui.lEditSocialNumber.setText(str(value))
+
+def setPassword(ui : "Ui_MainWindow", value : str):
+    ui.lEditPassword.setText(str(value))
+
+def setPasswordVerification(ui : "Ui_MainWindow", value : str):
+    ui.lEditPasswordVerify.setText(str(value))
+
+
+
+
 #//////////////////////////////UI//////////////////////////////
 
 class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
+
+
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(800, 600)
@@ -193,6 +268,9 @@ class Ui_MainWindow(object):
         self.btnHLayout.setSpacing(20)
         self.btnHLayout.setObjectName("btnHLayout")
         self.btnClear = QtWidgets.QPushButton(self.gridLayoutWidget)
+
+        self.btnClear.clicked.connect(partial( clear, self ))
+
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
         self.btnClear.setFont(font)
@@ -222,7 +300,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-
+        init(MainWindow, self)
 
 
 

@@ -13,6 +13,27 @@ from Lib.Messages import Messages
 # #////////////////////////////EVENTS///////////////////////////
 from Controllers.AuthenticationController import Auth
 
+#init event
+
+def init(window, ui : "Ui_MainWindow"):
+
+    if Transfer.Exists("login_email"):
+        email = Transfer.Get("login_email")
+        setEmail(ui, email)
+
+
+    if Transfer.Exists("try_count"):
+        try_count = Transfer.Get("try_count")
+
+        if try_count == 3:
+            Messages.push(Messages.Type.INFO, "you already failed log in 3 times\ntry forgot password")
+
+        Transfer.Add("try_count", try_count)
+
+
+
+
+#bottun events
 
 def login(window, ui : "Ui_MainWindow"):
 
@@ -24,8 +45,24 @@ def login(window, ui : "Ui_MainWindow"):
     result = Auth.Login(data)
 
     if not result:
+        Transfer.Add("login_email", data["email"])
+
+        if Transfer.Exists("try_count"):
+            Transfer.Add( "try_count", Transfer.Get("try_count") + 1)
+        else:
+            Transfer.Add("try_count", 1)
+
         Routing.Refresh(window)
+
     else:
+
+        #clear transfer
+        if Transfer.Exists("login_email"):
+            Transfer.Get("login_email")
+
+        if Transfer.Exists("try_count"):
+            Transfer.Get("try_count")
+
         Messages.push(Messages.Type.SUCCESS, "You logged in successfully")
         if Auth.CheckAdminCredentials():
             Routing.Redirect(window, "adminHome")
@@ -47,6 +84,14 @@ def getPassword(ui : "Ui_MainWindow") -> str:
 
 
 
+#set inputs
+
+def setEmail(ui : "Ui_MainWindow", value : str):
+    ui.lineEditEmail.setText(str(value))
+
+
+def setPassword(ui : "Ui_MainWindow", value : str):
+    ui.lineEditPassword.setText(str(value))
 
 #//////////////////////////////UI//////////////////////////////
 
@@ -189,7 +234,7 @@ class Ui_MainWindow(object):
         self.lblTitle.setText(_translate("MainWindow", "Login Page"))
 
 
-
+        init(MainWindow, self)
 
 
 
