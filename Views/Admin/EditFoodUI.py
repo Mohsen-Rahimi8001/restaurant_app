@@ -3,6 +3,7 @@ from Models.Food import Food
 from Window import Routing, Transfer
 from Controllers.AuthenticationController import Auth
 from Lib.Messages import Messages
+from Lib.Questions import Questions
 import os
 
 
@@ -24,11 +25,10 @@ def checkForCredentials(window: 'QtWidgets.QMainWindow'):
 
     if not Auth.CheckAdminCredentials():
         # Logout the user
-        Auth.Logout()
+        Auth.LogOut()
         # Go to the login window
         Routing.Redirect(window, "landingPage")
         Routing.ClearStack() # prevent the user from going back to the previous window
-        return
 
 
 def setupInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
@@ -106,7 +106,7 @@ def browseForImage(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
     """browses for an image"""
 
     # open a file dialog
-    fileName = QtWidgets.QFileDialog.getOpenFileName(window, "Open File", "D:\\", "Image Files (*.png *.jpg *.bmp *.gif)")
+    fileName = QtWidgets.QFileDialog.getOpenFileName(window, "Open File", ".", "Image Files (*.png *.jpg *.bmp *.gif)")
 
     # if the user didn't select an image
     if fileName[0] == "":
@@ -171,10 +171,10 @@ def saveChanges(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
 
     # check if it is a valid image directory
     if not os.path.isfile(image):
-        # Show Error Massege
-        Messages.push(Messages.Type.ERROR, "Invalid Image directory")
-        Messages.show()
-        return
+        # Show Warning Massege
+        if not Questions.ask(Questions.Type.ASKYESNO, "The image directorys doesn't exist.\n"
+            "Do you want to set the default image to the food?"):
+            return
 
     # update the food information in the database
     try:
@@ -183,11 +183,9 @@ def saveChanges(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
         # Show Error Massege
         Messages.push(Messages.Type.ERROR, str(e))
         Messages.show()
-        return
-
-    # go to the foods window
-    Routing.Redirect(window, "foods")
-    Routing.ClearStack() # prevent the user from going back to the previous window
+    else:
+        # show success message
+        Messages.push(Messages.Type.SUCCESS, "the food was updated successfully")
 
 
 class Ui_MainWindow(object):

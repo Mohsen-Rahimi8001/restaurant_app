@@ -16,7 +16,7 @@ def setInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
     # check if the user is admin
     if not Auth.CheckAdminCredentials():
         # logout the user
-        Auth.Logout()
+        Auth.LogOut()
         # go to the landing page
         Routing.Redirect(window, 'landingPage')
         Routing.ClearStack() # reset the previous window
