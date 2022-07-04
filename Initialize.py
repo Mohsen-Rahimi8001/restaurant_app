@@ -36,7 +36,7 @@ class Defaults:
                 "social_number": "1111111111",
                 "password": "aA!12345678",
                 "password_verification": "aA!12345678",
-                "role" : 2
+                "role" : 2,
             }
 
         if not Auth.CheckForPreviousSignUp(data["email"]):
