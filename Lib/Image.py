@@ -47,6 +47,10 @@ class Image:
     def GetFromDirectory(directory: str):
         """Copy the image form the directory in the image resources and return the new directory"""
 
+        if os.path.dirname(directory) == Image.BaseDir:
+            if os.path.isfile(directory):
+                return directory
+
         if os.path.isfile(directory):
             
             # copy the image to BaseDir
