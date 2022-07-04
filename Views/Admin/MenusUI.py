@@ -216,6 +216,7 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         self.btnAddMenu.setFont(font)
         self.btnAddMenu.setObjectName("btnAddMenu")
+        self.btnAddMenu.clicked.connect(lambda:Routing.Redirect(MainWindow, 'newMenu'))
         self.btnHLayout.addWidget(self.btnAddMenu)
         self.gridLayout.addLayout(self.btnHLayout, 3, 0, 1, 1)
         
