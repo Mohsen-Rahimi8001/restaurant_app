@@ -6,6 +6,8 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from functools import partial
 from Window import Routing
+from Window import Transfer
+from Lib.Messages import Messages
 
 
 # #////////////////////////////EVENTS///////////////////////////
@@ -19,7 +21,16 @@ def login(window, ui : "Ui_MainWindow"):
         "password" : getPassword(ui),
     }
 
+    result = Auth.Login(data)
 
+    if not result:
+        Routing.Refresh(window)
+    else:
+        Messages.push(Messages.Type.SUCCESS, "You logged in successfully")
+        if Auth.CheckAdminCredentials():
+            Routing.Redirect(window, "adminHome")
+        else:
+            Routing.Redirect(window, "userHome")
 
 
 

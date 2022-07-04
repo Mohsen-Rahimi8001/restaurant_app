@@ -119,3 +119,56 @@ class TestAuth(Test):
 
         self.assertFalse(Auth.CurrentUserId)
         self.assertFalse(Auth.IsUserLoggedIN())
+
+
+    def test_get_logged_in_user(self):
+
+        self.assertFalse(Auth.GetUser())
+
+        data = TestAuth.validData.copy()
+        Auth.SignUp(data)
+
+        loginData = {
+            "email": "user@gmail.com",
+            "password": "aA!12345678"
+        }
+
+        Auth.Login(loginData)
+
+        self.assertTrue(isinstance(Auth.GetUser(), User))
+
+
+    def test_check_admin_credentials_with_user(self):
+
+        self.assertFalse(Auth.CheckAdminCredentials())
+
+        data = TestAuth.validData.copy()
+        Auth.SignUp(data)
+
+        loginData = {
+            "email": "user@gmail.com",
+            "password": "aA!12345678"
+        }
+
+        Auth.Login(loginData)
+
+        self.assertFalse(Auth.CheckAdminCredentials())
+
+
+    def test_check_admin_credentials_with_admin(self):
+
+        self.assertFalse(Auth.CheckAdminCredentials())
+
+        data = TestAuth.validData.copy()
+        data["role"] = 2
+        Auth.SignUp(data)
+
+        loginData = {
+            "email": "user@gmail.com",
+            "password": "aA!12345678"
+        }
+
+        Auth.Login(loginData)
+
+        self.assertTrue(Auth.CheckAdminCredentials())
+

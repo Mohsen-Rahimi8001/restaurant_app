@@ -9,7 +9,7 @@ class Auth:
 
 
     CurrentUserId = False
-
+    AdminRole = 2
 
     @staticmethod
     def HashPassword(password) -> str:
@@ -105,13 +105,23 @@ class Auth:
             return True
         return False
 
+
     @staticmethod
     def GetUser() -> User:
         """ returns logged in user object """
-        pass
+
+        if not Auth.IsUserLoggedIN():
+            return False
+
+        return User.Get(Auth.CurrentUserId)
 
 
     @staticmethod
     def CheckAdminCredentials() -> bool:
         """returns true if logged in user is admin"""
-        return True
+
+        if not Auth.IsUserLoggedIN():
+            return False
+
+        return Auth.GetUser().role == Auth.AdminRole
+

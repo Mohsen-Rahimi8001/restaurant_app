@@ -55,6 +55,7 @@ class Routes:
         "foodEdit" : editFood,
         "newFood" : newFood,
         "editRestaurant": editRestaurant,
+        "userHome" : landingPage,
     }
 
 
