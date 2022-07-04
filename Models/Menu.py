@@ -2,11 +2,14 @@ from Models.Model import Model
 import json
 from Models.Food import Food
 from DataBase.Sqlite import Database
+import datetime as dt
+
 
 class Menu(Model):
 
     TableName = "menus"
     PrimaryKey = "id"
+    DatePattern = "%Y-%m-%d"
 
     def __init__(self, id : int, title : str, foods : list, date : str):
 
@@ -18,10 +21,27 @@ class Menu(Model):
 
 
     @staticmethod
+    def ValidateDate(date:str):
+        """Validates the date of the Menu
+        :param date: The date of the Menu
+        :return: date if it is valid, raises proper error otherwise
+        """
+        try:
+            dt.datetime.strptime(date, Menu.DatePattern)
+        except ValueError:
+            raise ValueError("Incorrect data format, should be 'Year-Month-Day'")
+
+        return date
+
+
+
+    @staticmethod
     def Create(menuData : dict):
         """create new menu in database"""
 
         data = menuData.copy()
+
+        data["date"] = Menu.ValidateDate(data["date"])
 
         data["foods"] = json.dumps(data["foods"])
 
@@ -73,6 +93,15 @@ class Menu(Model):
 
 
     @staticmethod
+    def ExistsByDate(date : str):
+        """check if a menu exists in database or not"""
+
+        date = Menu.ValidateDate(date)
+
+        return Database.Exists(Menu.TableName, "date", date)
+
+
+    @staticmethod
     def Update(id : int, menuData):
         """update menu"""
 
@@ -86,6 +115,9 @@ class Menu(Model):
 
         if "foods" in data.keys():
             data["foods"] = json.dumps(data["foods"])
+
+        if 'date' in data.keys():
+            data['date'] = Menu.ValidateDate(data['date'])
 
         Database.Update(Menu.TableName, Menu.PrimaryKey, id, data)
 
