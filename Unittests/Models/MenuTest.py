@@ -31,7 +31,7 @@ class TestMenu(unittest.TestCase):
     data = {
         "title" : "menu",
         "foods" : [],
-        "date" : "1-1-1"
+        "date" : "2020-01-01"
     }
 
     foodData = {
@@ -274,3 +274,14 @@ class TestMenu(unittest.TestCase):
         Menu.DeleteAll()
 
         self.assertEqual(len(Menu.GetAll()), 0)
+
+    def test_exists_by_date(self):
+
+        Database.Create('menus', {
+            "title": "test",
+            "foods": '[1, 2, 3]',
+            "date": "2020-01-01"
+        })
+
+        self.assertTrue(Menu.ExistsByDate("2020-01-01"))
+        self.assertFalse(Menu.ExistsByDate("2020-01-02"))
