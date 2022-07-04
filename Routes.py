@@ -44,6 +44,11 @@ class Routes:
         return Ui_MainWindow
 
 
+    def menusPage():
+        from Views.Admin.MenusUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
     #UI table window { name : UI method }
     UiObjects = {
 
@@ -56,6 +61,7 @@ class Routes:
         "newFood" : newFood,
         "editRestaurant": editRestaurant,
         "userHome" : landingPage,
+        "menus" : menusPage,
     }
 
 
