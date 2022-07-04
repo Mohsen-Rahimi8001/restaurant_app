@@ -257,3 +257,20 @@ class TestMenu(unittest.TestCase):
             self.assertTrue(food, Food)
             self.assertTrue(Food.Exists(food.id))
     
+    def test_delete_all(self):
+        
+        Database.Create('menus', {
+            "title": "test",
+            "foods": '[1, 2, 3]',
+            "date": "2020-01-01"
+        })
+
+        Database.Create('menus', {
+            "title": "test",
+            "foods": '[1, 2, 3]',
+            "date": "2020-01-01"
+        })
+
+        Menu.DeleteAll()
+
+        self.assertEqual(len(Menu.GetAll()), 0)
