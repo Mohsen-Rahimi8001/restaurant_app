@@ -59,6 +59,12 @@ class Image:
             destination = os.path.join(Image.BaseDir, name)
 
             if os.path.isfile(destination):
+                
+                # check if two images has the same content
+                with open(directory, "rb") as f:
+                    if f.read() == open(destination, "rb").read():
+                        return destination
+
                 # change the destination name to a unique one
                 # split the name to name and extension
                 name, extension = os.path.splitext(name)
