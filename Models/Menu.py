@@ -139,6 +139,17 @@ class Menu(Model):
         Database.DeleteAll(Menu.TableName)
 
 
+    @staticmethod
+    def DeleteFood(foodId: int):
+        """delete a food from all menus"""
+
+        menus = Menu.GetAll()
+        
+        for menu in menus:
+            menu.removeFood(foodId) # delete if the menu has the food otherwise do nothing
+            Menu.Update(menu.id, {"foods": menu.foods})
+
+
     #foods method
 
 
@@ -172,7 +183,7 @@ class Menu(Model):
             Menu.Update(self.id, {"foods": self.foods})
 
 
-    def getFoods(self) -> list:
+    def getFoods(self) -> list['Food']:
         """get Food object for each food in menu"""
 
         foods = []

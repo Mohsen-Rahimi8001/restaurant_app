@@ -6,6 +6,7 @@ from Models.Menu import Menu
 from functools import partial
 from Lib.Messages import Messages
 from Lib.Questions import Questions
+import datetime as dt
 
 
 
@@ -35,7 +36,7 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
 
     # get all menus from database
     menus = Menu.GetAll()
-    
+
     # set default menus table row count
     ui.tableDefaultMenus.setRowCount(len(defaultMenus))
     
@@ -50,7 +51,7 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
         editButton = QtWidgets.QPushButton()
         editButton.setIcon(QtGui.QIcon(r'.\Resources\Images\edit_icon.png'))
         editButton.setIconSize(QtCore.QSize(20, 20))
-        editSignal = partial(goToMenuEdit, i+1)
+        editSignal = partial(goToMenuEdit, i+1, True, window)
 
         # set menu id
         ui.tableDefaultMenus.setItem(i, 0, QtWidgets.QTableWidgetItem(str(i+1)))
@@ -61,15 +62,12 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
         # set menu foods
         foods = ""
         for food in menu.foods:
-            foods += food['title'] + ", "
+            foods += food.title + ", "
     
         ui.tableDefaultMenus.setItem(i, 2, QtWidgets.QTableWidgetItem(foods))
 
-        # set menu weekday
-        ui.tableDefaultMenus.setItem(i, 3, QtWidgets.QTableWidgetItem(menu.date))
-
         # set menu edit button
-        ui.tableDefaultMenus.setCellWidget(i, 4, editButton)
+        ui.tableDefaultMenus.setCellWidget(i, 3, editButton)
 
         # connect edit button to goToMenuEdit function
         editButton.clicked.connect(editSignal)
@@ -90,14 +88,14 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
         btnGoToEdit = QtWidgets.QPushButton()
         btnGoToEdit.setIcon(editIcon)
         btnGoToEdit.setIconSize(QtCore.QSize(20, 20))
-        editSignal = partial(goToMenuEdit, menu.id, window)
+        editSignal = partial(goToMenuEdit, menu.id, False, window)
 
         ui.tableMenus.setItem(i, 0, QtWidgets.QTableWidgetItem(str(menu.id)))
         ui.tableMenus.setItem(i, 1, QtWidgets.QTableWidgetItem(menu.title))
-        
+
         foods = ""
-        for food in menu.foods:
-            foods += food['title'] + ", "
+        for food in menu.getFoods():
+            foods += food.title + ", "
 
         ui.tableMenus.setItem(i, 2, QtWidgets.QTableWidgetItem(foods))
 
@@ -117,11 +115,12 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
 
 
 # ////////////////////////////////EVENTS////////////////////////////
-def goToMenuEdit(id: int, window: 'QtWidgets.QMainWindow'):
+def goToMenuEdit(id: int, idDefault:bool, window: 'QtWidgets.QMainWindow'):
     """go to the menu edit window"""
 
     # store the menu id to transfer to the next window
     Transfer.Add('id', id)
+    Transfer.Add('idDefault', idDefault)
 
     # go to the menu edit window
     Routing.Redirect(window, 'menuEdit')
@@ -237,7 +236,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.tableDefaultMenus.sizePolicy().hasHeightForWidth())
         self.tableDefaultMenus.setSizePolicy(sizePolicy)
         self.tableDefaultMenus.setObjectName("tableDefaultMenus")
-        self.tableDefaultMenus.setColumnCount(5)
+        self.tableDefaultMenus.setColumnCount(4)
         self.tableDefaultMenus.setRowCount(0)
         
         item = QtWidgets.QTableWidgetItem()
@@ -250,16 +249,12 @@ class Ui_MainWindow(object):
         self.tableDefaultMenus.setHorizontalHeaderItem(2, item) # foods
         
         item = QtWidgets.QTableWidgetItem()
-        self.tableDefaultMenus.setHorizontalHeaderItem(3, item) # date
-        
-        item = QtWidgets.QTableWidgetItem()
-        self.tableDefaultMenus.setHorizontalHeaderItem(4, item) # edit button
+        self.tableDefaultMenus.setHorizontalHeaderItem(3, item) # edit button
         
         # set table column width
         self.tableDefaultMenus.setColumnWidth(0, 10) # id
         self.tableDefaultMenus.setColumnWidth(1, 100) # title
         self.tableDefaultMenus.setColumnWidth(2, 340) # foods
-        self.tableDefaultMenus.setColumnWidth(3, 100) # date
         self.tableDefaultMenus.setColumnWidth(4, 70) # edit button
 
         # set table edit behavior (not editable)
@@ -301,8 +296,6 @@ class Ui_MainWindow(object):
         item = self.tableDefaultMenus.horizontalHeaderItem(2)
         item.setText(_translate("MainWindow", "Foods"))
         item = self.tableDefaultMenus.horizontalHeaderItem(3)
-        item.setText(_translate("MainWindow", "Date"))
-        item = self.tableDefaultMenus.horizontalHeaderItem(4)
         item.setText(_translate("MainWindow", "Edit"))
 
         # check for credentials
