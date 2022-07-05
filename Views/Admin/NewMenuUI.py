@@ -169,48 +169,25 @@ def addMenu(ui: "Ui_MainWindow"):
         Messages.show()
         return
 
-    # get the food ids from the menu table
-    foodIds = getFoodIds(ui)    
-
-    # fetch foods from the database
-    foods: list[Food] = []
-    for foodId in foodIds:
-        foods.append(Food.Get(foodId))
-
-    # check if the food ids is empty
-    if len(foodIds) == 0:
-        Messages.push(Messages.Type.ERROR, "Menu must contain at least one food")
-        Messages.show()
-        return
-
-    foods = [
-        {
-            "id": food.id,
-            "title": food.title,
-            "stock": food.stock,
-            "fixed_price": food.fixed_price,
-            "sale_price": food.sale_price,
-            "image": food.image,
-            "description": food.description,
-            "category": food.category,
-            "materials": food.materials,
-        } for food in foods
-    ]
-
     # check if the title is not empty
     if ui.lEditMenuTitle.text() == "":
         Messages.push(Messages.Type.ERROR, "Title must not be empty")
         Messages.show()
         return
 
-    data = {
-        "title" : ui.lEditMenuTitle.text(),
-        "foods" : foods,
-        "date" : date,
-    }
 
     # add the menu to the database
-    Menu.Create(data)
+    menuId = Menu.Create({
+        "title" : ui.lEditMenuTitle.text(),
+        "foods" : [],
+        "date" : date,
+    })
+
+    # create a menu object
+    menu = Menu.Get(menuId)
+
+    for id in getFoodIds(ui):
+        menu.addFood(id)
 
     # clear the menu table
     clearMenuTable(ui)
