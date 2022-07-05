@@ -1,39 +1,65 @@
 [
     {
+        "id": 1,
         "title": "saturday",
         "foods": [
             {
-                "title": "pizza1",
+                "id": 119,
+                "title": "pizza4",
+                "stock": 10,
                 "fixed_price": 100,
                 "sale_price": 150,
-                "stock": 10,
                 "description": "a b c",
-                "materials": "1-2-3-4",
                 "category": "American",
-                "image": ".\\Resources\\Images\\food_default_20220704234102.png",
-                "id": 116
+                "materials": "1-2-3-4",
+                "image": ".\\Resources\\Images\\food_default.png"
+            },
+            {
+                "id": 1,
+                "title": "Kebab2",
+                "stock": 1,
+                "fixed_price": 2,
+                "sale_price": 3,
+                "description": "The best",
+                "category": "Irainian",
+                "materials": "Meat",
+                "image": ".\\Resources\\Images\\kabab_soltani.jpg"
             }
         ],
-        "date": 0
+        "date": 1,
+        "name": "test"
     },
     {
+        "id": 2,
         "title": "sunday",
         "foods": [
             {
-                "title": "pizza2",
+                "title": "Pizza12",
                 "fixed_price": 100,
                 "sale_price": 150,
                 "stock": 10,
                 "description": "a b c",
                 "materials": "1-2-3-4",
                 "category": "American",
-                "image": ".\\Resources\\Images\\food_default_20220704234102.png",
+                "image": ".\\Resources\\Images\\food_default.png",
                 "id": 117
+            },
+            {
+                "id": 3,
+                "title": "test",
+                "stock": 1,
+                "fixed_price": 1,
+                "sale_price": 1,
+                "description": "asdf",
+                "category": "asfd",
+                "materials": "asdf",
+                "image": ".\\Resources\\Images\\food_default.png"
             }
         ],
-        "date": 1
+        "date": 2
     },
     {
+        "id": 3,
         "title": "monday",
         "foods": [
             {
@@ -44,13 +70,25 @@
                 "description": "a b c",
                 "materials": "1-2-3-4",
                 "category": "American",
-                "image": ".\\Resources\\Images\\food_default_20220704234103.png",
+                "image": ".\\Resources\\Images\\food_default.png",
                 "id": 118
+            },
+            {
+                "id": 6,
+                "title": "Kebab",
+                "stock": 1,
+                "fixed_price": 1,
+                "sale_price": 1,
+                "description": "ljk",
+                "category": "lkj",
+                "materials": "lkj",
+                "image": ".\\\\Resources\\\\Images\\\\kabab_soltani.jpg"
             }
         ],
-        "date": 2
+        "date": 3
     },
     {
+        "id": 4,
         "title": "tuesday",
         "foods": [
             {
@@ -61,13 +99,14 @@
                 "description": "a b c",
                 "materials": "1-2-3-4",
                 "category": "American",
-                "image": ".\\Resources\\Images\\food_default_20220704234103.png",
+                "image": ".\\Resources\\Images\\food_default.png",
                 "id": 119
             }
         ],
-        "date": 3
+        "date": 4
     },
     {
+        "id": 5,
         "title": "wednesday",
         "foods": [
             {
@@ -78,13 +117,14 @@
                 "description": "a b c",
                 "materials": "1-2-3-4",
                 "category": "American",
-                "image": ".\\Resources\\Images\\food_default_20220704234103.png",
+                "image": ".\\Resources\\Images\\food_default.png",
                 "id": 120
             }
         ],
-        "date": 4
+        "date": 5
     },
     {
+        "id": 6,
         "title": "thursday",
         "foods": [
             {
@@ -95,13 +135,14 @@
                 "description": "a b c",
                 "materials": "1-2-3-4",
                 "category": "American",
-                "image": ".\\Resources\\Images\\food_default_20220704234104.png",
+                "image": ".\\Resources\\Images\\food_default.png",
                 "id": 121
             }
         ],
-        "date": 5
+        "date": 6
     },
     {
+        "id": 7,
         "title": "friday",
         "foods": [
             {
@@ -112,10 +153,10 @@
                 "description": "a b c",
                 "materials": "1-2-3-4",
                 "category": "American",
-                "image": ".\\Resources\\Images\\food_default_20220704234104.png",
+                "image": ".\\Resources\\Images\\food_default.png",
                 "id": 122
             }
         ],
-        "date": 6
+        "date": 7
     }
 ]
