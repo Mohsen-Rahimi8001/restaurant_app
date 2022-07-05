@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>837</width>
+    <height>832</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>9</x>
+      <y>9</y>
+      <width>811</width>
+      <height>781</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridLayout">
+     <property name="leftMargin">
+      <number>5</number>
+     </property>
+     <property name="topMargin">
+      <number>5</number>
+     </property>
+     <property name="rightMargin">
+      <number>5</number>
+     </property>
+     <property name="bottomMargin">
+      <number>5</number>
+     </property>
+     <property name="spacing">
+      <number>10</number>
+     </property>
+     <item row="0" column="0" colspan="2">
+      <widget class="QLabel" name="lblTitle">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="font">
+        <font>
+         <family>Arial Rounded MT Bold</family>
+         <pointsize>26</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Edit Menu</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="lblMenuTitle">
+       <property name="font">
+        <font>
+         <family>Arial Rounded MT Bold</family>
+         <pointsize>10</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Menu New Title: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLineEdit" name="lEditMenuTitle"/>
+     </item>
+     <item row="4" column="0" colspan="2">
+      <layout class="QHBoxLayout" name="btnHLayout">
+       <property name="spacing">
+        <number>10</number>
+       </property>
+       <property name="leftMargin">
+        <number>5</number>
+       </property>
+       <property name="topMargin">
+        <number>5</number>
+       </property>
+       <property name="rightMargin">
+        <number>5</number>
+       </property>
+       <property name="bottomMargin">
+        <number>5</number>
+       </property>
+       <item>
+        <widget class="QPushButton" name="btnBack">
+         <property name="font">
+          <font>
+           <family>Arial Rounded MT Bold</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Back</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnClear">
+         <property name="font">
+          <font>
+           <family>Arial Rounded MT Bold</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Clear</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="btnChange">
+         <property name="font">
+          <font>
+           <family>Arial Rounded MT Bold</family>
+           <pointsize>9</pointsize>
+          </font>
+         </property>
+         <property name="text">
+          <string>Change</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="2" column="0" colspan="2">
+      <widget class="QTableWidget" name="tableMenuFoods">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <column>
+        <property name="text">
+         <string>Id</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Image</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Title</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Stock</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Fixed Price</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Sale Price</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Delete</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+     <item row="1" column="0" colspan="2">
+      <widget class="QTableWidget" name="tableFoods">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <column>
+        <property name="text">
+         <string>Id</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Image</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Title</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Stock</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Fixed Price</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Sale Price</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Add</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

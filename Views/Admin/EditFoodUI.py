@@ -7,12 +7,11 @@ from Lib.Questions import Questions
 import os
 
 
-# get the food object from Transfer
 FOOD: Food = None
 
 
 def setFoodObject():
-    """This function gets the food object from the Transfer"""
+    """This function sets the food object to the global variable FOOD"""
     global FOOD
     
     foodId = Transfer.Get('id')
@@ -23,12 +22,19 @@ def setFoodObject():
 def checkForCredentials(window: 'QtWidgets.QMainWindow'):
     """checks if the user is admin"""
 
+    if not Auth.IsUserLoggedIN():
+        # go to the landing page
+        Routing.Redirect(window, 'landingPage')
+        Routing.ClearStack()
+        return
+
     if not Auth.CheckAdminCredentials():
-        # Logout the user
+        # logout the user
         Auth.LogOut()
-        # Go to the login window
-        Routing.Redirect(window, "landingPage")
-        Routing.ClearStack() # prevent the user from going back to the previous window
+        # go to the landing page
+        Routing.Redirect(window, 'landingPage')
+        Routing.ClearStack()  # reset the previous window
+        return
 
 
 def setupInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
@@ -186,6 +192,7 @@ def saveChanges(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
     else:
         # show success message
         Messages.push(Messages.Type.SUCCESS, "the food was updated successfully")
+        Messages.show()
 
 
 class Ui_MainWindow(object):
