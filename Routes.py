@@ -59,6 +59,11 @@ class Routes:
         return Ui_MainWindow
 
 
+    def giftCards():
+        from Views.Admin.GiftCardsUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
     #UI table window { name : UI method }
     UiObjects = {
 
@@ -74,6 +79,7 @@ class Routes:
         "menus" : menusPage,
         "newMenu" : newMenu,
         "menuEdit" : editMenu,
+        "giftCards" : giftCards,
     }
 
 
