@@ -1,6 +1,7 @@
 import os
 import requests
 import datetime
+from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Image:
@@ -44,24 +45,24 @@ class Image:
 
 
     @staticmethod
-    def GetFromDirectory(directory: str):
+    def GetFromDirectory(path: str):
         """Copy the image form the directory in the image resources and return the new directory"""
 
-        if os.path.dirname(directory) == Image.BaseDir:
-            if os.path.isfile(directory):
+        if os.path.dirname(path) == Image.BaseDir:
+            if os.path.isfile(path):
                 return directory
 
-        if os.path.isfile(directory):
+        if os.path.isfile(path):
             
             # copy the image to BaseDir
             
-            name = os.path.basename(directory)
+            name = os.path.basename(path)
             destination = os.path.join(Image.BaseDir, name)
 
             if os.path.isfile(destination):
                 
                 # check if two images has the same content
-                with open(directory, "rb") as f:
+                with open(path, "rb") as f:
                     if f.read() == open(destination, "rb").read():
                         return destination
 
@@ -74,9 +75,16 @@ class Image:
 
                 destination = os.path.join(Image.BaseDir, name)
 
-            os.system(f"copy {directory} {destination}")
+            os.system(f"copy {path} {destination}")
 
             return destination
 
         else:
             return None
+
+
+    @staticmethod
+    def Browse(window : QtWidgets.QMainWindow):
+        """opens a browse dialog and returns selected path"""
+
+        return QtWidgets.QFileDialog.getOpenFileName(window, "Open File", ".\\", "Image Files (*.png *.jpg *.bmp *.gif)")[0]
