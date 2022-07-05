@@ -10,17 +10,19 @@ class Order(Model):
     PrimaryKey = "id"
 
 
-    def __init__(self, id : int, foods : list, date : str, paid : bool, reference_number : str, delivered : bool,
-                 user_id : int, account_number : str):
+    def __init__(self, id : int, foods : list, order_date : str, deliver_date : str, payment_method : int, reference_number : str,
+                 account_number : str, delivered : bool, user_id : int):
 
         super(Order, self).__init__(id)
         self.foods : list = foods
-        self.date : str = date
-        self.paid : bool = paid
+        self.order_date : str = order_date
+        self.deliver_date : str = order_date
+        self.payment_method : int = payment_method
         self.reference_number : str = reference_number
+        self.account_number: str = account_number
         self.delivered : bool = delivered
         self.user_id : int = user_id
-        self.account_number : str = account_number
+
 
 
     @staticmethod
@@ -31,10 +33,7 @@ class Order(Model):
 
         #initial conditions
         data["foods"] = json.dumps(data["foods"])
-        data["paid"] = 0
-        data["reference_number"] = ""
         data["delivered"] = 0
-        data["account_number"] = ""
 
         return Database.Create(Order.TableName, data)
 
@@ -46,17 +45,18 @@ class Order(Model):
         if not Order.Exists(id):
             raise RuntimeError("Order does not exist")
 
-        row  : list = Database.Read(Order.TableName, Order.PrimaryKey, id)[0]
+        row : list = Database.Read(Order.TableName, Order.PrimaryKey, id)[0]
 
         return Order(
             id = row[0],
             foods = json.loads(row[1]) if row[1] else list(),
-            date = row[2],
-            paid = bool(row[3]),
-            reference_number = row[4],
-            delivered = bool(row[5]),
-            user_id = row[6],
-            account_number = row[7],
+            order_date = row[2],
+            deliver_date = row[3],
+            payment_method = int(row[4]),
+            reference_number = row[5],
+            account_number = row[6],
+            delivered = bool(row[7]),
+            user_id = int(row[8])
         )
 
 
@@ -71,13 +71,14 @@ class Order(Model):
         for row in rows:
             orders.append(Order(
                 id=row[0],
-                foods=json.loads(row[1]) if row[1] != "[ ]" else [],
-                date=row[2],
-                paid= bool(row[3]),
-                reference_number=row[4],
-                delivered= bool(row[5]),
-                user_id=row[6],
-                account_number=row[7],
+                foods=json.loads(row[1]) if row[1] else list(),
+                order_date=row[2],
+                deliver_date=row[3],
+                payment_method=int(row[4]),
+                reference_number=row[5],
+                account_number=row[6],
+                delivered=bool(row[7]),
+                user_id = int(row[8])
             ))
 
         return orders
@@ -104,9 +105,6 @@ class Order(Model):
             data.pop("id")
 
         #convert booleans to int
-        if "paid" in data.keys():
-            data["paid"] = 1 if data["paid"] else 0
-
         if "delivered" in data.keys():
             data["delivered"] = 1 if data["delivered"] else 0
 
@@ -128,10 +126,19 @@ class Order(Model):
 
 
 
+    def deliver(self):
+        """set an order state to delivered"""
+
+        self.delivered = True
+        Order.Update(self.id, {"delivered" : True})
+
+
+
+
     #work with foods
 
     def addFood(self, food) -> None:
-        """add a food to order
+        """add food to order
             :param food can be Food object or food table id
         """
 

@@ -1,5 +1,4 @@
-import unittest
-from unittest.mock import Mock
+from Unittests.Test import Test
 from DataBase.Sqlite import Database
 from Models.Order import Order
 from Models.Food import Food
@@ -7,19 +6,7 @@ import json
 import os
 import datetime
 
-class TestOrder(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        # mock the database
-        Database.GetDatabasePath = Mock(return_value='test.db')
-        Database.Initialize()
-
-    @classmethod
-    def tearDownClass(cls):
-        # delete the database
-        if os.path.exists('test.db'):
-            os.remove('test.db')
+class TestOrder(Test):
 
     def setUp(self):
         # Flush orders table in the database
@@ -28,12 +15,13 @@ class TestOrder(unittest.TestCase):
 
     data = {
         "foods" : list(),
-        "date" : "1-1-1",
-        "paid" : False,
+        "order_date" : "1-1-1",
+        "deliver_date" : "1-1-1",
+        "payment_method" : 1,
         "reference_number" : "123456789",
+        "account_number": "1111111111111111",
         "delivered" : False,
         "user_id" : 1,
-        "account_number" : "",
     }
 
     foodData = {
@@ -68,7 +56,7 @@ class TestOrder(unittest.TestCase):
     def test_create_with_missing_col(self):
 
         missing_data = TestOrder.data.copy()
-        missing_data.pop("date")
+        missing_data.pop("order_date")
 
         with self.assertRaises(Exception):
             id = Order.Create(missing_data)
@@ -77,7 +65,7 @@ class TestOrder(unittest.TestCase):
     def test_create_with_wrong_datatype(self):
 
         data1 = TestOrder.data.copy()
-        data1["date"] = datetime.datetime.now()
+        data1["order_date"] = datetime.datetime.now()
 
         with self.assertRaises(Exception):
             id = Order.Create(data1)
@@ -109,12 +97,15 @@ class TestOrder(unittest.TestCase):
 
         self.assertEqual(order.id , id)
         self.assertEqual(order.foods , data1["foods"])
-        self.assertEqual(order.date , data1["date"])
-        self.assertEqual(order.paid , False)
-        self.assertEqual(order.reference_number , "")
+        self.assertEqual(order.order_date , data1["order_date"])
+        self.assertEqual(order.deliver_date , data1["deliver_date"])
+        self.assertEqual(order.payment_method , data1["payment_method"])
+        self.assertEqual(order.reference_number , data1["reference_number"])
+        self.assertEqual(order.account_number, data1["account_number"])
+        self.assertEqual(order.delivered, False)
         self.assertEqual(order.user_id , data1["user_id"])
-        self.assertEqual(order.delivered , False)
-        self.assertEqual(order.account_number, "")
+
+
 
 
     def test_get_all(self):
@@ -133,12 +124,13 @@ class TestOrder(unittest.TestCase):
 
         for order in orders:
             self.assertEqual(order.foods, data1["foods"])
-            self.assertEqual(order.date, data1["date"])
-            self.assertEqual(order.paid, False)
-            self.assertEqual(order.reference_number, "")
-            self.assertEqual(order.user_id, data1["user_id"])
+            self.assertEqual(order.order_date, data1["order_date"])
+            self.assertEqual(order.deliver_date, data1["deliver_date"])
+            self.assertEqual(order.payment_method, data1["payment_method"])
+            self.assertEqual(order.reference_number, data1["reference_number"])
+            self.assertEqual(order.account_number, data1["account_number"])
             self.assertEqual(order.delivered, False)
-            self.assertEqual(order.account_number, "")
+            self.assertEqual(order.user_id, data1["user_id"])
 
 
 
@@ -166,9 +158,9 @@ class TestOrder(unittest.TestCase):
         id = Order.Create(data1)
 
         data2 = dict()
-        data2["paid"] = True
         data2["foods"] = [1, 2, 3]
-        data2["delivered"] = False
+        data2["payment_method"] = 2
+        data2["delivered"] = True
 
         Order.Update(id, data2)
 
@@ -176,8 +168,24 @@ class TestOrder(unittest.TestCase):
 
         self.assertEqual(order.id, id)
         self.assertEqual(order.foods, data2["foods"])
-        self.assertEqual(order.paid, data2["paid"])
+        self.assertEqual(order.payment_method, data2["payment_method"])
         self.assertEqual(order.delivered, data2["delivered"])
+
+
+    def test_deliver(self):
+
+        data1 = TestOrder.data.copy()
+        id = Order.Create(data1)
+        order = Order.Get(id)
+
+        self.assertFalse(order.delivered)
+
+        order.deliver()
+
+        self.assertTrue(order.delivered)
+
+        order = Order.Get(id)
+        self.assertTrue(order.delivered)
 
 
     def test_add_food_by_id(self):

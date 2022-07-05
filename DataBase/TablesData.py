@@ -23,12 +23,14 @@ class TableData():
 	CREATE TABLE IF NOT EXISTS orders (
 	id integer PRIMARY KEY AUTOINCREMENT,
 	foods TEXT,
-	date TEXT NOT NULL,
-	paid INTEGER DEFAULT 0,
+	order_date TEXT NOT NULL,
+	deliver_date TEXT NOT NULL,
+	payment_method INTEGER DEFAULT 1,
 	reference_number TEXT,
+	account_number TEXT,
 	delivered INTEGER DEFAULT 0,
-	user_id INTEGER NOT NULL,
-	account_number TEXT
+	user_id INTEGER NOT NULL
+	
 	); """
 
 
