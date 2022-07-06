@@ -1,10 +1,108 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
-
-
+from functools import partial
+from Window import Routing
+from Controllers.AuthenticationController import Auth
+from Lib.Messages import Messages
+from Lib.Questions import Questions
+from Lib.Image import Image
+from Models.Restaurant import Restaurant
 
 
 #///////////////////////////////EVENTS///////////////////////
 
+# button events
+
+def logout(window : QtWidgets.QMainWindow):
+
+        questionResult = Questions.ask(Questions.Type.ASKYESNO, "are you sure, you want to log out ?")
+        if questionResult:
+                Auth.LogOut()
+                Routing.ClearStack()
+                Routing.Redirect(window, "login")
+
+
+def submit(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
+
+        data = {
+                "first_name" : getFirstName(ui),
+                "last_name" : getLastName(ui),
+                "phone_number" : getPhoneNumber(ui),
+                "social_number" : getSocialNumber(ui),
+                "email" : getEmail(ui),
+                "password" : getPassword(ui),
+                "new_password" : getNewPassword(ui),
+                "image" : getImagePath(ui),
+        }
+
+
+
+def browse(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
+
+        print("shit")
+
+        path = Image.Browse(window)
+
+        if path:
+                setImageShowPixmap(ui, path)
+                setImagePath(ui, path)
+
+
+# get input methods
+
+def getFirstName(ui : "Ui_MainWindow"):
+        return ui.firstNameEdit.text().strip()
+
+def getLastName(ui : "Ui_MainWindow"):
+        return ui.lastNameEdit.text().strip()
+
+def getPhoneNumber(ui : "Ui_MainWindow"):
+        return ui.phoneNumberEdit.text().strip()
+
+def getSocialNumber(ui : "Ui_MainWindow"):
+        return ui.socialNumberEdit.text().strip()
+
+def getPassword(ui : "Ui_MainWindow"):
+        return ui.passwordEdit.text().strip()
+
+def getNewPassword(ui : "Ui_MainWindow"):
+        return ui.newPasswordEdit.text().strip()
+
+def getEmail(ui : "Ui_MainWindow"):
+        return ui.emaiEdit.text().strip()
+
+def getImagePath(ui : "Ui_MainWindow"):
+        return ui.imageEdit.text().strip()
+
+
+#set methods
+
+def setFirstName(ui : "Ui_MainWindow", value : str):
+        ui.firstNameEdit.setText(str(value))
+
+def setLastName(ui : "Ui_MainWindow", value : str):
+        ui.lastNameEdit.setText(str(value))
+
+def setPhoneNumber(ui : "Ui_MainWindow", value : str):
+        ui.phoneNumberEdit.setText(str(value))
+
+def setSocialNumber(ui : "Ui_MainWindow", value : str):
+        ui.socialNumberEdit.setText(str(value))
+
+def setPassword(ui : "Ui_MainWindow", value : str):
+        ui.passwordEdit.setText(str(value))
+
+def setNewPassword(ui : "Ui_MainWindow", value : str):
+        ui.newPasswordEdit.setText(str(value))
+
+def setEmail(ui : "Ui_MainWindow", value : str):
+        ui.emaiEdit.setText(str(value))
+
+def setImagePath(ui : "Ui_MainWindow", value : str):
+        ui.imageEdit.setText(str(value))
+
+def setImageShowPixmap(ui : "Ui_MainWindow", path : str):
+        ui.imageShowLabel.setPixmap(QtGui.QPixmap(path))
+        ui.imageShowLabel.setScaledContents(True)
 
 #////////////////////////////UI/////////////////////////////
 
@@ -64,7 +162,6 @@ class Ui_MainWindow(object):
         self.imageShowLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
         self.imageShowLabel.setGeometry(QtCore.QRect(50, 50, 181, 131))
         self.imageShowLabel.setStyleSheet("border-width : 0px;\n"
-"background-color: rgb(245, 247, 250);\n"
 "border-radius:0px;")
         self.imageShowLabel.setText("")
         self.imageShowLabel.setObjectName("imageShowLabel")
@@ -228,16 +325,16 @@ class Ui_MainWindow(object):
 "padding-left:20px;\n"
 "")
         self.passwordEdit.setObjectName("passwordEdit")
-        self.brawseBtn = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
-        self.brawseBtn.setGeometry(QtCore.QRect(510, 430, 101, 31))
-        self.brawseBtn.setStyleSheet("border-width:0px;\n"
+        self.browseBtn = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
+        self.browseBtn.setGeometry(QtCore.QRect(510, 430, 101, 31))
+        self.browseBtn.setStyleSheet("border-width:0px;\n"
 "border-bottom-width : 1px;\n"
 "border-color: rgb(5, 85, 82);\n"
 "border-radius:0px;\n"
 "background-color: rgb(202, 205, 210);\n"
 "\n"
 "")
-        self.brawseBtn.setObjectName("brawseBtn")
+        self.browseBtn.setObjectName("browseBtn")
         self.submitBtn = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
         self.submitBtn.setGeometry(QtCore.QRect(50, 490, 121, 41))
         self.submitBtn.setStyleSheet("border-width:0px;\n"
@@ -252,219 +349,6 @@ class Ui_MainWindow(object):
 "\n"
 "")
         self.submitBtn.setObjectName("submitBtn")
-        self.scrollArea_2 = QtWidgets.QScrollArea(self.scrollAreaWidgetContents)
-        self.scrollArea_2.setGeometry(QtCore.QRect(0, 0, 841, 551))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.scrollArea_2.sizePolicy().hasHeightForWidth())
-        self.scrollArea_2.setSizePolicy(sizePolicy)
-        self.scrollArea_2.setStyleSheet("border-color: rgb(4, 84, 83);\n"
-"background-color: rgb(255, 255, 255);\n"
-"border-style : solid;\n"
-"border-width : 1px;\n"
-"border-right-width : 0px;\n"
-"border-bottom-width : 0px;\n"
-"border-top-left-radius : 20px;\n"
-"border-bottom-right-radius: 0px;\n"
-"")
-        self.scrollArea_2.setWidgetResizable(True)
-        self.scrollArea_2.setObjectName("scrollArea_2")
-        self.scrollAreaWidgetContents_2 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_2.setGeometry(QtCore.QRect(0, 0, 839, 549))
-        self.scrollAreaWidgetContents_2.setObjectName("scrollAreaWidgetContents_2")
-        self.imageShowLabel_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.imageShowLabel_2.setGeometry(QtCore.QRect(50, 50, 181, 131))
-        self.imageShowLabel_2.setStyleSheet("border-width : 0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"border-radius:0px;")
-        self.imageShowLabel_2.setText("")
-        self.imageShowLabel_2.setObjectName("imageShowLabel_2")
-        self.firstNameLabel_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.firstNameLabel_2.setGeometry(QtCore.QRect(50, 230, 101, 31))
-        self.firstNameLabel_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(202, 205, 210);\n"
-"\n"
-"")
-        self.firstNameLabel_2.setObjectName("firstNameLabel_2")
-        self.firstNameEdit_2 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
-        self.firstNameEdit_2.setGeometry(QtCore.QRect(150, 230, 231, 31))
-        self.firstNameEdit_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"padding-left:20px;\n"
-"")
-        self.firstNameEdit_2.setObjectName("firstNameEdit_2")
-        self.lastNameLabel_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.lastNameLabel_2.setGeometry(QtCore.QRect(410, 230, 101, 31))
-        self.lastNameLabel_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(202, 205, 210);\n"
-"\n"
-"")
-        self.lastNameLabel_2.setObjectName("lastNameLabel_2")
-        self.lastNameEdit_2 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
-        self.lastNameEdit_2.setGeometry(QtCore.QRect(510, 230, 231, 31))
-        self.lastNameEdit_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"padding-left:20px;\n"
-"")
-        self.lastNameEdit_2.setObjectName("lastNameEdit_2")
-        self.phoneNumberLabel_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.phoneNumberLabel_2.setGeometry(QtCore.QRect(50, 280, 101, 31))
-        self.phoneNumberLabel_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(202, 205, 210);\n"
-"\n"
-"")
-        self.phoneNumberLabel_2.setObjectName("phoneNumberLabel_2")
-        self.socialNumberLabel_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.socialNumberLabel_2.setGeometry(QtCore.QRect(410, 280, 101, 31))
-        self.socialNumberLabel_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(202, 205, 210);\n"
-"\n"
-"")
-        self.socialNumberLabel_2.setObjectName("socialNumberLabel_2")
-        self.socialNumberEdit_2 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
-        self.socialNumberEdit_2.setGeometry(QtCore.QRect(510, 280, 231, 31))
-        self.socialNumberEdit_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"padding-left:20px;\n"
-"")
-        self.socialNumberEdit_2.setObjectName("socialNumberEdit_2")
-        self.phoneNumberEdit_2 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
-        self.phoneNumberEdit_2.setGeometry(QtCore.QRect(150, 280, 231, 31))
-        self.phoneNumberEdit_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"padding-left:20px;\n"
-"")
-        self.phoneNumberEdit_2.setObjectName("phoneNumberEdit_2")
-        self.emailLabel_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.emailLabel_2.setGeometry(QtCore.QRect(50, 380, 101, 31))
-        self.emailLabel_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(202, 205, 210);\n"
-"\n"
-"")
-        self.emailLabel_2.setObjectName("emailLabel_2")
-        self.newPasswordLabel_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.newPasswordLabel_2.setGeometry(QtCore.QRect(410, 330, 101, 31))
-        self.newPasswordLabel_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(202, 205, 210);\n"
-"\n"
-"")
-        self.newPasswordLabel_2.setObjectName("newPasswordLabel_2")
-        self.newPasswordEdit_2 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
-        self.newPasswordEdit_2.setGeometry(QtCore.QRect(510, 330, 231, 31))
-        self.newPasswordEdit_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"padding-left:20px;\n"
-"")
-        self.newPasswordEdit_2.setObjectName("newPasswordEdit_2")
-        self.emaiEdit_2 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
-        self.emaiEdit_2.setGeometry(QtCore.QRect(150, 380, 231, 31))
-        self.emaiEdit_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"padding-left:20px;\n"
-"")
-        self.emaiEdit_2.setObjectName("emaiEdit_2")
-        self.passwordLabel_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.passwordLabel_2.setGeometry(QtCore.QRect(50, 330, 101, 31))
-        self.passwordLabel_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(202, 205, 210);\n"
-"\n"
-"")
-        self.passwordLabel_2.setObjectName("passwordLabel_2")
-        self.imageLabel_2 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
-        self.imageLabel_2.setGeometry(QtCore.QRect(50, 430, 101, 31))
-        self.imageLabel_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(202, 205, 210);\n"
-"\n"
-"")
-        self.imageLabel_2.setObjectName("imageLabel_2")
-        self.imageEdit_2 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
-        self.imageEdit_2.setGeometry(QtCore.QRect(150, 430, 361, 31))
-        self.imageEdit_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"padding-left:20px;\n"
-"")
-        self.imageEdit_2.setObjectName("imageEdit_2")
-        self.passwordEdit_2 = QtWidgets.QLineEdit(self.scrollAreaWidgetContents_2)
-        self.passwordEdit_2.setGeometry(QtCore.QRect(150, 330, 231, 31))
-        self.passwordEdit_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"padding-left:20px;\n"
-"")
-        self.passwordEdit_2.setObjectName("passwordEdit_2")
-        self.brawseBtn_2 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_2)
-        self.brawseBtn_2.setGeometry(QtCore.QRect(510, 430, 101, 31))
-        self.brawseBtn_2.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(202, 205, 210);\n"
-"\n"
-"")
-        self.brawseBtn_2.setObjectName("brawseBtn_2")
-        self.submitBtn_2 = QtWidgets.QPushButton(self.scrollAreaWidgetContents_2)
-        self.submitBtn_2.setGeometry(QtCore.QRect(50, 490, 121, 41))
-        self.submitBtn_2.setStyleSheet("border-width:0px;\n"
-"color: rgb(4, 85, 80);\n"
-"background-color: rgb(52, 163, 21, 100);\n"
-"border-bottom-width : 0px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"font-weight : 500;\n"
-"font-size: 9pt;\n"
-"\n"
-"\n"
-"")
-        self.submitBtn_2.setObjectName("submitBtn_2")
-        self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.historyBtn = QtWidgets.QPushButton(self.centralwidget)
         self.historyBtn.setGeometry(QtCore.QRect(850, 230, 91, 50))
@@ -717,6 +601,16 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+        # /////////////////////////////connect buttons to methods//////////////////////////////
+        self.orderBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "order"))
+        self.cartBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "cart"))
+        self.historyBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "history"))
+        self.accountBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "userInfo"))
+        self.logoutBtn.clicked.connect(partial(logout, MainWindow))
+        self.backBtn.clicked.connect(partial(Routing.RedirectBack, MainWindow))
+        self.browseBtn.clicked.connect(partial(browse, MainWindow, self))
+
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -732,18 +626,8 @@ class Ui_MainWindow(object):
         self.newPasswordLabel.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">New Password</span></p></body></html>"))
         self.passwordLabel.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Password</span></p></body></html>"))
         self.imageLabel.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Image</span></p></body></html>"))
-        self.brawseBtn.setText(_translate("MainWindow", "Brawse"))
+        self.browseBtn.setText(_translate("MainWindow", "Browse"))
         self.submitBtn.setText(_translate("MainWindow", "Submit"))
-        self.firstNameLabel_2.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">First Name</span></p></body></html>"))
-        self.lastNameLabel_2.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Last Name</span></p></body></html>"))
-        self.phoneNumberLabel_2.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Phone Number</span></p></body></html>"))
-        self.socialNumberLabel_2.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Social Number</span></p></body></html>"))
-        self.emailLabel_2.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Email</span></p></body></html>"))
-        self.newPasswordLabel_2.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">New Password</span></p></body></html>"))
-        self.passwordLabel_2.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Password</span></p></body></html>"))
-        self.imageLabel_2.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Image</span></p></body></html>"))
-        self.brawseBtn_2.setText(_translate("MainWindow", "Browse"))
-        self.submitBtn_2.setText(_translate("MainWindow", "Submit"))
         self.historyBtn.setText(_translate("MainWindow", "HISTORY"))
         self.logoutBtn.setText(_translate("MainWindow", "LOG OUT"))
         self.accountBtn.setText(_translate("MainWindow", "ACCOUNT"))

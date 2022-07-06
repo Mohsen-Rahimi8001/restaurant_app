@@ -88,3 +88,8 @@ class Image:
         """opens a browse dialog and returns selected path"""
 
         return QtWidgets.QFileDialog.getOpenFileName(window, "Open File", ".\\", "Image Files (*.png *.jpg *.bmp *.gif)")[0]
+
+
+    @staticmethod
+    def DefaultUserImagePath():
+        return os.path.join(Image.BaseDir, "user_default.png")

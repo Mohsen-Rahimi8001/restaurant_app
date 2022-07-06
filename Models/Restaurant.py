@@ -118,3 +118,9 @@ class Restaurant():
         with open(Restaurant.GetJsonAddress(), "r") as file:
             # create a Restaurant object from json file
             return cls(*json.load(file).values())
+
+
+    @staticmethod
+    def Name() -> str:
+        """get restaurant name"""
+        return str(Restaurant.LoadFromJson().restaurantName)
