@@ -7,6 +7,7 @@ from Lib.Questions import Questions
 from Lib.Image import Image
 from Models.Restaurant import Restaurant
 from Models.Food import Food
+from Window import Transfer
 
 
 
@@ -15,7 +16,13 @@ from Models.Food import Food
 # button events
 
 def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-        pass
+
+        user = Auth.GetUser()
+
+        cart = user.getCartFoodObjects()
+
+        for food in cart:
+                ui.addFood(window, food, user.countFood(food))
 
 
 
@@ -29,27 +36,53 @@ def logout(window : QtWidgets.QMainWindow):
 
 
 def confirm(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-    pass
+        Routing.Redirect(window, "invoice")
 
 
 def clear(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-        pass
+
+        questionResult = Questions.ask(Questions.Type.ASKYESNO, "are you sure you want to clear cart?")
+        if questionResult:
+                user = Auth.GetUser().clearCart()
+                Routing.Refresh(window)
 
 
 def add(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
-        pass
+
+        user = Auth.GetUser()
+
+        if food.stock > 1:
+                food.reduceStock(1)
+                user.addFoodToCart(food)
+        else:
+                Messages.push(Messages.Type.ERROR, f"{food.title} is sold out")
+
+        Routing.Refresh(window)
+
 
 
 def remove(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
-        pass
+
+        user = Auth.GetUser()
+        food.addToStock(user.countFood(food))
+        user.removeAllFromCart(food)
+        Messages.push(Messages.Type.INFO, f"{food.title} removed from your cart")
+        Routing.Refresh(window)
+
 
 
 def reduce(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
-        pass
+
+        user = Auth.GetUser()
+        food.addToStock(1)
+        user.removeFoodFromCart(food)
+        Routing.Refresh(window)
 
 
 def info(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
-        pass
+
+        Transfer.Add("food_info_id", food.id)
+        Routing.Redirect(window, "foodInfo")
 
 
 
@@ -231,13 +264,15 @@ class Ui_MainWindow(object):
             foodRemoveBtn.clicked.connect(lambda:remove(window, self, food))
             foodInfoBtn.clicked.connect(lambda:info(window, self, food))
 
-            Ui_MainWindow.FoodsWidgets.append(foodWidget)
+            self.FoodsWidgets.append(foodWidget)
 
 
 
 
 
     def setupUi(self, MainWindow):
+
+        self.FoodsWidgets = []
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(950, 700)

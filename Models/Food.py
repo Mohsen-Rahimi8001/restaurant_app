@@ -253,3 +253,20 @@ class Food(Model):
             materials = row[7],
             image = row[8]
         ) for row in fetched_data]
+
+
+
+    def addToStock(self, number : int):
+        """add number to food stock"""
+
+        self.stock += number
+        Food.Update(self.id, {"stock" : self.stock})
+
+
+    def reduceStock(self, number: int):
+        """reduce stock value by number"""
+
+        if self.stock - number > 0:
+
+            self.stock += number
+            Food.Update(self.id, {"stock": self.stock})

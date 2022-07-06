@@ -183,12 +183,11 @@ class User(Model):
         """
 
         if isinstance(food, Food):
-            self.cart.append(food.id)
+            id = food.id
+        else:
+            id = food
 
-        if isinstance(food, int):
-            if Food.Exists(food):
-                self.cart.append(food)
-
+        self.cart.append(id)
         User.Update(self.id, {"cart": self.cart})
 
 
@@ -207,6 +206,20 @@ class User(Model):
             User.Update(self.id, {"cart": self.cart})
 
 
+    def removeAllFromCart(self, food) -> None:
+        """remove all of given food from cart"""
+
+        if isinstance(food, Food):
+            id = food.id
+        else:
+            id = food
+
+        newCart = [foodId for foodId in self.cart if foodId != id ]
+
+        self.cart = newCart
+        User.Update(self.id, {"cart": self.cart})
+
+
     def getCartFoods(self) -> list:
         """get Food object for each food in user cart"""
 
@@ -218,3 +231,31 @@ class User(Model):
         return foods
 
 
+    def countFood(self, food) -> int:
+        """returns count of given food in cart"""
+
+        if isinstance(food, Food):
+            id = food.id
+        else:
+            id = food
+
+        return self.cart.count(id)
+
+
+    def clearCart(self):
+
+        self.cart = []
+        User.Update(self.id, {"cart" : self.cart})
+
+
+    def getCartFoodObjects(self):
+        """returns unique cart food objects"""
+
+        ids = list(set( self.cart.copy() ))
+
+        foods = []
+
+        for foodId in ids:
+            foods.append(Food.Get(foodId))
+
+        return foods
