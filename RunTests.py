@@ -7,6 +7,7 @@ from Unittests.Models import CommentTest
 from Unittests.Models import UserTest
 from Unittests.Models import OrderTest
 from Unittests.Models import MenuTest
+from Unittests.Models import MessageTest
 from Unittests.Controllers import ValidationTest
 from Unittests.Controllers import AuthenticationControllerTest
 
@@ -28,6 +29,7 @@ def run_tests():
     run(UserTest.TestUser)
     run(OrderTest.TestOrder)
     run(MenuTest.TestMenu)
+    run(MessageTest.TestMessage)
     run(ValidationTest.TestUserValidator)
     run(AuthenticationControllerTest.TestAuth)
 
