@@ -76,6 +76,16 @@ class TableData():
 	food_id INTEGER NOT NULL
 	);"""
 
+
+	messages = """
+	CREATE TABLE IF NOT EXISTS messages (
+	id integer PRIMARY KEY AUTOINCREMENT,
+	message TEXT NOT NULL,
+	datetime TEXT NOT NULL,
+	admin_email TEXT NOT NULL
+	);"""
+
+
 	Tables = [
 		users,
 		orders,
@@ -83,5 +93,6 @@ class TableData():
 		gift_cards,
 		foods,
 		comments,
+		messages,
 	]
 

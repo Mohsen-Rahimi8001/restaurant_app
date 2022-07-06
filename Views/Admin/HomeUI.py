@@ -132,9 +132,15 @@ def goToStatus(window: 'QtWidgets.QMainWindow'):
     """redirects to status page"""
     Routing.Redirect(window, 'status')
 
+
 def goToEditRestaurant(window: 'QtWidgets.QMainWindow'):
     """redirects to edit restaurant page"""
     Routing.Redirect(window, 'editRestaurant')
+
+
+def goToChatRoom(window: 'QtWidgets.QMainWindow'):
+    """redirects to chat room page"""
+    Routing.Redirect(window, 'chatRoom')
 
 
 class Ui_MainWindow(object):
@@ -213,6 +219,14 @@ class Ui_MainWindow(object):
         self.verticalLayout.addWidget(self.btnEditRestaurantInfo)
         self.btnEditRestaurantInfo.clicked.connect(lambda: goToEditRestaurant(MainWindow))
         
+        self.btnChatRoom = QtWidgets.QPushButton(self.gridLayoutWidget)
+        font.setPointSize(9)
+        self.btnChatRoom.setFont(font)
+        self.btnChatRoom.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.btnChatRoom.setObjectName("btnChatRoom")
+        self.verticalLayout.addWidget(self.btnChatRoom)
+        self.btnChatRoom.clicked.connect(lambda: goToChatRoom(MainWindow))
+
         self.gridLayout.addLayout(self.verticalLayout, 1, 1, 6, 1)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
         self.verticalLayout_3.setContentsMargins(5, 5, 5, 5)
@@ -330,6 +344,7 @@ class Ui_MainWindow(object):
         self.btnOrders.setText(_translate("MainWindow", "Orders"))
         self.btnEconomic.setText(_translate("MainWindow", "Economic Situation"))
         self.btnEditRestaurantInfo.setText(_translate("MainWindow", "Edit Restaurant Info"))
+        self.btnChatRoom.setText(_translate("MainWindow", "Chat Room"))
         self.lblRestInfoTitle.setText(_translate("MainWindow", "Restaurant Info"))
         self.lblRestaurantName.setText(_translate("MainWindow", "Name: "))
         self.lblRestPhone.setText(_translate("MainWindow", "Phone Number: "))

@@ -69,6 +69,11 @@ class Routes:
         return Ui_MainWindow
 
 
+    def chatRoom():
+        from Views.Admin.ChatUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
     #UI table window { name : UI method }
     UiObjects = {
 
@@ -86,6 +91,7 @@ class Routes:
         "menuEdit" : editMenu,
         "giftCards" : giftCards,
         "newGiftCard" : newGiftCard,
+        "chatRoom" : chatRoom,
     }
 
 
