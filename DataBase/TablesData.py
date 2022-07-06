@@ -29,6 +29,7 @@ class TableData():
 	reference_number TEXT,
 	account_number TEXT,
 	delivered INTEGER DEFAULT 0,
+	confirmed INTEGER DEFAULT 0,
 	user_id INTEGER NOT NULL
 	
 	); """

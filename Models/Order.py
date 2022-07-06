@@ -11,7 +11,7 @@ class Order(Model):
 
 
     def __init__(self, id : int, foods : list, order_date : str, deliver_date : str, payment_method : int, reference_number : str,
-                 account_number : str, delivered : bool, user_id : int):
+                 account_number : str, delivered : bool, confirmed : bool , user_id : int):
 
         super(Order, self).__init__(id)
         self.foods : list = foods
@@ -21,7 +21,9 @@ class Order(Model):
         self.reference_number : str = reference_number
         self.account_number: str = account_number
         self.delivered : bool = delivered
+        self.confirmed : bool = confirmed
         self.user_id : int = user_id
+
 
 
 
@@ -34,6 +36,7 @@ class Order(Model):
         #initial conditions
         data["foods"] = json.dumps(data["foods"])
         data["delivered"] = 0
+        data["confirmed"] = 0
 
         return Database.Create(Order.TableName, data)
 
@@ -56,7 +59,8 @@ class Order(Model):
             reference_number = row[5],
             account_number = row[6],
             delivered = bool(row[7]),
-            user_id = int(row[8])
+            confirmed = bool(row[8]),
+            user_id = int(row[9])
         )
 
 
@@ -78,7 +82,8 @@ class Order(Model):
                 reference_number=row[5],
                 account_number=row[6],
                 delivered=bool(row[7]),
-                user_id = int(row[8])
+                confirmed=bool(row[8]),
+                user_id = int(row[9])
             ))
 
         return orders
@@ -108,6 +113,9 @@ class Order(Model):
         if "delivered" in data.keys():
             data["delivered"] = 1 if data["delivered"] else 0
 
+        if "confirmed" in data.keys():
+            data["confirmed"] = 1 if data["confirmed"] else 0
+
         #converts lists to string
         if "foods" in data.keys():
             data["foods"] = json.dumps(data["foods"])
@@ -132,6 +140,12 @@ class Order(Model):
         self.delivered = True
         Order.Update(self.id, {"delivered" : True})
 
+
+    def confirm(self):
+        """confirm an order"""
+
+        self.confirmed = True
+        Order.Update(self.id, {"confirmed" : True})
 
 
 

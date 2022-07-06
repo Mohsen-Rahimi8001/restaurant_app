@@ -21,6 +21,7 @@ class TestOrder(Test):
         "reference_number" : "123456789",
         "account_number": "1111111111111111",
         "delivered" : False,
+        "confirmed" : False,
         "user_id" : 1,
     }
 
@@ -103,6 +104,7 @@ class TestOrder(Test):
         self.assertEqual(order.reference_number , data1["reference_number"])
         self.assertEqual(order.account_number, data1["account_number"])
         self.assertEqual(order.delivered, False)
+        self.assertEqual(order.confirmed, False)
         self.assertEqual(order.user_id , data1["user_id"])
 
 
@@ -130,6 +132,7 @@ class TestOrder(Test):
             self.assertEqual(order.reference_number, data1["reference_number"])
             self.assertEqual(order.account_number, data1["account_number"])
             self.assertEqual(order.delivered, False)
+            self.assertEqual(order.confirmed, False)
             self.assertEqual(order.user_id, data1["user_id"])
 
 
@@ -186,6 +189,22 @@ class TestOrder(Test):
 
         order = Order.Get(id)
         self.assertTrue(order.delivered)
+
+
+    def test_confirm(self):
+
+        data1 = TestOrder.data.copy()
+        id = Order.Create(data1)
+        order = Order.Get(id)
+
+        self.assertFalse(order.confirmed)
+
+        order.confirm()
+
+        self.assertTrue(order.confirmed)
+
+        order = Order.Get(id)
+        self.assertTrue(order.confirmed)
 
 
     def test_add_food_by_id(self):
