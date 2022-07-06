@@ -67,6 +67,22 @@ class Routes:
         from Views.User.CartUI import Ui_MainWindow
         return Ui_MainWindow
 
+
+    def giftCards():
+        from Views.Admin.GiftCardsUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
+    def newGiftCard():
+        from Views.Admin.NewGiftCardUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
+    def chatRoom():
+        from Views.Admin.ChatUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
     #UI table window { name : UI method }
     UiObjects = {
 
@@ -84,6 +100,10 @@ class Routes:
         "menuEdit" : editMenu,
         "userInfo" : userInfo,
         "cart" : cart,
+        "giftCards" : giftCards,
+        "newGiftCard" : newGiftCard,
+        "chatRoom" : chatRoom,
+
     }
 
 

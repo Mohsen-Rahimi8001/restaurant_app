@@ -144,7 +144,7 @@ class GiftCard(Model):
     def Create(data:dict) -> int:
         """Add a new GiftCard to the database."""
         
-        if 'code' not in data:
+        if 'code' not in data or not data['code']:
             data['code'] = GiftCard.GetDefaultCode()
 
         # check if the code is already in the database
