@@ -1,6 +1,7 @@
 from Controllers.Validation import UserValidator
 from Lib.Messages import Messages
 from Models.User import User
+from Lib.Email import Email
 #import bcrypt
 
 
@@ -126,4 +127,23 @@ class Auth:
             return False
 
         return Auth.GetUser().role == Auth.AdminRole
+
+
+    @staticmethod
+    def SendPasswordByEmail(email : str) -> bool:
+
+        if not UserValidator.ValidateEmail(email):
+            return False
+
+        if not User.SearchByEmail(email):
+            Messages.push(Messages.Type.ERROR, "account with this email does not exist")
+            return False
+
+        user = User.GetUserByEmail(email)
+
+        Email.Send(email, f"your password : {user.password}")
+        return True
+
+
+
 

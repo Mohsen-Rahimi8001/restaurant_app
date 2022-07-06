@@ -8,6 +8,7 @@ from functools import partial
 from Window import Routing
 from Window import Transfer
 from Lib.Messages import Messages
+from Lib.Questions import Questions
 
 
 # #////////////////////////////EVENTS///////////////////////////
@@ -26,7 +27,9 @@ def init(window, ui : "Ui_MainWindow"):
         try_count = Transfer.Get("try_count")
 
         if try_count == 3:
-            Messages.push(Messages.Type.INFO, "you already failed log in 3 times\ntry forgot password")
+            result = Questions.ask(Questions.Type.ASKOKCANCEL, "you already failed log in 3 times\ntry forgot password")
+            if result:
+                forgotPassword(window, ui)
 
         Transfer.Add("try_count", try_count)
 
@@ -69,6 +72,13 @@ def login(window, ui : "Ui_MainWindow"):
         else:
             Routing.Redirect(window, "userHome")
 
+
+
+def forgotPassword(window, ui : "Ui_MainWindow"):
+
+    email = getEmail(ui)
+    Auth.SendPasswordByEmail(email)
+    Routing.Refresh(window)
 
 
 
@@ -122,6 +132,7 @@ class Ui_MainWindow(object):
         self.btnForgetPassword.setFont(font)
         self.btnForgetPassword.setObjectName("btnForgetPassword")
         self.btnHLayout.addWidget(self.btnForgetPassword)
+        self.btnForgetPassword.clicked.connect( partial( forgotPassword, MainWindow, self ) )
 
 
 
@@ -225,7 +236,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.btnForgetPassword.setText(_translate("MainWindow", "Forget Password"))
+        self.btnForgetPassword.setText(_translate("MainWindow", "Forgot Password"))
         self.btnLogin.setText(_translate("MainWindow", "Login"))
         self.lblPassword.setText(_translate("MainWindow", "Password: "))
         self.lblAdminEmail.setText(_translate("MainWindow", "Email: "))
