@@ -15,7 +15,7 @@ from Models.Food import Food
 # button events
 
 def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-    pass
+        pass
 
 
 
@@ -55,193 +55,183 @@ def info(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
 
 
 
-# get input methods
-
-
-
-
-
 #////////////////////////////////////ui/////////////////////////////////////
 
 class Ui_MainWindow(object):
 
-    Foods = []
+    FoodsWidgets = []
 
-    def addFood(self, food : Food, count : int):
+    def addFood(self, window : "QtWidgets.QMainWindow" , food : Food, count : int):
             """adds a food item to cart"""
 
-            self.foodWidget = QtWidgets.QWidget(self.scrollAreaWidgetContents_3)
-            self.foodWidget.setMinimumSize(QtCore.QSize(0, 155))
-            self.foodWidget.setMaximumSize(QtCore.QSize(16777215, 155))
-            self.foodWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+            foodWidget = QtWidgets.QWidget(self.scrollAreaWidgetContents_3)
+            foodWidget.setMinimumSize(QtCore.QSize(0, 155))
+            foodWidget.setMaximumSize(QtCore.QSize(16777215, 155))
+            foodWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
     "border-width : 0px;\n"
     "border-style : solid;\n"
     "border-bottom-width : 2px;\n"
     "border-color: rgb(51, 165, 24);\n"
     "")
-            self.foodWidget.setObjectName("foodWidget")
-            self.foodTitleLabel = QtWidgets.QLabel(self.foodWidget)
-            self.foodTitleLabel.setGeometry(QtCore.QRect(200, 20, 101, 31))
-            self.foodTitleLabel.setStyleSheet("border-width:0px;\n"
+            foodWidget.setObjectName("foodWidget")
+            foodTitleLabel = QtWidgets.QLabel(foodWidget)
+            foodTitleLabel.setGeometry(QtCore.QRect(200, 20, 101, 31))
+            foodTitleLabel.setStyleSheet("border-width:0px;\n"
     "border-color: rgb(5, 85, 82);\n"
     "border-radius:0px;\n"
     "background-color: rgb(202, 205, 210);\n"
     "\n"
     "")
-            self.foodTitleLabel.setObjectName("foodTitleLabel")
-            self.foodNumberValue = QtWidgets.QLabel(self.foodWidget)
-            self.foodNumberValue.setGeometry(QtCore.QRect(300, 60, 170, 31))
+            foodTitleLabel.setObjectName("foodTitleLabel")
+            foodNumberValue = QtWidgets.QLabel(foodWidget)
+            foodNumberValue.setGeometry(QtCore.QRect(300, 60, 170, 31))
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
             sizePolicy.setVerticalStretch(0)
-            sizePolicy.setHeightForWidth(self.foodNumberValue.sizePolicy().hasHeightForWidth())
-            self.foodNumberValue.setSizePolicy(sizePolicy)
-            self.foodNumberValue.setMinimumSize(QtCore.QSize(170, 0))
-            self.foodNumberValue.setStyleSheet("border-width:0px;\n"
+            sizePolicy.setHeightForWidth(foodNumberValue.sizePolicy().hasHeightForWidth())
+            foodNumberValue.setSizePolicy(sizePolicy)
+            foodNumberValue.setMinimumSize(QtCore.QSize(170, 0))
+            foodNumberValue.setStyleSheet("border-width:0px;\n"
     "border-color: rgb(5, 85, 82);\n"
     "border-radius:0px;\n"
     "background-color: rgb(245, 247, 250);\n"
     "")
-            self.foodNumberValue.setObjectName("foodNumberValue")
-            self.foodTitleValue = QtWidgets.QLabel(self.foodWidget)
-            self.foodTitleValue.setGeometry(QtCore.QRect(300, 20, 170, 31))
+            foodNumberValue.setObjectName("foodNumberValue")
+            foodTitleValue = QtWidgets.QLabel(foodWidget)
+            foodTitleValue.setGeometry(QtCore.QRect(300, 20, 170, 31))
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
             sizePolicy.setVerticalStretch(0)
-            sizePolicy.setHeightForWidth(self.foodTitleValue.sizePolicy().hasHeightForWidth())
-            self.foodTitleValue.setSizePolicy(sizePolicy)
-            self.foodTitleValue.setMinimumSize(QtCore.QSize(170, 0))
-            self.foodTitleValue.setStyleSheet("border-width:0px;\n"
+            sizePolicy.setHeightForWidth(foodTitleValue.sizePolicy().hasHeightForWidth())
+            foodTitleValue.setSizePolicy(sizePolicy)
+            foodTitleValue.setMinimumSize(QtCore.QSize(170, 0))
+            foodTitleValue.setStyleSheet("border-width:0px;\n"
     "background-color: rgb(245, 247, 250);\n"
     "border-color: rgb(5, 85, 82);\n"
     "border-radius:0px;\n"
     "background-color: rgb(245, 247, 250);\n"
     "")
-            self.foodTitleValue.setObjectName("foodTitleValue")
-            self.foodPriceLabel = QtWidgets.QLabel(self.foodWidget)
-            self.foodPriceLabel.setGeometry(QtCore.QRect(200, 100, 101, 31))
-            self.foodPriceLabel.setStyleSheet("border-width:0px;\n"
+            foodTitleValue.setObjectName("foodTitleValue")
+            foodPriceLabel = QtWidgets.QLabel(foodWidget)
+            foodPriceLabel.setGeometry(QtCore.QRect(200, 100, 101, 31))
+            foodPriceLabel.setStyleSheet("border-width:0px;\n"
     "border-color: rgb(5, 85, 82);\n"
     "border-radius:0px;\n"
     "background-color: rgb(202, 205, 210);\n"
     "\n"
     "")
-            self.foodPriceLabel.setObjectName("foodPriceLabel")
-            self.foodPriceValue = QtWidgets.QLabel(self.foodWidget)
-            self.foodPriceValue.setGeometry(QtCore.QRect(300, 100, 170, 31))
+            foodPriceLabel.setObjectName("foodPriceLabel")
+            foodPriceValue = QtWidgets.QLabel(foodWidget)
+            foodPriceValue.setGeometry(QtCore.QRect(300, 100, 170, 31))
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
             sizePolicy.setVerticalStretch(0)
-            sizePolicy.setHeightForWidth(self.foodPriceValue.sizePolicy().hasHeightForWidth())
-            self.foodPriceValue.setSizePolicy(sizePolicy)
-            self.foodPriceValue.setMinimumSize(QtCore.QSize(170, 0))
-            self.foodPriceValue.setStyleSheet("border-width:0px;\n"
+            sizePolicy.setHeightForWidth(foodPriceValue.sizePolicy().hasHeightForWidth())
+            foodPriceValue.setSizePolicy(sizePolicy)
+            foodPriceValue.setMinimumSize(QtCore.QSize(170, 0))
+            foodPriceValue.setStyleSheet("border-width:0px;\n"
     "border-color: rgb(5, 85, 82);\n"
     "border-radius:0px;\n"
     "background-color: rgb(245, 247, 250);\n"
     "")
-            self.foodPriceValue.setObjectName("foodPriceValue")
-            self.foodNumberLabel = QtWidgets.QLabel(self.foodWidget)
-            self.foodNumberLabel.setGeometry(QtCore.QRect(200, 60, 101, 31))
-            self.foodNumberLabel.setStyleSheet("border-width:0px;\n"
+            foodPriceValue.setObjectName("foodPriceValue")
+            foodNumberLabel = QtWidgets.QLabel(foodWidget)
+            foodNumberLabel.setGeometry(QtCore.QRect(200, 60, 101, 31))
+            foodNumberLabel.setStyleSheet("border-width:0px;\n"
     "border-color: rgb(5, 85, 82);\n"
     "border-radius:0px;\n"
     "background-color: rgb(202, 205, 210);\n"
     "\n"
     "")
-            self.foodNumberLabel.setObjectName("foodNumberLabel")
-            self.foodImage = QtWidgets.QLabel(self.foodWidget)
-            self.foodImage.setGeometry(QtCore.QRect(510, 20, 181, 111))
+            foodNumberLabel.setObjectName("foodNumberLabel")
+            foodImage = QtWidgets.QLabel(foodWidget)
+            foodImage.setGeometry(QtCore.QRect(510, 20, 181, 111))
             sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
             sizePolicy.setHorizontalStretch(0)
             sizePolicy.setVerticalStretch(0)
-            sizePolicy.setHeightForWidth(self.foodImage.sizePolicy().hasHeightForWidth())
-            self.foodImage.setSizePolicy(sizePolicy)
-            self.foodImage.setMinimumSize(QtCore.QSize(0, 111))
-            self.foodImage.setObjectName("foodImage")
-            self.divider1 = QtWidgets.QWidget(self.foodWidget)
-            self.divider1.setGeometry(QtCore.QRect(150, 20, 20, 111))
-            self.divider1.setStyleSheet("border-width : 0px;\n"
+            sizePolicy.setHeightForWidth(foodImage.sizePolicy().hasHeightForWidth())
+            foodImage.setSizePolicy(sizePolicy)
+            foodImage.setMinimumSize(QtCore.QSize(0, 111))
+            foodImage.setObjectName("foodImage")
+            divider1 = QtWidgets.QWidget(foodWidget)
+            divider1.setGeometry(QtCore.QRect(150, 20, 20, 111))
+            divider1.setStyleSheet("border-width : 0px;\n"
     "border-right-width : 2px;\n"
     "border-color: rgb(202, 205, 210);")
-            self.divider1.setObjectName("divider1")
-            self.divider2 = QtWidgets.QWidget(self.foodWidget)
-            self.divider2.setGeometry(QtCore.QRect(470, 20, 20, 111))
-            self.divider2.setStyleSheet("border-width : 0px;\n"
+            divider1.setObjectName("divider1")
+            divider2 = QtWidgets.QWidget(foodWidget)
+            divider2.setGeometry(QtCore.QRect(470, 20, 20, 111))
+            divider2.setStyleSheet("border-width : 0px;\n"
     "border-right-width : 2px;\n"
     "border-color: rgb(202, 205, 210);")
-            self.divider2.setObjectName("divider2")
-            self.foodAddBtn = QtWidgets.QPushButton(self.foodWidget)
-            self.foodAddBtn.setGeometry(QtCore.QRect(32, 20, 101, 21))
-            self.foodAddBtn.setStyleSheet("border-width:0px;\n"
+            divider2.setObjectName("divider2")
+            foodAddBtn = QtWidgets.QPushButton(foodWidget)
+            foodAddBtn.setGeometry(QtCore.QRect(32, 20, 101, 21))
+            foodAddBtn.setStyleSheet("border-width:0px;\n"
     "border-color: rgb(5, 85, 82);\n"
     "border-radius:0px;\n"
     "background-color: rgb(245, 247, 250);\n"
     "padding-left:0px;\n"
     "")
-            self.foodAddBtn.setObjectName("foodAddBtn")
-            self.foodRemoveBtn = QtWidgets.QPushButton(self.foodWidget)
-            self.foodRemoveBtn.setGeometry(QtCore.QRect(30, 80, 101, 21))
-            self.foodRemoveBtn.setStyleSheet("border-width:0px;\n"
+            foodAddBtn.setObjectName("foodAddBtn")
+            foodRemoveBtn = QtWidgets.QPushButton(foodWidget)
+            foodRemoveBtn.setGeometry(QtCore.QRect(30, 80, 101, 21))
+            foodRemoveBtn.setStyleSheet("border-width:0px;\n"
     "border-color: rgb(5, 85, 82);\n"
     "border-radius:0px;\n"
     "background-color: rgb(245, 247, 250);\n"
     "padding-left:0px;\n"
     "")
-            self.foodRemoveBtn.setObjectName("foodRemoveBtn")
-            self.foodReduceBtn = QtWidgets.QPushButton(self.foodWidget)
-            self.foodReduceBtn.setGeometry(QtCore.QRect(30, 50, 101, 21))
-            self.foodReduceBtn.setStyleSheet("border-width:0px;\n"
+            foodRemoveBtn.setObjectName("foodRemoveBtn")
+            foodReduceBtn = QtWidgets.QPushButton(foodWidget)
+            foodReduceBtn.setGeometry(QtCore.QRect(30, 50, 101, 21))
+            foodReduceBtn.setStyleSheet("border-width:0px;\n"
     "border-color: rgb(5, 85, 82);\n"
     "border-radius:0px;\n"
     "background-color: rgb(245, 247, 250);\n"
     "padding-left:0px;\n"
     "")
-            self.foodReduceBtn.setObjectName("foodReduceBtn")
-            self.foodInfoBtn = QtWidgets.QPushButton(self.foodWidget)
-            self.foodInfoBtn.setGeometry(QtCore.QRect(32, 110, 101, 21))
-            self.foodInfoBtn.setStyleSheet("border-width:0px;\n"
+            foodReduceBtn.setObjectName("foodReduceBtn")
+            foodInfoBtn = QtWidgets.QPushButton(foodWidget)
+            foodInfoBtn.setGeometry(QtCore.QRect(32, 110, 101, 21))
+            foodInfoBtn.setStyleSheet("border-width:0px;\n"
     "border-color: rgb(5, 85, 82);\n"
     "border-radius:0px;\n"
     "background-color: rgb(245, 247, 250);\n"
     "padding-left:0px;\n"
     "")
-            self.foodInfoBtn.setObjectName("foodInfoBtn")
-            self.verticalLayout.addWidget(self.foodWidget)
+            foodInfoBtn.setObjectName("foodInfoBtn")
+            self.verticalLayout.addWidget(foodWidget)
 
-            self.foodTitleLabel.setText("<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Title : </span></p></body></html>")
-            self.foodPriceLabel.setText("<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Price : </span></p></body></html>")
-            self.foodNumberLabel.setText("<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Count : </span></p></body></html>")
-            self.foodAddBtn.setText("Add")
-            self.foodRemoveBtn.setText("Remove")
-            self.foodReduceBtn.setText("Reduce")
-            self.foodInfoBtn.setText("More Info")
+            foodTitleLabel.setText("<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Title : </span></p></body></html>")
+            foodPriceLabel.setText("<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Price : </span></p></body></html>")
+            foodNumberLabel.setText("<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Count : </span></p></body></html>")
+            foodAddBtn.setText("Add")
+            foodRemoveBtn.setText("Remove")
+            foodReduceBtn.setText("Reduce")
+            foodInfoBtn.setText("More Info")
 
             #set values
 
-            self.foodNumberValue.setText(
+            foodNumberValue.setText(
                     f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{count}</span></p></body></html>")
-            self.foodTitleValue.setText(
+            foodTitleValue.setText(
                     f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{food.title}</span></p></body></html>")
-            self.foodPriceValue.setText(
+            foodPriceValue.setText(
                     f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{food.sale_price}</span></p></body></html>")
 
-            self.foodImage.setPixmap(QtGui.QPixmap(food.image))
-            self.foodImage.setScaledContents(True)
+            foodImage.setPixmap(QtGui.QPixmap(food.image))
+            foodImage.setScaledContents(True)
 
 
             #connect buttons
 
-            self.foodAddBtn.clicked.connect(lambda:add(MainWindow, self, food))
-            self.foodReduceBtn.clicked.connect(lambda:reduce(MainWindow, self, food))
-            self.foodRemoveBtn.clicked.connect(lambda:remove(MainWindow, self, food))
-            self.foodInfoBtn.clicked.connect(lambda:info(MainWindow, self, food))
+            foodAddBtn.clicked.connect(lambda:add(window, self, food))
+            foodReduceBtn.clicked.connect(lambda:reduce(window, self, food))
+            foodRemoveBtn.clicked.connect(lambda:remove(window, self, food))
+            foodInfoBtn.clicked.connect(lambda:info(window, self, food))
 
-
-
-
-
-
+            Ui_MainWindow.FoodsWidgets.append(foodWidget)
 
 
 
@@ -647,6 +637,9 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+
+
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -667,7 +660,9 @@ class Ui_MainWindow(object):
 
         # ////////////////run init////////////////////
         init(MainWindow, self)
-        
+
+
+
 
 if __name__ == "__main__":
     import sys
