@@ -63,6 +63,10 @@ class Routes:
         from Views.User.InfoUI import Ui_MainWindow
         return Ui_MainWindow
 
+    def cart():
+        from Views.User.CartUI import Ui_MainWindow
+        return Ui_MainWindow
+
     #UI table window { name : UI method }
     UiObjects = {
 
@@ -79,6 +83,7 @@ class Routes:
         "newMenu" : newMenu,
         "menuEdit" : editMenu,
         "userInfo" : userInfo,
+        "cart" : cart,
     }
 
 

@@ -21,16 +21,16 @@ def run(test_class):
 
 def run_tests():
     """run tests"""
-    # run(FoodTest.TestFood)
-    # run(SqliteTest.TestDataBase)
-    # run(GiftCardTest.TestGiftCard)
-    # run(RestaurantTest.TestRestaurant)
-    # run(CommentTest.TestComment)
-    # run(UserTest.TestUser)
-    # run(OrderTest.TestOrder)
-    # run(MenuTest.TestMenu)
-    # run(ValidationTest.TestUserValidator)
-    # run(AuthenticationControllerTest.TestAuth)
+    run(FoodTest.TestFood)
+    run(SqliteTest.TestDataBase)
+    run(GiftCardTest.TestGiftCard)
+    run(RestaurantTest.TestRestaurant)
+    run(CommentTest.TestComment)
+    run(UserTest.TestUser)
+    run(OrderTest.TestOrder)
+    run(MenuTest.TestMenu)
+    run(ValidationTest.TestUserValidator)
+    run(AuthenticationControllerTest.TestAuth)
     run(UserInfoControllerTest.TestUserInfo)
 
 

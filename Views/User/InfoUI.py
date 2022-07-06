@@ -6,7 +6,7 @@ from Lib.Messages import Messages
 from Lib.Questions import Questions
 from Lib.Image import Image
 from Models.Restaurant import Restaurant
-from Controllers.User.UserInfoController import UserInfo
+
 
 
 #///////////////////////////////EVENTS///////////////////////
@@ -649,7 +649,7 @@ class Ui_MainWindow(object):
         self.backBtn.setText(_translate("MainWindow", "BACK"))
         self.mainTitle.setToolTip(_translate("MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
         self.mainTitle.setWhatsThis(_translate("MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
-        self.mainTitle.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; color:#055553;\">Restaurant Title</span></p></body></html>"))
+        self.mainTitle.setText(_translate("MainWindow", f"<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; color:#055553;\">{Restaurant.Name()}</span></p></body></html>"))
         self.windowTitle.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#33a415;\">Account Info</span></p></body></html>"))
 
         #////////////////run init////////////////////

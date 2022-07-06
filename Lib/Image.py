@@ -93,3 +93,7 @@ class Image:
     @staticmethod
     def DefaultUserImagePath():
         return os.path.join(Image.BaseDir, "user_default.png")
+
+    @staticmethod
+    def DefaultFoodImagePath():
+        return os.path.join(Image.BaseDir, "food_default.png")

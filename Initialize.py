@@ -1,5 +1,6 @@
 from DataBase.Sqlite import Database
 from Controllers.AuthenticationController import Auth
+from Models.User import User
 
 
 
@@ -67,4 +68,5 @@ class Defaults:
             }
 
         if not Auth.CheckForPreviousSignUp(data["email"]):
-            Auth.SignUp(data)
+            id = Auth.SignUp(data)
+            User.Update(id, {"password" : "user"})
