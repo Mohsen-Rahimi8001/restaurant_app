@@ -107,7 +107,7 @@ class Message(Model):
         else:
             data['admin_email'] = Message.ValidateEmail(data['admin_email'])
 
-        Database.Create(Message.TableName, data)
+        return Database.Create(Message.TableName, data)
 
     @staticmethod
     def GetAll():
