@@ -6,11 +6,24 @@ from Lib.Messages import Messages
 from Lib.Questions import Questions
 from Lib.Image import Image
 from Models.Restaurant import Restaurant
+from Controllers.User.UserInfoController import UserInfo
 
 
 #///////////////////////////////EVENTS///////////////////////
 
 # button events
+
+def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
+        user = Auth.GetUser()
+
+        setFirstName(ui, user.first_name)
+        setLastName(ui, user.last_name)
+        setPhoneNumber(ui, user.phone_number)
+        setSocialNumber(ui, user.social_number)
+        setEmail(ui, user.email)
+        setImageShowPixmap(ui, user.image)
+
+
 
 def logout(window : QtWidgets.QMainWindow):
 
@@ -34,11 +47,11 @@ def submit(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
                 "image" : getImagePath(ui),
         }
 
+        UserInfo.Edit(data)
+        Routing.Refresh(window)
 
 
 def browse(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-
-        print("shit")
 
         path = Image.Browse(window)
 
@@ -608,8 +621,9 @@ class Ui_MainWindow(object):
         self.accountBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "userInfo"))
         self.logoutBtn.clicked.connect(partial(logout, MainWindow))
         self.backBtn.clicked.connect(partial(Routing.RedirectBack, MainWindow))
-        self.browseBtn.clicked.connect(partial(browse, MainWindow, self))
 
+        self.browseBtn.clicked.connect(partial(browse, MainWindow, self))
+        self.submitBtn.clicked.connect(partial(submit, MainWindow, self))
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -638,6 +652,8 @@ class Ui_MainWindow(object):
         self.mainTitle.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; color:#055553;\">Restaurant Title</span></p></body></html>"))
         self.windowTitle.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#33a415;\">Account Info</span></p></body></html>"))
 
+        #////////////////run init////////////////////
+        init(MainWindow, self)
 
 if __name__ == "__main__":
     import sys

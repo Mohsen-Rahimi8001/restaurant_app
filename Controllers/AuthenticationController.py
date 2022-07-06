@@ -1,7 +1,7 @@
 from Controllers.Validation import UserValidator
 from Lib.Messages import Messages
 from Models.User import User
-import bcrypt
+#import bcrypt
 
 
 
@@ -13,12 +13,14 @@ class Auth:
 
     @staticmethod
     def HashPassword(password) -> str:
-        return  bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt(5))
+        #return  bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt(5))
+        return password
 
 
     @staticmethod
     def CheckPasswordMatch(password : str, hashed : str) -> bool:
-        return  bcrypt.checkpw(password, hashed)
+        #return  bcrypt.checkpw(password, hashed)
+        return password == hashed
 
 
     @staticmethod

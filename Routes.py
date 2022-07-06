@@ -74,7 +74,7 @@ class Routes:
         "foodEdit" : editFood,
         "newFood" : newFood,
         "editRestaurant": editRestaurant,
-        "userHome" : landingPage,
+        "userHome" : userInfo,
         "menus" : menusPage,
         "newMenu" : newMenu,
         "menuEdit" : editMenu,
