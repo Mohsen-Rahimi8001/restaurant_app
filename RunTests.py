@@ -9,6 +9,7 @@ from Unittests.Models import OrderTest
 from Unittests.Models import MenuTest
 from Unittests.Controllers import ValidationTest
 from Unittests.Controllers import AuthenticationControllerTest
+from Unittests.Controllers.User import UserInfoControllerTest
 
 
 def run(test_class):
@@ -20,16 +21,17 @@ def run(test_class):
 
 def run_tests():
     """run tests"""
-    run(FoodTest.TestFood)
-    run(SqliteTest.TestDataBase)
-    run(GiftCardTest.TestGiftCard)
-    run(RestaurantTest.TestRestaurant)
-    run(CommentTest.TestComment)
-    run(UserTest.TestUser)
-    run(OrderTest.TestOrder)
-    run(MenuTest.TestMenu)
-    run(ValidationTest.TestUserValidator)
-    run(AuthenticationControllerTest.TestAuth)
+    # run(FoodTest.TestFood)
+    # run(SqliteTest.TestDataBase)
+    # run(GiftCardTest.TestGiftCard)
+    # run(RestaurantTest.TestRestaurant)
+    # run(CommentTest.TestComment)
+    # run(UserTest.TestUser)
+    # run(OrderTest.TestOrder)
+    # run(MenuTest.TestMenu)
+    # run(ValidationTest.TestUserValidator)
+    # run(AuthenticationControllerTest.TestAuth)
+    run(UserInfoControllerTest.TestUserInfo)
 
 
 if __name__ == "__main__":

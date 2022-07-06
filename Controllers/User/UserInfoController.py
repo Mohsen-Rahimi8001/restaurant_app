@@ -27,24 +27,30 @@ class UserInfo:
         if not UserValidator.ValidateEmail(data["email"]):
             data.pop("email")
 
+
     @staticmethod
     def PopOldData(user : User, data : dict) -> None:
         """remove old data"""
 
-        if user.first_name == data["first_name"]:
-            data.pop("first_name")
+        if "first_name" in data:
+            if user.first_name == data["first_name"]:
+                data.pop("first_name")
 
-        if user.last_name == data["last_name"]:
-            data.pop("last_name")
+        if "last_name" in data:
+            if user.last_name == data["last_name"]:
+                data.pop("last_name")
 
-        if user.phone_number == data["phone_number"]:
-            data.pop("phone_number")
+        if "phone_number" in data:
+            if user.phone_number == data["phone_number"]:
+                data.pop("phone_number")
 
-        if user.social_number == data["social_number"]:
-            data.pop("social_number")
+        if "social_number" in data:
+            if user.social_number == data["social_number"]:
+                data.pop("social_number")
 
-        if user.email == data["email"]:
-            data.pop("email")
+        if "email" in data:
+            if user.email == data["email"]:
+                data.pop("email")
 
 
     @staticmethod
@@ -87,17 +93,23 @@ class UserInfo:
 
 
     @staticmethod
-    def Edit(data : dict) -> None:
+    def Edit(editData : dict) -> None:
         """update user data"""
 
+        data = editData.copy()
+
+        #validate input
         UserInfo.ValidateEditDate(data)
 
         user = Auth.GetUser()
 
+        #remove old values from update data
         UserInfo.PopOldData(user, data)
 
+        #handel new image
         UserInfo.CheckForNewImage(data)
 
+        #change password
         UserInfo.CheckForNewPassword(user, data)
 
         if len(data) > 0:
