@@ -155,7 +155,7 @@ class Ui_MainWindow(object):
         font.setPointSize(9)
         self.btnAdd.setFont(font)
         self.btnAdd.setObjectName("btnAdd")
-        self.btnAdd.clicked.connect(lambda:Routing.Redirect(MainWindow, "addGiftCard"))
+        self.btnAdd.clicked.connect(lambda:Routing.Redirect(MainWindow, "newGiftCard"))
         self.btnHLayout.addWidget(self.btnAdd)
         
         self.gridLayout.addLayout(self.btnHLayout, 2, 0, 1, 1)
