@@ -121,7 +121,7 @@ class DateValidator:
             return False
         
         #check for range
-        if not day in range(1,32):
+        if not int(day) in range(1,32):
             Messages.push(Messages.Type.ERROR, f"{inputName} is out of range")
             return False
         
@@ -141,7 +141,7 @@ class DateValidator:
             return False
 
         # check for range
-        if not month in range(1, 13):
+        if not int(month) in range(1, 13):
             Messages.push(Messages.Type.ERROR, f"{inputName} is out of range")
             return False
 
@@ -161,7 +161,7 @@ class DateValidator:
             return False
 
         # check for range
-        if not year >= 2022:
+        if not int(year) >= 2022:
             Messages.push(Messages.Type.ERROR, f"{inputName} is out of range")
             return False
 

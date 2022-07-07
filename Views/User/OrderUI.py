@@ -9,6 +9,7 @@ from Models.Restaurant import Restaurant
 from Models.Food import Food
 from Window import Transfer
 from Models.Menu import Menu
+from Controllers.User.MenuController import MenuController
 
 
 
@@ -17,13 +18,49 @@ from Models.Menu import Menu
 # button events
 
 def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-    pass
+
+    if Transfer.Exists("date_search_data"):
+        data = Transfer.Get("date_search_data")
+        setDay(ui, data["day"])
+        setMonth(ui, data["month"])
+        setYear(ui, data["year"])
+
+
+    menus = MenuController.GetPresentMenus()
+
+    if Transfer.Exists("order_type"):
+
+        orderType = Transfer.Get("order_type")
+
+        if orderType == "search_date" or orderType == "search_food":
+
+            menus = Transfer.Get("order_menus")
+
+
+
+    for menu in menus:
+        ui.addMenu(window, menu)
 
 
 
 
 def searchDate(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-    pass
+
+    year = getYear(ui)
+    month = getMonth(ui)
+    day = getDay(ui)
+
+    menus = MenuController.SearchDate(year, month, day)
+
+    if menus:
+
+        Transfer.Add("order_type", "search_date")
+        Transfer.Add("order_menus", menus)
+
+    Transfer.Add("date_search_data", {"year": year, "month": month, "day": day})
+    Routing.Refresh(window)
+
+
 
 
 
@@ -48,6 +85,28 @@ def logout(window : QtWidgets.QMainWindow):
         Routing.ClearStack()
         Routing.Redirect(window, "login")
 
+
+
+#input methods
+
+def getYear(ui : 'Ui_MainWindow'):
+    return ui.yearEdit.text().strip()
+
+def getMonth(ui : 'Ui_MainWindow'):
+    return ui.monthEdit.text().strip()
+
+def getDay(ui : 'Ui_MainWindow'):
+    return ui.dayEdit.text().strip()
+
+
+def setYear(ui : 'Ui_MainWindow', value : str):
+    return ui.yearEdit.setText(str(value))
+
+def setMonth(ui : 'Ui_MainWindow', value : str):
+    return ui.monthEdit.setText(str(value))
+
+def setDay(ui : 'Ui_MainWindow', value : str):
+    return ui.dayEdit.setText(str(value))
 
 
 
@@ -650,6 +709,9 @@ class Ui_MainWindow(object):
         self.accountBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "userInfo"))
         self.logoutBtn.clicked.connect(partial(logout, MainWindow))
         self.backBtn.clicked.connect(partial(Routing.RedirectBack, MainWindow))
+
+        self.searchDateBtn.clicked.connect(partial(searchDate, MainWindow, self))
+        self.SearchFoodBtn.clicked.connect(partial(searchFood, MainWindow, self))
 
         self.retranslateUi(MainWindow)
 

@@ -102,6 +102,28 @@ class Menu(Model):
 
 
     @staticmethod
+    def GetByDate(date : str):
+        """returns menus with given date"""
+
+        if not Menu.ExistsByDate(date):
+             return False
+
+        rows = Database.Read(Menu.TableName, "date", date)
+
+        menus = list()
+
+        for row in rows:
+            menus.append(Menu(
+                id=row[0],
+                title=row[1],
+                foods=json.loads(row[2]) if row[2] else list(),
+                date=row[3]
+            ))
+
+        return menus
+
+
+    @staticmethod
     def Update(id : int, menuData):
         """update menu"""
 
@@ -120,7 +142,6 @@ class Menu(Model):
             data['date'] = Menu.ValidateDate(data['date'])
 
         Database.Update(Menu.TableName, Menu.PrimaryKey, id, data)
-
 
 
     @staticmethod
