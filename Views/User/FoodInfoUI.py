@@ -16,7 +16,56 @@ from Window import Transfer
 # button events
 
 def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-    pass
+
+    if Transfer.Exists("food_info_id"):
+
+        foodId = Transfer.Get("food_info_id")
+        food : Food = Food.Get(foodId)
+
+
+        setPageTitle(ui, f"{food.title} Info")
+        setTitle(ui, food.title)
+        setPrice(ui, food.sale_price)
+        setStock(ui, food.stock)
+        setCategory(ui, food.category)
+        setDescription(ui, food.description)
+        setMaterials(ui, food.materials)
+        setImage(ui, food.image)
+
+    else:
+
+        Routing.RedirectBack(window)
+
+
+
+#input methods
+
+def setTitle(ui : "Ui_MainWindow", value : str):
+        ui.titleValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{str(value)}</span></p></body></html>")
+
+def setPrice(ui : "Ui_MainWindow", value : str):
+        ui.priceValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{str(value)}</span></p></body></html>")
+
+def setCategory(ui : "Ui_MainWindow", value : str):
+        ui.categoryValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{str(value)}</span></p></body></html>")
+
+def setStock(ui : "Ui_MainWindow", value : str):
+        ui.stockValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{str(value)}</span></p></body></html>")
+
+def setDescription(ui : "Ui_MainWindow", value : str):
+        ui.descriptionValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{str(value)}</span></p></body></html>")
+
+def setMaterials(ui : "Ui_MainWindow", value : str):
+        ui.materialsValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{str(value)}</span></p></body></html>")
+
+def setImage(ui : "Ui_MainWindow", value : str):
+        ui.imageLabel.setPixmap(QtGui.QPixmap( value ))
+        ui.imageLabel.setScaledContents(True)
+
+
+def setPageTitle(ui : "Ui_MainWindow", value : str):
+        ui.windowTitle.setText(f"<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#33a415;\">{str(value)}</span></p></body></html>")
+
 
 
 
@@ -463,6 +512,14 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
+        # /////////////////////////////connect buttons to methods//////////////////////////////
+        self.orderBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "order"))
+        self.cartBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "cart"))
+        self.historyBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "history"))
+        self.accountBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "userInfo"))
+        self.logoutBtn.clicked.connect(partial(logout, MainWindow))
+        self.backBtn.clicked.connect(partial(Routing.RedirectBack, MainWindow))
+
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
@@ -489,9 +546,11 @@ class Ui_MainWindow(object):
         self.backBtn.setText(_translate("MainWindow", "BACK"))
         self.mainTitle.setToolTip(_translate("MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
         self.mainTitle.setWhatsThis(_translate("MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
-        self.mainTitle.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; color:#055553;\">Restaurant Title</span></p></body></html>"))
+        self.mainTitle.setText(_translate("MainWindow", f"<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; color:#055553;\">{Restaurant.Name()}</span></p></body></html>"))
         self.windowTitle.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#33a415;\">Food title</span></p></body></html>"))
 
+        # ////////////////run init////////////////////
+        init(MainWindow, self)
 
 if __name__ == "__main__":
     import sys
