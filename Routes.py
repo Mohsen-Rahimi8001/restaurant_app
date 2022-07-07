@@ -93,6 +93,11 @@ class Routes:
         return Ui_MainWindow
 
 
+    def history():
+        from Views.User.OrdersHistoryUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
 
     #UI table window { name : UI method }
     UiObjects = {
@@ -116,6 +121,8 @@ class Routes:
         "chatRoom" : chatRoom,
         "orderManage" : orderManage,
         "status" : status,
+        "history" : history,
+
     }
 
 
