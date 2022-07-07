@@ -1,6 +1,7 @@
 import json
 import re
 from Constants.RegExValidations import Patterns
+from Models.Order import Order
 
 
 class Restaurant():
@@ -107,10 +108,12 @@ class Restaurant():
         """returns the path to the json file"""
         return r".\Constants\Restaurant.json"
 
+
     def SaveToJson(self) -> None:
         """save restaurant object to json file"""
         with open(Restaurant.GetJsonAddress(), "w") as file:
             json.dump(self.__dict__, file, indent=4)
+
 
     @classmethod
     def LoadFromJson(cls) -> 'Restaurant':
@@ -124,3 +127,28 @@ class Restaurant():
     def Name() -> str:
         """get restaurant name"""
         return str(Restaurant.LoadFromJson().restaurantName)
+
+    
+    @staticmethod
+    def GetRestaurantEconomy():
+        """get restaurant economy"""
+        
+        orders = Order.GetAll()
+
+        data = {
+            "total" : 0,
+            "total_interest" : 0,
+        }
+
+        for order in orders:
+            if order.confirmed:
+                data['total'] += order.getTotalPrice()
+                data["total_interest"] += order.getTotalInterest()
+            
+                if order.deliver_date in data:
+                    data[order.deliver_date][0] += order.getTotalPrice()
+                    data[order.deliver_date][1] += order.getTotalInterest()
+                else:
+                    data[order.deliver_date] = [order.getTotalPrice(), order.getTotalInterest()]
+        
+        return data

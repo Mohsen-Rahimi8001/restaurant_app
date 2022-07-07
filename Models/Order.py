@@ -65,7 +65,7 @@ class Order(Model):
 
 
     @staticmethod
-    def GetAll() -> list:
+    def GetAll() -> list['Order']:
         """get all orders"""
 
         rows = Database.ReadAll(Order.TableName)
@@ -181,7 +181,7 @@ class Order(Model):
             Order.Update(self.id, {"foods": self.foods})
 
 
-    def getFoods(self) -> list:
+    def getFoods(self) -> list['Food']:
         """get Food object for each food in order"""
 
         foods = []
@@ -191,6 +191,27 @@ class Order(Model):
 
         return foods
 
+
+    def getTotalInterest(self):
+        """get total interest for order"""
+
+        total = 0
+
+        for food in self.getFoods():
+            total += food.sale_price - food.fixed_price
+
+        return total
+
+
+    def getTotalPrice(self):
+        """get total price for order"""
+
+        total = 0
+
+        for food in self.getFoods():
+            total += food.sale_price
+
+        return total
 
 
     #properties
