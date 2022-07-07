@@ -1,6 +1,5 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Controllers.AuthenticationController import Auth
-from Controllers.Admin.MenusController import MenusController
 from Window import Routing, Transfer
 from Lib.Messages import Messages
 from Models.Menu import Menu
@@ -9,28 +8,13 @@ from functools import partial
 
 
 MENU: Menu = None
-DEFAULT: bool = None
 
-def setMenuObject(window: 'QtWidgets.QMainWindow'):
+def setMenuObject():
     """This function sets the menu object to the global variable MENU"""
-    global MENU, DEFAULT
+    global MENU
 
     menuId = Transfer.Get('id')
-    
-    # check if menu is a default menu
-    if Transfer.Get('idDefault'):
-        DEFAULT = True
-        
-        # get the default menu
-        MENU = MenusController.GetDefaultMenu(menuId)
-
-        if not MENU:
-            Messages.push(Messages.Type.ERROR, "Menu not found")
-            Messages.show()
-            Routing.RedirectBack(window)
-    else:
-        DEFAULT = False
-        MENU = Menu.Get(menuId)
+    MENU = Menu.Get(menuId)
 
 
 def checkForCredentials(window: 'QtWidgets.QMainWindow'):
@@ -57,43 +41,7 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
     # fetched all the foods
     foods = Food.GetAll()
 
-    if DEFAULT:
-        
-        # fetch all the default foods
-        defaultFoods = MenusController.GetAllFoods()
-        
-        # set the foods to the food table
-        ui.tableFoods.setRowCount(len(foods) + len(defaultFoods))
-
-        # set the default foods to the food table
-        for i, food in enumerate(defaultFoods):
-
-            # create add button
-            addIcon = QtGui.QIcon(r".\Resources\Images\add_icon.png")
-            btnAdd = QtWidgets.QPushButton()
-            btnAdd.setIcon(addIcon)
-            btnAdd.setIconSize(QtCore.QSize(20, 20))
-            addSignal = partial(addFood, food, ui, window)
-
-            # create an icon of the food image
-            foodIcon = QtGui.QIcon(food.image)
-
-            ui.tableFoods.setItem(i, 0, QtWidgets.QTableWidgetItem(str(food.id)))
-            ui.tableFoods.setItem(i, 1, QtWidgets.QTableWidgetItem(foodIcon, "", QtCore.Qt.DecorationRole))
-            ui.tableFoods.setItem(i, 2, QtWidgets.QTableWidgetItem(food.title))
-            ui.tableFoods.setItem(i, 3, QtWidgets.QTableWidgetItem(str(food.stock)))
-            ui.tableFoods.setItem(i, 4, QtWidgets.QTableWidgetItem(str(food.fixed_price)))
-            ui.tableFoods.setItem(i, 5, QtWidgets.QTableWidgetItem(str(food.sale_price)))
-
-            # add the add button to add column
-            ui.tableFoods.setCellWidget(i, 6, btnAdd)
-
-            # connect the add button to the add signal
-            btnAdd.clicked.connect(addSignal)
-
-    else:
-        ui.tableFoods.setRowCount(len(foods))
-
+    ui.tableFoods.setRowCount(len(foods))
 
     # set the foods to the food table
     for i, food in enumerate(foods):
@@ -122,11 +70,8 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
         btnAdd.clicked.connect(addSignal)
 
 
-    if not DEFAULT:
-        # fetched foods in the menu and set them to the menu table
-        foodsInMenu = MENU.getFoods()
-    else:
-        foodsInMenu = MENU.foods
+    # fetched foods in the menu and set them to the menu table
+    foodsInMenu = MENU.getFoods()
 
     ui.tableMenuFoods.setRowCount(len(foodsInMenu))
 
@@ -163,25 +108,14 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
 def addFood(food: Food, ui: 'Ui_MainWindow', window: "QtWidgets.QMainWindow"):
     """adds a food to the menu"""
 
-    if not DEFAULT:
-        if not Menu.Exists(food.id):
-            # add the food to the menu
-            MENU.addFood(food)
-        else:
-            # show error message
-            Messages.push(Messages.Type.ERROR, "Food already exists in menu")
-            Messages.show()
-            return
+    if food.id not in MENU.foods:
+        # add the food to the menu
+        MENU.addFood(food)
     else:
-        if not MenusController.FoodExistsInMenu(MENU.id, food.id):
-
-            # add the food to the default menu
-            MenusController.AddFoodToMenu(MENU.id, food)
-        else:
-            # show error message
-            Messages.push(Messages.Type.ERROR, "Food already exists in menu")
-            Messages.show()
-            return
+        # show error message
+        Messages.push(Messages.Type.ERROR, "Food already exists in menu")
+        Messages.show()
+        return
         
     # update the menu table
     refreshPage(ui, window)
@@ -194,12 +128,8 @@ def addFood(food: Food, ui: 'Ui_MainWindow', window: "QtWidgets.QMainWindow"):
 def removeFood(food: Food, ui: 'Ui_MainWindow', window: "QtWidgets.QMainWindow"):
     """removes a food from the menu"""
 
-    if not DEFAULT:
-        # remove the food from the menu
-        MENU.removeFood(food)
-    else:
-        # remove the food from the default menu
-        MenusController.RemoveFoodFromMenu(MENU.id, food)
+    # remove the food from the menu
+    MENU.removeFood(food)
 
     # update the menu table
     refreshPage(ui, window)
@@ -209,22 +139,15 @@ def removeFood(food: Food, ui: 'Ui_MainWindow', window: "QtWidgets.QMainWindow")
     Messages.show()
 
 
-
 def refreshPage(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
     """refreshes the page"""
 
     # clear two tables
-    ui.tableFoods.clear()
-    ui.tableMenuFoods.clear()
+    ui.tableFoods.setRowCount(0)
+    ui.tableMenuFoods.setRowCount(0)
 
-    if DEFAULT:
-        global MENU
-        
-        # get the default menu
-        MENU = MenusController.GetDefaultMenu(MENU.id)
-    
-    # set up the information
-    setUpInitInformation(ui, window)
+    setUpInitInformation(ui, window)        
+
 
 
 def saveChanges(ui: "Ui_MainWindow"):
@@ -233,13 +156,9 @@ def saveChanges(ui: "Ui_MainWindow"):
     # get the new name
     newTitle = ui.lEditMenuTitle.text()
 
-    if not DEFAULT:
-        # update the menu
-        Menu.Update(MENU.id, {'title' : newTitle})
-    else:
-        # update the default menu
-        MenusController.UpdateMenu(MENU.id, {'title' : newTitle})
-
+    # update the menu
+    Menu.Update(MENU.id, {'title' : newTitle})
+    
     # show a message
     Messages.push(Messages.Type.SUCCESS, "Menu updated")
     Messages.show()
@@ -422,7 +341,7 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Add"))
 
         # this function sets the MENU every time the page is loaded
-        setMenuObject(MainWindow)
+        setMenuObject()
         checkForCredentials(MainWindow)
         setUpInitInformation(self, MainWindow)
 

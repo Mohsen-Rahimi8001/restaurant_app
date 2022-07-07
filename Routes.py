@@ -83,6 +83,17 @@ class Routes:
         return Ui_MainWindow
 
 
+    def orderManage():
+        from Views.Admin.OrdersUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
+    def status():
+        from Views.Admin.StatusUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
+
     #UI table window { name : UI method }
     UiObjects = {
 
@@ -103,7 +114,8 @@ class Routes:
         "giftCards" : giftCards,
         "newGiftCard" : newGiftCard,
         "chatRoom" : chatRoom,
-
+        "orderManage" : orderManage,
+        "status" : status,
     }
 
 
