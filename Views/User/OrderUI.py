@@ -21,18 +21,22 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
 
 
+
 def searchDate(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
     pass
 
 
 
 def searchFood(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-    pass
+
+    Routing.Redirect(window, "searchFood")
 
 
 
 def order(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", menu : Menu):
-    pass
+
+    Transfer.Add("menu_id", menu.id)
+    Routing.Redirect(window, "menu")
 
 
 
