@@ -521,7 +521,16 @@ class Ui_MainWindow(object):
         self.backBtn.clicked.connect(partial(Routing.RedirectBack, MainWindow))
 
         self.retranslateUi(MainWindow)
+
+        # ////////////////run init////////////////////
+        init(MainWindow, self)
+
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+
+
+
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -549,8 +558,11 @@ class Ui_MainWindow(object):
         self.mainTitle.setText(_translate("MainWindow", f"<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; color:#055553;\">{Restaurant.Name()}</span></p></body></html>"))
         self.windowTitle.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#33a415;\">Food title</span></p></body></html>"))
 
-        # ////////////////run init////////////////////
-        init(MainWindow, self)
+
+
+
+
+
 
 if __name__ == "__main__":
     import sys

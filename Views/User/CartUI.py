@@ -659,8 +659,8 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         # /////////////////////////////connect buttons to methods//////////////////////////////
-        self.orderBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "order"))
-        self.cartBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "cart"))
+        self.orderBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "cart"))
+        self.cartBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "order"))
         self.historyBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "history"))
         self.accountBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "userInfo"))
         self.logoutBtn.clicked.connect(partial(logout, MainWindow))

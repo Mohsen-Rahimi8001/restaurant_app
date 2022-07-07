@@ -1196,15 +1196,19 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         # /////////////////////////////connect buttons to methods//////////////////////////////
-        self.orderBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "order"))
-        self.cartBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "cart"))
+        self.orderBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "cart"))
+        self.cartBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "order"))
         self.historyBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "history"))
         self.accountBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "userInfo"))
         self.logoutBtn.clicked.connect(partial(logout, MainWindow))
         self.backBtn.clicked.connect(partial(Routing.RedirectBack, MainWindow))
 
-
         self.retranslateUi(MainWindow)
+
+        # ////////////////run init////////////////////
+        init(MainWindow, self)
+
+
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
@@ -1239,8 +1243,7 @@ class Ui_MainWindow(object):
         self.windowTitle.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#33a415;\">Orders History</span></p></body></html>"))
         self.orderBtn.setText(_translate("MainWindow", "CART"))
 
-        # ////////////////run init////////////////////
-        init(MainWindow, self)
+
 
 
 
