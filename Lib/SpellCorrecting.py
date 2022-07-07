@@ -1,5 +1,6 @@
 import textblob
 from PyQt5 import QtGui, QtWidgets
+import string
 
 
 class SpellCorrecting:
@@ -24,20 +25,12 @@ class SpellCorrecting:
 
 
     @staticmethod
-    def KeyPressHandler(event:QtGui.QKeyEvent, lineEdit:QtWidgets.QLineEdit):
+    def KeyPressHandler(lineEdit:QtWidgets.QLineEdit):
         """When the space key is pressed the last word will be corrected"""
+
+        if lineEdit.text() and lineEdit.text()[-1] in [" ", ".", ",", ";", ":", "!", "?", "-"]:
+            correctedSentence = SpellCorrecting.SentenceCorrect(lineEdit.text())
+        else:
+            correctedSentence = lineEdit.text()
         
-        if event.key() == 16777219: # back space
-            SpellCorrecting.Word = SpellCorrecting.Word[:-1]
-            lineEdit.setText(lineEdit.text()[:-1])
-            return
-
-        if event.text() == " ":
-            if SpellCorrecting.Word != "":
-                correctedWord = SpellCorrecting.WordCorrect(SpellCorrecting.Word)
-                lineEdit.setText(lineEdit.text()[:-len(correctedWord)] + correctedWord + " ")
-                SpellCorrecting.Word = ""
-                return
-
-        SpellCorrecting.Word += event.text()
-        lineEdit.insert(event.text())
+        lineEdit.setText(correctedSentence)
