@@ -261,6 +261,8 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableMenuFoods.setHorizontalHeaderItem(6, item)
         
+        self.tableMenuFoods.setEditTriggers(QtWidgets.QAbstractItemView.NoEditTriggers)
+
         self.gridLayout.addWidget(self.tableMenuFoods, 2, 0, 1, 2)
         
         self.tableFoods = QtWidgets.QTableWidget(self.gridLayoutWidget)

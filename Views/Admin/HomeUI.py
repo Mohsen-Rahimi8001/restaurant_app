@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Controllers.AuthenticationController import Auth
 from Models.Restaurant import Restaurant
+from Lib.Questions import Questions
 from Window import Routing
 
 
@@ -145,9 +146,12 @@ def goToChatRoom(window: 'QtWidgets.QMainWindow'):
 
 def logout(window: 'QtWidgets.QMainWindow'):
     """logs out the user"""
-    Auth.LogOut()
-    Routing.Redirect(window, 'login')
-    Routing.ClearStack() # reset previous window
+    
+    if Questions.ask(Questions.Type.ASKYESNO, "Are you sure you want to logout?"):
+        
+        Auth.LogOut()
+        Routing.Redirect(window, 'login')
+        Routing.ClearStack() # reset previous window
 
 
 class Ui_MainWindow(object):

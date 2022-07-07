@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Window import Routing
 from Controllers.AuthenticationController import Auth
+from Controllers.Admin.GiftCardController import GiftCardController
 from Lib.Messages import Messages
 from Models.GiftCard import GiftCard
 from functools import partial
@@ -20,10 +21,25 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
     # get all giftcards
     giftcards = GiftCard.GetAll()
 
-    ui.tableGiftCards.setRowCount(len(giftcards))
+    i = -1
 
     # put the date in the table
-    for i, giftcard in enumerate(giftcards):
+    for giftcard in giftcards:
+        
+        i += 1
+
+        if giftcard.sent:
+            i -= 1
+            continue
+
+        ui.tableGiftCards.setRowCount(i + 1)
+
+        # create send button
+        sendIcon = QtGui.QIcon(r".\Resources\Images\send_icon.png")
+        btnSend = QtWidgets.QPushButton()
+        btnSend.setIcon(sendIcon)
+        btnSend.setIconSize(QtCore.QSize(20, 20))
+        sendSignal = partial(sendGiftcard, giftcard.id, window)
 
         # create a delete button
         deleteIcon = QtGui.QIcon(r".\Resources\Images\delete_icon.png")
@@ -41,8 +57,14 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
         # add the delete button to delete column
         ui.tableGiftCards.setCellWidget(i, 5, btnDelete)
 
+        # add the send button to send column
+        ui.tableGiftCards.setCellWidget(i, 6, btnSend)
+
         # connect the delete button to the signal
         btnDelete.clicked.connect(deleteSignal)
+
+        # connect the send button to the signal
+        btnSend.clicked.connect(sendSignal)
 
 
 
@@ -58,6 +80,19 @@ def deleteGiftcard(giftcard_id: int, window: "QtWidgets.QMainWindow"):
 
     # refresh the page
     Routing.Refresh(window)    
+
+
+def sendGiftcard(giftCardId:int, window: "QtWidgets.QMainWindow"):
+    """Sends the gift card to all users"""
+    
+    giftCard = GiftCard.Get(giftCardId)
+
+    GiftCardController.SendToAll(giftCard)
+
+    Messages.push(Messages.Type.SUCCESS, "Giftcard sent successfully.")
+    
+    # refresh the page
+    Routing.Refresh(window)
 
 
 
@@ -95,7 +130,7 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.tableGiftCards.sizePolicy().hasHeightForWidth())
         self.tableGiftCards.setSizePolicy(sizePolicy)
         self.tableGiftCards.setObjectName("tableGiftCards")
-        self.tableGiftCards.setColumnCount(6)
+        self.tableGiftCards.setColumnCount(7)
         self.tableGiftCards.setRowCount(0)
 
         item = QtWidgets.QTableWidgetItem()
@@ -116,6 +151,9 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableGiftCards.setHorizontalHeaderItem(5, item)
 
+        item = QtWidgets.QTableWidgetItem()
+        self.tableGiftCards.setHorizontalHeaderItem(6, item)
+
         # set table row height
         self.tableGiftCards.setRowHeight(0, 30)
 
@@ -126,6 +164,7 @@ class Ui_MainWindow(object):
         self.tableGiftCards.setColumnWidth(3, 100) # amount
         self.tableGiftCards.setColumnWidth(4, 200) # code
         self.tableGiftCards.setColumnWidth(5, 100) # delete
+        self.tableGiftCards.setColumnWidth(6, 100) # send
 
         # set table edit behavior (not editable)
         self.tableGiftCards.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
@@ -145,7 +184,16 @@ class Ui_MainWindow(object):
         self.btnBack.setObjectName("btnBack")
         self.btnBack.clicked.connect(lambda:Routing.RedirectBack(MainWindow))
         self.btnHLayout.addWidget(self.btnBack)
-        
+
+        self.btnSuggest = QtWidgets.QPushButton(self.gridLayoutWidget)
+        font = QtGui.QFont()
+        font.setFamily("Arial Rounded MT Bold")
+        font.setPointSize(9)
+        self.btnSuggest.setFont(font)
+        self.btnSuggest.setObjectName("btnSuggest")
+        self.btnSuggest.clicked.connect(GiftCardController.Suggest)
+        self.btnHLayout.addWidget(self.btnSuggest)
+
         self.btnAdd = QtWidgets.QPushButton(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
@@ -181,7 +229,10 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Code"))
         item = self.tableGiftCards.horizontalHeaderItem(5)
         item.setText(_translate("MainWindow", "Delete"))
+        item = self.tableGiftCards.horizontalHeaderItem(6)
+        item.setText(_translate("MainWindow", "Send"))
         self.btnBack.setText(_translate("MainWindow", "Back"))
+        self.btnSuggest.setText(_translate("MainWindow", "Suggest"))
         self.btnAdd.setText(_translate("MainWindow", "Add"))
 
         checkForCredentials(MainWindow)

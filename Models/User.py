@@ -26,6 +26,13 @@ class User(Model):
         self.orders : list = orders
         self.cart : list = cart
 
+    
+    def __eq__(self, other):
+        if not isinstance(other, User):
+            return False
+        else:
+            return self.id == other.id
+
 
     @staticmethod
     def Create(userData : dict):
@@ -73,7 +80,7 @@ class User(Model):
 
 
     @staticmethod
-    def GetAll() -> list:
+    def GetAll() -> list['User']:
         """get all users"""
 
         rows = Database.ReadAll(User.TableName)

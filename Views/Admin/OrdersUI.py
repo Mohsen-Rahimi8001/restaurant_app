@@ -216,6 +216,8 @@ class Ui_MainWindow(object):
         item = QtWidgets.QTableWidgetItem()
         self.tableOrders.setHorizontalHeaderItem(8, item)
         
+        self.tableOrders.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
+
         self.gridLayout.addWidget(self.tableOrders, 1, 0, 1, 1)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
