@@ -100,3 +100,69 @@ class UserValidator:
             return False
 
         return True
+    
+    
+    
+
+
+
+class DateValidator:
+    
+    @staticmethod
+    def ValidateDay(day : str, inputName : str = "Day") -> bool:
+        
+        if not day.strip():
+            Messages.push(Messages.Type.ERROR, f"{inputName} can't be empty")
+            return False
+        
+        #check for being number
+        if not day.isdigit():
+            Messages.push(Messages.Type.ERROR, f"{inputName} must be number")
+            return False
+        
+        #check for range
+        if not day in range(1,32):
+            Messages.push(Messages.Type.ERROR, f"{inputName} is out of range")
+            return False
+        
+        return True
+
+
+    @staticmethod
+    def ValidateMonth(month: str, inputName: str = "Month") -> bool:
+
+        if not month.strip():
+            Messages.push(Messages.Type.ERROR, f"{inputName} can't be empty")
+            return False
+
+        # check for being number
+        if not month.isdigit():
+            Messages.push(Messages.Type.ERROR, f"{inputName} must be number")
+            return False
+
+        # check for range
+        if not month in range(1, 13):
+            Messages.push(Messages.Type.ERROR, f"{inputName} is out of range")
+            return False
+
+        return True
+
+
+    @staticmethod
+    def ValidateYear(year: str, inputName: str = "Year") -> bool:
+
+        if not year.strip():
+            Messages.push(Messages.Type.ERROR, f"{inputName} can't be empty")
+            return False
+
+        # check for being number
+        if not year.isdigit():
+            Messages.push(Messages.Type.ERROR, f"{inputName} must be number")
+            return False
+
+        # check for range
+        if not year >= 2022:
+            Messages.push(Messages.Type.ERROR, f"{inputName} is out of range")
+            return False
+
+        return True
