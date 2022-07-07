@@ -85,14 +85,20 @@ class GiftCardController:
             GiftCard.Update(giftCard.id, {'sent' : 1})
 
         message = \
-        f"Hello Dear {user.first_name}\n\n"
-        f"You are one of our best customers. To appreciate you, dear customer, we have prepared a discount offer for you."
-        f"We hope you will enjoy it.\n\n_______________________________________\n"
-        f"This is the Gift Card: \n"
-        f"Amount: {giftCard.amount}%\n"
-        f"Code: {giftCard.code}\n"
-        f"Start date: {giftCard.start_date}\n"
-        f"Expiration date: {giftCard.expiration_date}\n"
+        f"""
+        Hello Dear {user.first_name}
+
+        You are one of our best customers.
+        To appreciate you, dear customer, we have prepared a discount offer for you.
+        We hope you will enjoy it.
+        
+        _______________________________________
+        This is the Gift Card:
+        Amount: {giftCard.amount}%
+        Code: {giftCard.code}
+        Start date: {giftCard.start_date}
+        Expiration date: {giftCard.expiration_date}
+        """
 
         Email.Send(user.email, message)
 
@@ -121,13 +127,16 @@ class GiftCardController:
         for user in users:
 
             message = \
-            f"Hello dear {user.first_name}\n"
-            f"We have prepared a discount offer for you.\n"
-            f"We hope you will enjoy it.\n\n"
-            f"This is the Gift Card: \n"
-            f"Amount: {giftCard.amount}% \n"
-            f"Code: {giftCard.code}\n"
-            f"Start date: {giftCard.start_date}\n"
-            f"Expiration date: {giftCard.expiration_date}\n"
+            f"""
+            Hello dear {user.first_name}
+            We have prepared a discount offer for you.
+            We hope you will enjoy it.
+            
+            This is the Gift Card:
+            Amount: {giftCard.amount}%
+            Code: {giftCard.code}
+            Start date: {giftCard.start_date}
+            Expiration date: {giftCard.expiration_date}
+            """
 
             Email.Send(user.email, message)
