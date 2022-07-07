@@ -125,7 +125,7 @@ def goToGiftCards(window: 'QtWidgets.QMainWindow'):
 
 def gotoOrders(window: 'QtWidgets.QMainWindow'):
     """redirects to orders page"""
-    Routing.Redirect(window, 'orders')
+    Routing.Redirect(window, 'orderManage')
 
 
 def goToStatus(window: 'QtWidgets.QMainWindow'):
@@ -141,6 +141,13 @@ def goToEditRestaurant(window: 'QtWidgets.QMainWindow'):
 def goToChatRoom(window: 'QtWidgets.QMainWindow'):
     """redirects to chat room page"""
     Routing.Redirect(window, 'chatRoom')
+
+
+def logout(window: 'QtWidgets.QMainWindow'):
+    """logs out the user"""
+    Auth.LogOut()
+    Routing.Redirect(window, 'login')
+    Routing.ClearStack() # reset previous window
 
 
 class Ui_MainWindow(object):
@@ -226,6 +233,14 @@ class Ui_MainWindow(object):
         self.btnChatRoom.setObjectName("btnChatRoom")
         self.verticalLayout.addWidget(self.btnChatRoom)
         self.btnChatRoom.clicked.connect(lambda: goToChatRoom(MainWindow))
+
+        self.btnLogout = QtWidgets.QPushButton(self.gridLayoutWidget)
+        font.setPointSize(9)
+        self.btnLogout.setFont(font)
+        self.btnLogout.setSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        self.btnLogout.setObjectName("btnLogout")
+        self.verticalLayout.addWidget(self.btnLogout)
+        self.btnLogout.clicked.connect(lambda: logout(MainWindow))
 
         self.gridLayout.addLayout(self.verticalLayout, 1, 1, 6, 1)
         self.verticalLayout_3 = QtWidgets.QVBoxLayout()
@@ -345,6 +360,7 @@ class Ui_MainWindow(object):
         self.btnEconomic.setText(_translate("MainWindow", "Economic Situation"))
         self.btnEditRestaurantInfo.setText(_translate("MainWindow", "Edit Restaurant Info"))
         self.btnChatRoom.setText(_translate("MainWindow", "Chat Room"))
+        self.btnLogout.setText(_translate("MainWindow", "Logout"))
         self.lblRestInfoTitle.setText(_translate("MainWindow", "Restaurant Info"))
         self.lblRestaurantName.setText(_translate("MainWindow", "Name: "))
         self.lblRestPhone.setText(_translate("MainWindow", "Phone Number: "))

@@ -36,13 +36,35 @@
      <property name="bottomMargin">
       <number>10</number>
      </property>
-     <item row="1" column="0" colspan="2">
+     <item row="1" column="0" colspan="3">
       <widget class="QTextEdit" name="tEditChats"/>
      </item>
-     <item row="2" column="0">
-      <widget class="QLineEdit" name="lEditMessage"/>
+     <item row="3" column="0" colspan="3">
+      <widget class="QPushButton" name="btnBack">
+       <property name="font">
+        <font>
+         <family>Arial Rounded MT Bold</family>
+         <pointsize>9</pointsize>
+        </font>
+       </property>
+       <property name="text">
+        <string>Back</string>
+       </property>
+      </widget>
      </item>
      <item row="2" column="1">
+      <widget class="QCheckBox" name="chBoxSpellCorrecting">
+       <property name="font">
+        <font>
+         <family>Arial Rounded MT Bold</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>Assistant</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
       <widget class="QPushButton" name="btnSend">
        <property name="font">
         <font>
@@ -55,7 +77,7 @@
        </property>
       </widget>
      </item>
-     <item row="0" column="0" colspan="2">
+     <item row="0" column="0" colspan="3">
       <widget class="QLabel" name="lblTitle">
        <property name="font">
         <font>
@@ -71,18 +93,8 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="0" colspan="2">
-      <widget class="QPushButton" name="btnBack">
-       <property name="font">
-        <font>
-         <family>Arial Rounded MT Bold</family>
-         <pointsize>9</pointsize>
-        </font>
-       </property>
-       <property name="text">
-        <string>Back</string>
-       </property>
-      </widget>
+     <item row="2" column="0">
+      <widget class="QLineEdit" name="lEditMessage"/>
      </item>
     </layout>
    </widget>

@@ -20,9 +20,6 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
     # get all giftcards
     giftcards = GiftCard.GetAll()
 
-    # clear the table
-    ui.tableGiftCards.clear()
-
     ui.tableGiftCards.setRowCount(len(giftcards))
 
     # put the date in the table

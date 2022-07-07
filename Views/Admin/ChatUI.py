@@ -1,6 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from Models.Message import Message
 from Controllers.AuthenticationController import Auth
+from Lib.SpellCorrecting import SpellCorrecting
 from Window import Routing
 import datetime as dt
 
@@ -56,6 +57,13 @@ def sendMessage(ui: "Ui_MainWindow"):
     addMessage(ui, admin_email, datetime, message)
 
 
+def enableSpellCorrecting(ui : 'Ui_MainWindow'):
+    """connect the lEditMessage to the spell correcting function"""
+    if ui.chBoxSpellCorrecting.isChecked():
+        ui.lEditMessage.textChanged.connect(lambda: SpellCorrecting.KeyPressHandler(ui.lEditMessage))
+    else:
+        ui.lEditMessage.textChanged.disconnect()
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow: 'QtWidgets.QMainWindow'):
@@ -73,6 +81,15 @@ class Ui_MainWindow(object):
         self.lEditMessage.setObjectName("lEditMessage")
         self.lEditMessage.returnPressed.connect(lambda:sendMessage(self))
         self.gridLayout.addWidget(self.lEditMessage, 2, 0, 1, 1)
+        
+        self.chBoxSpellCorrecting = QtWidgets.QCheckBox(self.gridLayoutWidget)
+        font = QtGui.QFont()
+        font.setFamily("Arial Rounded MT Bold")
+        self.chBoxSpellCorrecting.setFont(font)
+        self.chBoxSpellCorrecting.setObjectName("chBoxSpellCorrecting")
+        self.chBoxSpellCorrecting.toggled.connect(lambda:enableSpellCorrecting(self))
+        self.gridLayout.addWidget(self.chBoxSpellCorrecting, 2, 1, 1, 1)
+        
         self.btnSend = QtWidgets.QPushButton(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
@@ -80,7 +97,7 @@ class Ui_MainWindow(object):
         self.btnSend.setFont(font)
         self.btnSend.setObjectName("btnSend")
         self.btnSend.clicked.connect(lambda: sendMessage(self))
-        self.gridLayout.addWidget(self.btnSend, 2, 1, 1, 1)
+        self.gridLayout.addWidget(self.btnSend, 2, 2, 1, 1)
 
         self.btnBack = QtWidgets.QPushButton()
         font = QtGui.QFont()
@@ -89,12 +106,12 @@ class Ui_MainWindow(object):
         self.btnBack.setFont(font)
         self.btnBack.setObjectName("btnBack")
         self.btnBack.clicked.connect(lambda:Routing.RedirectBack(MainWindow))
-        self.gridLayout.addWidget(self.btnBack, 3, 0, 1, 2)
+        self.gridLayout.addWidget(self.btnBack, 3, 0, 1, 3)
 
         self.tEditChats = QtWidgets.QTextEdit(self.gridLayoutWidget)
         self.tEditChats.setObjectName("tEditChats")
         self.tEditChats.setReadOnly(True)
-        self.gridLayout.addWidget(self.tEditChats, 1, 0, 1, 2)
+        self.gridLayout.addWidget(self.tEditChats, 1, 0, 1, 3)
         self.lblTitle = QtWidgets.QLabel(self.gridLayoutWidget)
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
@@ -102,7 +119,7 @@ class Ui_MainWindow(object):
         self.lblTitle.setFont(font)
         self.lblTitle.setAlignment(QtCore.Qt.AlignCenter)
         self.lblTitle.setObjectName("lblTitle")
-        self.gridLayout.addWidget(self.lblTitle, 0, 0, 1, 2)
+        self.gridLayout.addWidget(self.lblTitle, 0, 0, 1, 3)
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusbar = QtWidgets.QStatusBar(MainWindow)
         self.statusbar.setObjectName("statusbar")
@@ -114,6 +131,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow : 'QtWidgets.QMainWindow'):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
+        self.chBoxSpellCorrecting.setText(_translate("MainWindow", "Assistant"))
         self.btnSend.setText(_translate("MainWindow", "Send"))
         self.lblTitle.setText(_translate("MainWindow", "Chat Room"))
         self.btnBack.setText(_translate("MainWindow", "Back"))
