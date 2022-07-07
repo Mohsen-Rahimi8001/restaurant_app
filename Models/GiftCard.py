@@ -8,7 +8,7 @@ class GiftCard(Model):
     PrimaryKey = 'id'
     TableName = 'gift_cards'
 
-    def __init__(self, id:int, start_date:str, expiration_date:str, amount:int, code:str=None) -> None:
+    def __init__(self, id:int, start_date:str, expiration_date:str, amount:int, sent:bool, code:str=None) -> None:
         """
         :param id: The id of the gift card
         :param code: The code of the gift card
@@ -22,12 +22,14 @@ class GiftCard(Model):
         self.start_date = start_date
         self.expiration_date = expiration_date
         self.amount = amount
+        self.sent = sent
     
+
     def __str__(self):
-        return f'GiftCard({self.id},{self.code},{self.start_date},{self.expiration_date})'
+        return f'GiftCard({self.id},{self.code},{self.start_date},{self.expiration_date},{self.sent})'
     
     def __repr__(self):
-        return f'GiftCard({self.id},{self.code},{self.start_date},{self.expiration_date})'
+        return f'GiftCard({self.id},{self.code},{self.start_date},{self.expiration_date},{self.sent})'
 
     def __eq__(self, other):
         if isinstance(other, GiftCard):
@@ -144,6 +146,11 @@ class GiftCard(Model):
     def Create(data:dict) -> int:
         """Add a new GiftCard to the database."""
         
+        if 'id' in data:
+            raise ValueError("id can not be set")
+        
+        data['sent'] = 0
+
         if 'code' not in data or not data['code']:
             data['code'] = GiftCard.GetDefaultCode()
 
@@ -180,7 +187,14 @@ class GiftCard(Model):
 
         fetched_row = fetched_row[0]
 
-        return GiftCard(id=fetched_row[0], code=fetched_row[1], start_date=fetched_row[2], expiration_date=fetched_row[3], amount=fetched_row[4])
+        return GiftCard(
+            id=fetched_row[0], 
+            code=fetched_row[1], 
+            start_date=fetched_row[2], 
+            expiration_date=fetched_row[3], 
+            amount=fetched_row[4], 
+            sent=fetched_row[5]
+            )
 
     @staticmethod
     def GetAll() -> list['GiftCard']:
@@ -195,7 +209,8 @@ class GiftCard(Model):
                 code=row[1],
                 start_date=row[2],
                 expiration_date=row[3],
-                amount=row[4]
+                amount=row[4],
+                sent=row[5]
                 ))
 
         return giftCards
@@ -277,7 +292,8 @@ class GiftCard(Model):
                 code=row[1],
                 start_date=row[2],
                 expiration_date=row[3],
-                amount=row[4]
+                amount=row[4],
+                sent=row[5]
                 ))
 
         return giftCards

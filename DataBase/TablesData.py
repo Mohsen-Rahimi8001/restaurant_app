@@ -50,7 +50,8 @@ class TableData():
 	code TEXT NOT NULL,
 	start_date TEXT NOT NULL,
 	expiration_date TEXT NOT NULL,
-	amount integer NOT NULL
+	amount integer NOT NULL,
+	sent integer NOT NULL
 	); """
 
 
