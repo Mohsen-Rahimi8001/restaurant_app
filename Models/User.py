@@ -251,7 +251,7 @@ class User(Model):
     def getCartFoodObjects(self):
         """returns unique cart food objects"""
 
-        ids = list(set( self.cart.copy() ))
+        ids = list(set( self.cart ))
 
         foods = []
 

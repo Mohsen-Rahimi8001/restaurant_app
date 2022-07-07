@@ -21,6 +21,9 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
         cart = user.getCartFoodObjects()
 
+        if len(cart) < 1:
+            return
+
         for food in cart:
                 ui.addFood(window, food, user.countFood(food))
 

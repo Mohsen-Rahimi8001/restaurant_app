@@ -210,5 +210,33 @@ class Order(Model):
     
 
 
+    def getPrice(self):
+
+        foods = self.getFoods()
+
+        price = 0
+
+        for food in foods:
+            price += food.sale_price
+
+        return price
+
+
+
+    def countFood(self, food) -> int:
+        """returns count of given food in foods"""
+
+        if isinstance(food, Food):
+            id = food.id
+        else:
+            id = food
+
+        return self.foods.count(id)
+
+
+    def getTotalPriceOfFood(self, food):
+
+        return self.countFood(food) * food.sale_price
+
 
 
