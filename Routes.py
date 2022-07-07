@@ -98,6 +98,11 @@ class Routes:
         return Ui_MainWindow
 
 
+    def foodInfo():
+        from Views.User.FoodInfoUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
 
     #UI table window { name : UI method }
     UiObjects = {
@@ -122,6 +127,7 @@ class Routes:
         "orderManage" : orderManage,
         "status" : status,
         "history" : history,
+        "foodInfo" : foodInfo,
 
     }
 
