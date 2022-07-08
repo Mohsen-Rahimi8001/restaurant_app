@@ -49,10 +49,7 @@ class GiftCard(Model):
         :return: datatime object of startDate if the start date is valid, False otherwise
         """
         try:
-            startDate = dt.datetime.strptime(startDate, "%Y-%m-%d")
-            if startDate < dt.datetime.now():
-                return False
-            return startDate
+            return dt.datetime.strptime(startDate, "%Y-%m-%d")
         
         except ValueError:
             return False
@@ -199,6 +196,9 @@ class GiftCard(Model):
     @staticmethod
     def GetAll() -> list['GiftCard']:
         """Get all GiftCards from the database."""
+
+        GiftCard.DeleteExpiredGiftCards()
+
         fetched_rows = Database.ReadAll(GiftCard.TableName)
         
         giftCards = []

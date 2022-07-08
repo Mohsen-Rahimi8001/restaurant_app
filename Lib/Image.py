@@ -50,7 +50,7 @@ class Image:
 
         if os.path.dirname(path) == Image.BaseDir:
             if os.path.isfile(path):
-                return directory
+                return path
 
         if os.path.isfile(path):
             
@@ -75,7 +75,7 @@ class Image:
 
                 destination = os.path.join(Image.BaseDir, name)
 
-            os.system(f"copy {path} {destination}")
+            os.system(f"copy {os.path.abspath(path)} {os.path.abspath(destination)}")
 
             return destination
 

@@ -210,6 +210,9 @@ class Menu(Model):
         foods = []
 
         for foodId in self.foods:
-            foods.append(Food.Get(foodId))
+            food = Food.Get(foodId)
+            
+            if food:
+                foods.append(food)
 
         return foods

@@ -38,9 +38,6 @@ class TestGiftCard(unittest.TestCase):
 
         with self.assertRaises(TypeError):
             gc.code = 1
-        
-        with self.assertRaises(ValueError):
-            gc.start_date = '2020-01-01'
 
         with self.assertRaises(ValueError):
             gc.expiration_date = '2028-01-01'
@@ -69,10 +66,7 @@ class TestGiftCard(unittest.TestCase):
             GiftCard.Create({'start_date': '2029-01-01', 'expiration_date': '2029-01-02', 'code': '123456', 'amount': 10})
         
         # check errors might happen
-        # wrong start_date
-        with self.assertRaises(ValueError):
-            GiftCard.Create({'start_date': '2020-01-01', 'expiration_date': '2029-01-02', 'code': '2589', 'amount': 10})
-        
+
         # wrong expiration_date
         with self.assertRaises(ValueError):
             GiftCard.Create({'start_date': '2029-01-01', 'expiration_date': '2020-01-02', 'code': '2589', 'amount': 10})

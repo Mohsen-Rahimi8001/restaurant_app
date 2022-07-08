@@ -62,15 +62,15 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
         ui.tableMenus.setItem(i, 2, QtWidgets.QTableWidgetItem(foods))
 
         ui.tableMenus.setItem(i, 3, QtWidgets.QTableWidgetItem(menu.date))
-        
-        # set delete button
-        ui.tableMenus.setCellWidget(i, 4, btnDelete)
 
         # connect edit button to goToMenuEdit function
         btnGoToEdit.clicked.connect(editSignal)
 
         # set edit button
-        ui.tableMenus.setCellWidget(i, 5, btnGoToEdit)
+        ui.tableMenus.setCellWidget(i, 4, btnGoToEdit)
+
+        # set delete button
+        ui.tableMenus.setCellWidget(i, 5, btnDelete)
 
         # connect delete button to deleteMenu function
         btnDelete.clicked.connect(deleteSignal)
