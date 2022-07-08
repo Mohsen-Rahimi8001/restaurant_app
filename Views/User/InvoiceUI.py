@@ -11,6 +11,8 @@ from Window import Transfer
 from Models.Menu import Menu
 from Controllers.User.MenuController import MenuController
 from Controllers.User.CartController import Cart
+from Controllers.Admin.GiftCardController import GiftCardController
+from Controllers.User.OrderController import OrderController
 
 
 
@@ -19,22 +21,69 @@ from Controllers.User.CartController import Cart
 # button events
 
 def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-    pass
+
+    #set total price
+    user = Auth.GetUser()
+
+    totalPrice = user.getCartTotalSalePrice()
+    if Transfer.Exists("invoice_discount_coefficient"):
+        discount = Transfer.Get("invoice_discount_coefficient")
+        Transfer.Add("invoice_discount_coefficient", discount)
+        totalPrice = round( totalPrice * discount)
+
+    setTotalPrice(ui, totalPrice)
+
+    #display foods
+    foods = user.getCartFoodObjects()
+
+    for food in foods:
+        ui.addFoodWidget(window, food, user.countFood(food))
 
 
 
 def confirm(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-    pass
+
+    paymentMethod = getPaymentMethod(ui)
+    accountNumber = getAccountNumber(ui)
+
+    result = OrderController.ConfirmPayment(paymentMethod, accountNumber)
+
+    if result:
+
+        Auth.GetUser().clearCart()
+
+        Messages.push(Messages.Type.SUCCESS, "order booked")
+
+        if Transfer.Exists("invoice_discount_coefficient"):
+            Transfer.Get("invoice_discount_coefficient")
+
+        Routing.Redirect(window, "history")
+
+    else:
+        Routing.Refresh(window)
 
 
 
 def cancel(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-    pass
+    if Transfer.Exists("invoice_discount_coefficient"):
+        Transfer.Get("invoice_discount_coefficient")
+    Routing.Redirect(window, "cart")
 
 
 
 def evaluate(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-    pass
+
+    code = getGiftCard(ui)
+    if not code:
+        return
+
+    result = GiftCardController.Evaluate(code)
+
+    if result:
+        Transfer.Add("invoice_discount_coefficient", (100 - int(result)) / 100 )
+        Messages.push(Messages.Type.SUCCESS, "your gift cart evaluated successfully")
+
+    Routing.Refresh(window)
 
 
 
@@ -73,6 +122,9 @@ def setAccountNumber(ui : "Ui_MainWindow", value : str):
 
 
 def getPaymentMethod(ui : "Ui_MainWindow"):
+
+    if not ui.onlineRadio.isChecked() and not ui.onSpotRadio.isChecked():
+        return -1
 
     if ui.onlineRadio.isChecked():
         return 0

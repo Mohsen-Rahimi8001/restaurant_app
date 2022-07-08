@@ -5,6 +5,7 @@ from Lib.Email import Email
 from Lib.Questions import Questions
 from Lib.Messages import Messages
 import datetime as dt
+from Lib.DateTools import DateTools
 import random
 
 
@@ -141,3 +142,26 @@ class GiftCardController:
         
         giftCard.sent = 1
         GiftCard.Update(giftCard.id, {'sent' : 1})
+
+
+    @staticmethod
+    def Evaluate(giftCardCode : str):
+
+        #check for gift card exists
+        if not GiftCard.ExistsByKey("code", giftCardCode):
+            Messages.push(Messages.Type.WARNING, "gift card code is invalid")
+            return False
+
+        giftCard = GiftCard.GetByKey("code", giftCardCode)
+
+        #check for today is after start date
+        if DateTools.Compare(DateTools.GetToday(), giftCard.start_date) == 1:
+            Messages.push(Messages.Type.WARNING, "gift card code is invalid")
+            return False
+
+        #check for expiration
+        if DateTools.Compare(DateTools.GetToday(), giftCard.expiration_date) == -1:
+            Messages.push(Messages.Type.WARNING, "gift card is expired")
+            return False
+
+        return amount
