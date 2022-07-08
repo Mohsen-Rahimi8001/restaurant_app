@@ -11,6 +11,7 @@ from Window import Transfer
 from Models.Menu import Menu
 from Controllers.User.MenuController import MenuController
 from Controllers.User.CartController import Cart
+from Lib.FoodSearch import FoodSearch
 
 
 
@@ -29,6 +30,20 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
     setSearchValue(ui, searchValue)
 
+    foods = FoodSearch.find_by_all({
+        "category" : searchValue,
+        "title" : searchValue,
+        "description" : searchValue,
+        "materials" : searchValue,
+    })
+
+    if not foods:
+        Messages.push(Messages.Type.INFO, "there is not food with this specification")
+        return
+
+    for food in foods:
+        ui.addFoodWidget(window,food)
+
 
 
 
@@ -39,7 +54,20 @@ def search(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
 
 def menu(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
-    pass
+
+    menus : list[Menu] = Menu.GetAll()
+
+    results = []
+
+    for menu in menus:
+        if food.id in menu.foods:
+            results.append(menu)
+
+    if results:
+        Transfer.Add("order_type", "search_food")
+        Transfer.Add("order_menus", results)
+
+    Routing.Redirect(window, "order")
 
 
 

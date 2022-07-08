@@ -28,9 +28,6 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
     menus = MenuController.GetPresentMenus()
 
-    #///////////////////////////////////////////
-    menus.append(Menu(1,"a", [1,2,3], "2022-7-8"))
-
     if Transfer.Exists("order_type"):
 
         orderType = Transfer.Get("order_type")
@@ -38,7 +35,6 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
         if orderType == "search_date" or orderType == "search_food":
 
             menus = Transfer.Get("order_menus")
-
 
 
     for menu in menus:
@@ -75,8 +71,7 @@ def searchFood(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
 def order(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", menu : Menu):
 
-    #Transfer.Add("menu_id", menu.id)
-    Transfer.Add("menu_id", menu)
+    Transfer.Add("menu_id", menu.id)
     Routing.Redirect(window, "menu")
 
 

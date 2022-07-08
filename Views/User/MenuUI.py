@@ -27,9 +27,7 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
     menuId = Transfer.Get("menu_id")
     Transfer.Add("menu_id", menuId)
 
-    #menu = Menu.Get(menuId)
-    menu = menuId
-
+    menu = Menu.Get(menuId)
 
 
     #set labels
@@ -37,13 +35,7 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
     setMenuDate(ui, menu.date)
 
     #get foods
-    #foods = menu.getFoods()
-
-    foods = []
-
-    foods.append(Food(1,"1",5,10,15,"1","1","1",Image.DefaultFoodImagePath()))
-    foods.append(Food(2,"2",5,10,15,"1","1","1",Image.DefaultFoodImagePath()))
-    foods.append(Food(3,"3",5,10,15,"1","1","1",Image.DefaultFoodImagePath()))
+    foods = menu.getFoods()
 
     for food in foods:
         ui.addFoodWidget(window, food)
