@@ -118,6 +118,12 @@ class Routes:
         return Ui_MainWindow
 
 
+    def invoice():
+        from Views.User.InvoiceUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
+
 
     #UI table window { name : UI method }
     UiObjects = {
@@ -146,6 +152,7 @@ class Routes:
         "order" : order,
         "menu" : menu,
         "search" : search,
+        "invoice" : invoice,
 
     }
 

@@ -166,3 +166,24 @@ class DateValidator:
             return False
 
         return True
+
+
+
+class PaymentValidator:
+
+    @staticmethod
+    def ValidateAccountNumber(accNum : str, inputName: str = "Account Number") -> bool:
+
+        if not accNum:
+            Messages.push(Messages.Type.ERROR, f"{inputName} is empty")
+            return False
+
+        if not accNum.isdigit():
+            Messages.push(Messages.Type.ERROR, f"{inputName} must be number")
+            return False
+
+        if not len(accNum) == 16:
+            Messages.push(Messages.Type.ERROR, f"{inputName} must be 16 digits")
+            return False
+
+        return True

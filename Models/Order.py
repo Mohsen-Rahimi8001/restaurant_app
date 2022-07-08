@@ -243,7 +243,6 @@ class Order(Model):
         return price
 
 
-
     def countFood(self, food) -> int:
         """returns count of given food in foods"""
 

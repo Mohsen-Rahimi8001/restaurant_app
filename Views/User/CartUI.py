@@ -25,8 +25,11 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
         if len(cart) < 1:
             return
 
+        ui.FoodsWidgets = []
         for food in cart:
                 ui.addFood(window, food, user.countFood(food))
+
+        setTotalPrice(ui, user.getCartTotalSalePrice())
 
 
 
@@ -40,7 +43,12 @@ def logout(window : QtWidgets.QMainWindow):
 
 
 def confirm(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-        Routing.Redirect(window, "invoice")
+
+        if len(Auth.GetUser().getCartFoods()) > 0:
+            Routing.Redirect(window, "invoice")
+        else:
+            Messages.push(Messages.Type.WARNING, "cart is empty")
+            Routing.Refresh(window)
 
 
 def clear(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
@@ -83,6 +91,8 @@ def info(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
 
 
 
+def setTotalPrice(ui : "Ui_MainWindow", value : str):
+    ui.totalPriceValue.setText(str( value ))
 
 
 #////////////////////////////////////ui/////////////////////////////////////
