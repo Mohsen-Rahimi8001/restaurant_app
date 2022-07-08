@@ -12,6 +12,7 @@ from Models.Menu import Menu
 from Controllers.User.MenuController import MenuController
 from Controllers.User.CartController import Cart
 from Lib.FoodSearch import FoodSearch
+from Lib.DateTools import DateTools
 
 
 
@@ -25,6 +26,8 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
         return
 
     searchValue = Transfer.Get("search_value")
+    Transfer.Add("search_value", searchValue)
+
     if not searchValue:
         return
 
@@ -42,7 +45,7 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
         return
 
     for food in foods:
-        ui.addFoodWidget(window,food)
+        ui.addFoodWidget(window, food)
 
 
 
@@ -55,12 +58,12 @@ def search(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
 def menu(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
 
-    menus : list[Menu] = Menu.GetAll()
+    menus : "list[Menu]" = Menu.GetAll()
 
     results = []
 
     for menu in menus:
-        if food.id in menu.foods:
+        if food.id in menu.foods and DateTools.Compare(DateTools.GetToday(), menu.date) != -1:
             results.append(menu)
 
     if results:
@@ -275,6 +278,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
 
         self.foodsList = []
+
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(950, 700)
@@ -621,6 +625,8 @@ class Ui_MainWindow(object):
         MainWindow.setStatusBar(self.statusbar)
 
         # /////////////////////////////connect buttons to methods//////////////////////////////
+
+
         self.orderBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "order"))
         self.cartBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "cart"))
         self.historyBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "history"))
@@ -632,11 +638,15 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        # ////////////////run init////////////////////
+        # # ////////////////run init////////////////////
         init(MainWindow, self)
 
 
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+
+
+
+
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate

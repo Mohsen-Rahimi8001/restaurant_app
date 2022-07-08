@@ -148,6 +148,17 @@ class Ui_MainWindow(object):
 
 
 
+        self.btnBack = QtWidgets.QPushButton(self.gridLayoutWidget)
+        font = QtGui.QFont()
+        font.setFamily("Arial Rounded MT Bold")
+        self.btnBack.setFont(font)
+        self.btnBack.setObjectName("btnBack")
+
+        self.btnBack.clicked.connect(partial(Routing.RedirectBack, MainWindow))
+        self.btnBack.setText("Back")
+
+
+
         self.btnHLayout.addWidget(self.btnLogin)
         self.mainGLayout.addLayout(self.btnHLayout, 4, 0, 1, 3)
         self.lblPassword = QtWidgets.QLabel(self.gridLayoutWidget)

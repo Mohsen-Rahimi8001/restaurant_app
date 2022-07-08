@@ -25,6 +25,10 @@ class MenuController:
 
         date = DateTools.GetDateStrFormat(year, month, day)
 
+        if DateTools.Compare(DateTools.GetToday(), date) == -1:
+            Messages.push(Messages.Type.INFO, "specified date is past")
+            return False
+
         if not Menu.ExistsByDate(date):
             Messages.push(Messages.Type.INFO, "there is no menu for specified date")
             return False

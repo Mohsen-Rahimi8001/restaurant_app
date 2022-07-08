@@ -64,7 +64,6 @@ def searchDate(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
 
 def searchFood(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-
     Routing.Redirect(window, "search")
 
 

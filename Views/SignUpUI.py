@@ -72,15 +72,9 @@ def submit(window, ui : "Ui_MainWindow"):
 
 
 
-def clear(ui : "Ui_MainWindow"):
+def back(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
     """clear inputs"""
-    setFirstName(ui, "")
-    setLastName(ui, "")
-    setEmail(ui, "")
-    setSocialNumber(ui, "")
-    setPhoneNumber(ui, "")
-    setPasswordVerification(ui, "")
-    setPassword(ui, "")
+    Routing.RedirectBack(window)
 
 
 
@@ -269,7 +263,7 @@ class Ui_MainWindow(object):
         self.btnHLayout.setObjectName("btnHLayout")
         self.btnClear = QtWidgets.QPushButton(self.gridLayoutWidget)
 
-        self.btnClear.clicked.connect(partial( clear, self ))
+        self.btnClear.clicked.connect(partial( back, MainWindow,  self ))
 
         font = QtGui.QFont()
         font.setFamily("Arial Rounded MT Bold")
@@ -322,7 +316,7 @@ class Ui_MainWindow(object):
         self.lblFamily.setText(_translate("MainWindow", "Family: "))
         self.lblSocialNumber.setText(_translate("MainWindow", "Social number: "))
         self.lEditPasswordVerify.setPlaceholderText(_translate("MainWindow", "Repeat your password"))
-        self.btnClear.setText(_translate("MainWindow", "Clear"))
+        self.btnClear.setText(_translate("MainWindow", "Back"))
         self.btnSubmit.setText(_translate("MainWindow", "Submit"))
 
 

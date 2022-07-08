@@ -42,7 +42,7 @@ class FoodSearch:
 
 
     @staticmethod
-    def find(by:By, string:str, similarity:float = 0.7) -> list[Food]:
+    def find(by:By, string:str, similarity:float = 0.7) -> "list[Food]":
         """Finds foods by the given string"""
 
         FoodSearch.ValidateInputs(string, by, similarity)
@@ -58,7 +58,7 @@ class FoodSearch:
 
 
     @staticmethod
-    def find_by_all(data:dict[str,str|tuple], similarity:float = 0.7) -> list[Food]:
+    def find_by_all(data: "dict[str,str|tuple]", similarity:float = 0.7) -> "list[Food]":
         """Search for all foods similar to data"""
 
         assert isinstance(similarity, Real), 'similarity must be a float'
@@ -107,7 +107,7 @@ class FoodSearch:
     
 
     @staticmethod
-    def price_between(min:float, max:float) -> list[Food]:
+    def price_between(min:float, max:float) -> "list[Food]":
         """Finds foods with a sale price between min and max"""
 
         assert isinstance(min, Real) and isinstance(max, Real), "min and max must be floats"
