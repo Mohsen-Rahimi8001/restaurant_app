@@ -28,6 +28,8 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
         for food in cart:
                 ui.addFood(window, food, user.countFood(food))
 
+        setTotalPrice(ui, user.getCartTotalSalePrice())
+
 
 
 def logout(window : QtWidgets.QMainWindow):
@@ -83,6 +85,8 @@ def info(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
 
 
 
+def setTotalPrice(ui : "Ui_MainWindow", value : str):
+    ui.totalPriceValue.setText(str( value ))
 
 
 #////////////////////////////////////ui/////////////////////////////////////

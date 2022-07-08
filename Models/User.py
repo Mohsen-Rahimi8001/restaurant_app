@@ -266,3 +266,15 @@ class User(Model):
             foods.append(Food.Get(foodId))
 
         return foods
+
+
+    def getCartTotalSalePrice(self):
+
+        foods = self.getCartFoods()
+
+        totalSalePrice = 0
+
+        for food in foods:
+            totalSalePrice += int (food.sale_price)
+
+        return totalSalePrice
