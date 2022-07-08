@@ -9,6 +9,7 @@ from Models.Restaurant import Restaurant
 from Models.Food import Food
 from Window import Transfer
 from Models.Order import Order
+from Lib.DateTools import DateTools
 
 
 
@@ -17,7 +18,34 @@ from Models.Order import Order
 # button events
 
 def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-    pass
+
+    user = Auth.GetUser()
+
+    orders = user.getOrders()
+
+    for order in orders:
+
+        #check for delivered orders
+        if DateTools.Compare(DateTools.GetToday(), order.deliver_date) == -1:
+            order.deliver()
+
+        #show order
+        if order.confirmed:
+
+            if order.delivered:
+                ui.addLabelOrderWidget(window, order, "Delivered")
+
+            else:
+                ui.addCancelOrderWidget(window, order)
+
+        else:
+
+            if order.delivered:
+                ui.addLabelOrderWidget(window, order, "Rejected")
+
+            else:
+                ui.addLabelOrderWidget(window, order, "Processing")
+
 
 
 def logout(window : QtWidgets.QMainWindow):
@@ -29,8 +57,32 @@ def logout(window : QtWidgets.QMainWindow):
                 Routing.Redirect(window, "login")
 
 
+
 def cancel(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", order : Order):
-    print(f"cancel {order.deliver_date}")
+
+    questionResult = Questions.ask(Questions.Type.ASKYESNO, "are you sure you want ot delete this order")
+    if questionResult:
+
+        foods = order.getFoods()
+
+        #add foods stock
+        for food in foods:
+            food.addToStock(1)
+
+        user = Auth.GetUser()
+
+        user.removeOrder(order)
+
+        Order.Delete(order.id)
+
+        Messages.push(Messages.Type.INFO, "order canceled")
+
+        Routing.Refresh(window)
+
+
+
+
+
 
 
 

@@ -278,3 +278,39 @@ class User(Model):
             totalSalePrice += int (food.sale_price)
 
         return totalSalePrice
+
+
+
+    #orders method
+
+    def addOrder(self, order):
+
+        if isinstance(order, Order):
+            id = order.id
+        else:
+            id = order
+
+        self.orders.append(id)
+        User.Update(self.id, {"orders" : self.orders})
+
+
+    def getOrders(self) -> list:
+
+        orders = []
+
+        for order in self.orders:
+            orders.append(Order.Get(order))
+
+        return orders
+
+
+    def removeOrder(self, order):
+
+        if isinstance(order, Order):
+            id = order.id
+        else:
+            id = order
+
+        if id in self.orders:
+            self.orders.remove(id)
+            User.Update(self.id, {"orders": self.orders})
