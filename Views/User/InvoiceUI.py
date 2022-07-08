@@ -50,7 +50,13 @@ def confirm(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
     if result:
 
-        Auth.GetUser().clearCart()
+        user = Auth.GetUser()
+
+        #clear cart
+        user.clearCart()
+
+        #add order to users orders
+        user.addOrder(result)
 
         Messages.push(Messages.Type.SUCCESS, "order booked")
 
@@ -91,6 +97,8 @@ def logout(window : QtWidgets.QMainWindow):
 
     questionResult = Questions.ask(Questions.Type.ASKYESNO, "are you sure, you want to log out ?")
     if questionResult:
+        if Transfer.Exists("invoice_discount_coefficient"):
+            Transfer.Get("invoice_discount_coefficient")
         Auth.LogOut()
         Routing.ClearStack()
         Routing.Redirect(window, "login")
