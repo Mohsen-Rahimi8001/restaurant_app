@@ -5,9 +5,9 @@ import ssl
 class Email:
 
     SmtpServer = "smtp.gmail.com"
-    SenderEmail = "ap.4002.final.project.group2@gmail.com"
-    SenderPassword = "aA!123456789"
-    Port = 456
+    SenderEmail = "ap.4002.group2@gmail.com"
+    SenderPassword = "xfkrlkgvdwrejrfx"
+    Port = 465
 
 
     @staticmethod
@@ -19,5 +19,5 @@ class Email:
                 server.login(Email.SenderEmail, Email.SenderPassword)
                 server.sendmail(Email.SenderEmail, receiverEmail, message)
 
-        except Exception:
-            pass
+        except Exception as e:
+            raise e

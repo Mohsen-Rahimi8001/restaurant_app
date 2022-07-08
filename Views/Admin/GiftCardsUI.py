@@ -87,12 +87,14 @@ def sendGiftcard(giftCardId:int, window: "QtWidgets.QMainWindow"):
     
     giftCard = GiftCard.Get(giftCardId)
 
-    GiftCardController.SendToAll(giftCard)
-
-    Messages.push(Messages.Type.SUCCESS, "Giftcard sent successfully.")
-    
-    # refresh the page
-    Routing.Refresh(window)
+    try:
+        GiftCardController.SendToAll(giftCard)
+    except Exception as e:
+        Messages.push(Messages.Type.ERROR, str(e))
+        Routing.Refresh(window)
+    else:
+        Messages.push(Messages.Type.SUCCESS, "Giftcard sent successfully.")
+        Routing.Refresh(window)
 
 
 
