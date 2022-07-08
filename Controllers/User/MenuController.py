@@ -38,13 +38,15 @@ class MenuController:
     def GetPresentMenus():
         """returns menus that their date is not past"""
 
-        menus : list[Menu] = Menu.GetAll()
+        menus : "list[Menu]" = Menu.GetAll()
 
         result = []
 
         for menu in menus:
+
             if DateTools.Compare( DateTools.GetToday(), menu.date ) != -1:
                 result.append(menu)
+
 
         return result
 

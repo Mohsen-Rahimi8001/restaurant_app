@@ -3,12 +3,18 @@ from datetime import datetime
 
 class DateTools:
 
-    DateStringFormat = "%y-%m-%d"
+    DateStringFormat = "%Y-%m-%d"
 
 
     @staticmethod
     def GetDateStrFormat(year : str, month : str, day : str) -> str:
         """convert date to DateTools format"""
+
+        if len(month) == 1:
+            month = "0" + month
+
+        if len(day) == 1:
+            day = "0" + day
 
         return f'{year}-{month}-{day}'
 
