@@ -8,6 +8,7 @@ from Lib.Image import Image
 from Models.Restaurant import Restaurant
 from Models.Food import Food
 from Window import Transfer
+from Controllers.User.CartController import Cart
 
 
 
@@ -46,20 +47,13 @@ def clear(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
         questionResult = Questions.ask(Questions.Type.ASKYESNO, "are you sure you want to clear cart?")
         if questionResult:
-                user = Auth.GetUser().clearCart()
+                Cart.ClearCart()
                 Routing.Refresh(window)
 
 
 def add(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
 
-        user = Auth.GetUser()
-
-        if food.stock > 1:
-                food.reduceStock(1)
-                user.addFoodToCart(food)
-        else:
-                Messages.push(Messages.Type.ERROR, f"{food.title} is sold out")
-
+        Cart.AddFood(food)
         Routing.Refresh(window)
 
 

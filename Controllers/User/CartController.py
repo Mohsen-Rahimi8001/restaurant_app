@@ -17,7 +17,10 @@ class Cart:
         user = Auth.GetUser()
 
         #return reserved foods to stock
-        for food in User.getCartFoods():
+        foods = user.getCartFoods()
+
+
+        for food in foods:
             food.addToStock(1)
 
         #clear cart
@@ -34,8 +37,10 @@ class Cart:
         if food.stock > 0:
             user.addFoodToCart(food)
             food.reduceStock(1)
+            return True
         else:
             Messages.push(Messages.Type.ERROR, f"all {food.title}(s) have been sold out")
+            return False
 
 
     @staticmethod
@@ -66,8 +71,9 @@ class Cart:
 
             Cart.ChangeDeliverDate(menuDate)
 
-        Cart.AddFood(food)
-        return True
+        result = Cart.AddFood(food)
+        Cart.DeliverDate = menuDate
+        return result
 
 
 

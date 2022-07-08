@@ -266,7 +266,7 @@ class Food(Model):
     def reduceStock(self, number: int):
         """reduce stock value by number"""
 
-        if self.stock - number > 0:
+        if self.stock - number >= 0:
 
-            self.stock += number
+            self.stock -= number
             Food.Update(self.id, {"stock": self.stock})
