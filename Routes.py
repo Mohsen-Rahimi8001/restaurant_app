@@ -113,6 +113,12 @@ class Routes:
         return Ui_MainWindow
 
 
+    def search():
+        from Views.User.SearchUI import Ui_MainWindow
+        return Ui_MainWindow
+
+
+
     #UI table window { name : UI method }
     UiObjects = {
 
@@ -139,6 +145,7 @@ class Routes:
         "foodInfo" : foodInfo,
         "order" : order,
         "menu" : menu,
+        "search" : search,
 
     }
 

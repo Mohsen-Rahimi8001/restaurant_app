@@ -10,6 +10,7 @@ from Models.Food import Food
 from Window import Transfer
 from Models.Menu import Menu
 from Controllers.User.MenuController import MenuController
+from Controllers.User.CartController import Cart
 
 
 
@@ -19,65 +20,34 @@ from Controllers.User.MenuController import MenuController
 
 def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
-    if Transfer.Exists("date_search_data"):
-        data = Transfer.Get("date_search_data")
-        setDay(ui, data["day"])
-        setMonth(ui, data["month"])
-        setYear(ui, data["year"])
+    if not Transfer.Exists("search_value"):
+        return
 
+    searchValue = Transfer.Get("search_value")
+    if not searchValue:
+        return
 
-    menus = MenuController.GetPresentMenus()
-
-    #///////////////////////////////////////////
-    menus.append(Menu(1,"a", [1,2,3], "2022-7-8"))
-
-    if Transfer.Exists("order_type"):
-
-        orderType = Transfer.Get("order_type")
-
-        if orderType == "search_date" or orderType == "search_food":
-
-            menus = Transfer.Get("order_menus")
-
-
-
-    for menu in menus:
-        ui.addMenu(window, menu)
+    setSearchValue(ui, searchValue)
 
 
 
 
-def searchDate(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
+def search(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
-    year = getYear(ui)
-    month = getMonth(ui)
-    day = getDay(ui)
-
-    menus = MenuController.SearchDate(year, month, day)
-
-    if menus:
-
-        Transfer.Add("order_type", "search_date")
-        Transfer.Add("order_menus", menus)
-
-    Transfer.Add("date_search_data", {"year": year, "month": month, "day": day})
+    Transfer.Add("search_value", getSearchValue(ui))
     Routing.Refresh(window)
 
 
+def menu(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
+    pass
 
 
 
-def searchFood(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
+def moreInfo(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
 
-    Routing.Redirect(window, "search")
+    Transfer.Add("food_info_id", food.id)
+    Routing.Redirect(window, "foodInfo")
 
-
-
-def order(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", menu : Menu):
-
-    #Transfer.Add("menu_id", menu.id)
-    Transfer.Add("menu_id", menu)
-    Routing.Redirect(window, "menu")
 
 
 
@@ -91,26 +61,18 @@ def logout(window : QtWidgets.QMainWindow):
 
 
 
+
 #input methods
 
-def getYear(ui : 'Ui_MainWindow'):
-    return ui.yearEdit.text().strip()
+def getSearchValue(ui : "Ui_MainWindow"):
+    return ui.searchEdit.text().strip()
 
-def getMonth(ui : 'Ui_MainWindow'):
-    return ui.monthEdit.text().strip()
-
-def getDay(ui : 'Ui_MainWindow'):
-    return ui.dayEdit.text().strip()
+def setSearchValue(ui : "Ui_MainWindow", value : str):
+    ui.searchEdit.setText( str (value))
 
 
-def setYear(ui : 'Ui_MainWindow', value : str):
-    return ui.yearEdit.setText(str(value))
 
-def setMonth(ui : 'Ui_MainWindow', value : str):
-    return ui.monthEdit.setText(str(value))
 
-def setDay(ui : 'Ui_MainWindow', value : str):
-    return ui.dayEdit.setText(str(value))
 
 
 
@@ -118,92 +80,156 @@ def setDay(ui : 'Ui_MainWindow', value : str):
 #////////////////////////////////////ui/////////////////////////////////////
 
 
-
 class Ui_MainWindow(object):
 
-    def addMenu(self, window : QtWidgets.QMainWindow, menu : Menu):
+    def addFoodWidget(self, window: QtWidgets.QMainWindow, food: Food):
 
-
-        self.menuWidget = QtWidgets.QWidget(self.scrollAreaWidgetContents_3)
-        self.menuWidget.setMinimumSize(QtCore.QSize(0, 51))
-        self.menuWidget.setMaximumSize(QtCore.QSize(16777215, 51))
-        self.menuWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
+        self.foodWidget = QtWidgets.QWidget(self.scrollAreaWidgetContents_3)
+        self.foodWidget.setMinimumSize(QtCore.QSize(0, 155))
+        self.foodWidget.setMaximumSize(QtCore.QSize(16777215, 155))
+        self.foodWidget.setStyleSheet("background-color: rgb(255, 255, 255);\n"
                                       "border-width : 0px;\n"
                                       "border-style : solid;\n"
-                                      "\n"
+                                      "border-bottom-width : 2px;\n"
+                                      "border-color: rgb(51, 165, 24);\n"
                                       "")
-        self.menuWidget.setObjectName("menuWidget")
-        self.menuDateLabel = QtWidgets.QLabel(self.menuWidget)
-        self.menuDateLabel.setGeometry(QtCore.QRect(290, 10, 201, 31))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.menuDateLabel.sizePolicy().hasHeightForWidth())
-        self.menuDateLabel.setSizePolicy(sizePolicy)
-        self.menuDateLabel.setMinimumSize(QtCore.QSize(0, 0))
-        self.menuDateLabel.setStyleSheet("border-width:0px;\n"
-                                         "background-color: rgb(245, 247, 250);\n"
-                                         "border-color: rgb(5, 85, 82);\n"
-                                         "border-radius:0px;\n"
-                                         "background-color: rgb(245, 247, 250);\n"
-                                         "")
-        self.menuDateLabel.setObjectName("menuDateLabel")
-        self.divider1 = QtWidgets.QWidget(self.menuWidget)
-        self.divider1.setGeometry(QtCore.QRect(250, 10, 20, 31))
-        self.divider1.setStyleSheet("border-width : 0px;\n"
-                                    "border-right-width : 2px;\n"
-                                    "border-color: rgb(202, 205, 210);")
-        self.divider1.setObjectName("divider1")
-        self.divider2 = QtWidgets.QWidget(self.menuWidget)
-        self.divider2.setGeometry(QtCore.QRect(500, 10, 20, 31))
-        self.divider2.setStyleSheet("border-width : 0px;\n"
-                                    "border-right-width : 2px;\n"
-                                    "border-color: rgb(202, 205, 210);")
-        self.divider2.setObjectName("divider2")
-        self.menuTitleLabel = QtWidgets.QLabel(self.menuWidget)
-        self.menuTitleLabel.setGeometry(QtCore.QRect(539, 10, 191, 31))
+        self.foodWidget.setObjectName("foodWidget")
+        self.foodTitleLabel = QtWidgets.QLabel(self.foodWidget)
+        self.foodTitleLabel.setGeometry(QtCore.QRect(200, 20, 101, 31))
+        self.foodTitleLabel.setStyleSheet("border-width:0px;\n"
+                                          "border-color: rgb(5, 85, 82);\n"
+                                          "border-radius:0px;\n"
+                                          "background-color: rgb(202, 205, 210);\n"
+                                          "\n"
+                                          "")
+        self.foodTitleLabel.setObjectName("foodTitleLabel")
+        self.foodStockValue = QtWidgets.QLabel(self.foodWidget)
+        self.foodStockValue.setGeometry(QtCore.QRect(300, 60, 170, 31))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.menuTitleLabel.sizePolicy().hasHeightForWidth())
-        self.menuTitleLabel.setSizePolicy(sizePolicy)
-        self.menuTitleLabel.setMinimumSize(QtCore.QSize(0, 0))
-        self.menuTitleLabel.setStyleSheet("border-width:0px;\n"
+        sizePolicy.setHeightForWidth(self.foodStockValue.sizePolicy().hasHeightForWidth())
+        self.foodStockValue.setSizePolicy(sizePolicy)
+        self.foodStockValue.setMinimumSize(QtCore.QSize(170, 0))
+        self.foodStockValue.setStyleSheet("border-width:0px;\n"
+                                          "border-color: rgb(5, 85, 82);\n"
+                                          "border-radius:0px;\n"
+                                          "background-color: rgb(245, 247, 250);\n"
+                                          "")
+        self.foodStockValue.setObjectName("foodStockValue")
+        self.foodTitleValue = QtWidgets.QLabel(self.foodWidget)
+        self.foodTitleValue.setGeometry(QtCore.QRect(300, 20, 170, 31))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.foodTitleValue.sizePolicy().hasHeightForWidth())
+        self.foodTitleValue.setSizePolicy(sizePolicy)
+        self.foodTitleValue.setMinimumSize(QtCore.QSize(170, 0))
+        self.foodTitleValue.setStyleSheet("border-width:0px;\n"
                                           "background-color: rgb(245, 247, 250);\n"
                                           "border-color: rgb(5, 85, 82);\n"
                                           "border-radius:0px;\n"
                                           "background-color: rgb(245, 247, 250);\n"
                                           "")
-        self.menuTitleLabel.setObjectName("menuTitleLabel")
-        self.menuBtn = QtWidgets.QPushButton(self.menuWidget)
-        self.menuBtn.setGeometry(QtCore.QRect(30, 10, 211, 31))
-        self.menuBtn.setStyleSheet("border-width:0px;\n"
-                                   "color: rgb(4, 85, 80);\n"
-                                   "background-color: rgb(52, 163, 21, 100);\n"
-                                   "border-bottom-width : 0px;\n"
-                                   "border-color: rgb(5, 85, 82);\n"
-                                   "border-radius:0px;\n"
-                                   "font-weight : 500;\n"
-                                   "font-size: 9pt;\n"
-                                   "\n"
-                                   "\n"
-                                   "")
-        self.menuBtn.setObjectName("menuBtn")
-        self.verticalLayout.addWidget(self.menuWidget)
+        self.foodTitleValue.setObjectName("foodTitleValue")
+        self.foodPriceLabel = QtWidgets.QLabel(self.foodWidget)
+        self.foodPriceLabel.setGeometry(QtCore.QRect(200, 100, 101, 31))
+        self.foodPriceLabel.setStyleSheet("border-width:0px;\n"
+                                          "border-color: rgb(5, 85, 82);\n"
+                                          "border-radius:0px;\n"
+                                          "background-color: rgb(202, 205, 210);\n"
+                                          "\n"
+                                          "")
+        self.foodPriceLabel.setObjectName("foodPriceLabel")
+        self.foodPriceValue = QtWidgets.QLabel(self.foodWidget)
+        self.foodPriceValue.setGeometry(QtCore.QRect(300, 100, 170, 31))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.foodPriceValue.sizePolicy().hasHeightForWidth())
+        self.foodPriceValue.setSizePolicy(sizePolicy)
+        self.foodPriceValue.setMinimumSize(QtCore.QSize(170, 0))
+        self.foodPriceValue.setStyleSheet("border-width:0px;\n"
+                                          "border-color: rgb(5, 85, 82);\n"
+                                          "border-radius:0px;\n"
+                                          "background-color: rgb(245, 247, 250);\n"
+                                          "")
+        self.foodPriceValue.setObjectName("foodPriceValue")
+        self.foodStockLabel = QtWidgets.QLabel(self.foodWidget)
+        self.foodStockLabel.setGeometry(QtCore.QRect(200, 60, 101, 31))
+        self.foodStockLabel.setStyleSheet("border-width:0px;\n"
+                                          "border-color: rgb(5, 85, 82);\n"
+                                          "border-radius:0px;\n"
+                                          "background-color: rgb(202, 205, 210);\n"
+                                          "\n"
+                                          "")
+        self.foodStockLabel.setObjectName("foodStockLabel")
+        self.foodImage = QtWidgets.QLabel(self.foodWidget)
+        self.foodImage.setGeometry(QtCore.QRect(510, 20, 181, 111))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.foodImage.sizePolicy().hasHeightForWidth())
+        self.foodImage.setSizePolicy(sizePolicy)
+        self.foodImage.setMinimumSize(QtCore.QSize(0, 111))
+        self.foodImage.setStyleSheet("background-color: rgb(245, 247, 250);\n"
+                                     "border-width : 0px;")
+        self.foodImage.setText("")
+        self.foodImage.setObjectName("foodImage")
+        self.divider1 = QtWidgets.QWidget(self.foodWidget)
+        self.divider1.setGeometry(QtCore.QRect(150, 20, 20, 111))
+        self.divider1.setStyleSheet("border-width : 0px;\n"
+                                    "border-right-width : 2px;\n"
+                                    "border-color: rgb(202, 205, 210);")
+        self.divider1.setObjectName("divider1")
+        self.divider2 = QtWidgets.QWidget(self.foodWidget)
+        self.divider2.setGeometry(QtCore.QRect(470, 20, 20, 111))
+        self.divider2.setStyleSheet("border-width : 0px;\n"
+                                    "border-right-width : 2px;\n"
+                                    "border-color: rgb(202, 205, 210);")
+        self.divider2.setObjectName("divider2")
+        self.foodMenuBtn = QtWidgets.QPushButton(self.foodWidget)
+        self.foodMenuBtn.setGeometry(QtCore.QRect(32, 20, 101, 51))
+        self.foodMenuBtn.setStyleSheet("border-width:0px;\n"
+                                       "border-bottom-width : 5px;\n"
+                                       "border-color: rgb(5, 85, 82);\n"
+                                       "border-radius:0px;\n"
+                                       "background-color: rgb(245, 247, 250);\n"
+                                       "padding-left:0px;\n"
+                                       "color: rgb(4, 84, 83);")
+        self.foodMenuBtn.setObjectName("foodMenuBtn")
+        self.foodInfoBtn = QtWidgets.QPushButton(self.foodWidget)
+        self.foodInfoBtn.setGeometry(QtCore.QRect(32, 110, 101, 21))
+        self.foodInfoBtn.setStyleSheet("border-width:0px;\n"
+                                       "border-color: rgb(5, 85, 82);\n"
+                                       "border-radius:0px;\n"
+                                       "background-color: rgb(245, 247, 250);\n"
+                                       "padding-left:0px;\n"
+                                       "color: rgb(4, 84, 83);")
+        self.foodInfoBtn.setObjectName("foodInfoBtn")
+        self.verticalLayout.addWidget(self.foodWidget)
 
 
-        #//////////add data to menu widget//////////////
-        self.menuDateLabel.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{menu.date}</span></p></body></html>")
-        self.menuTitleLabel.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{menu.title}</span></p></body></html>")
-        self.menuBtn.setText("Order form This Menu")
+        #set label values
+        self.foodTitleLabel.setText("<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Title : </span></p></body></html>")
+        self.foodStockValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\"></span>{food.stock}</p></body></html>")
+        self.foodTitleValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\"></span>{food.title}</p></body></html>")
+        self.foodPriceLabel.setText("<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Price : </span></p></body></html>")
+        self.foodPriceValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{food.sale_price}</span></p></body></html>")
+        self.foodStockLabel.setText("<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Stock : </span></p></body></html>")
+        self.foodMenuBtn.setText("Check Menus \nWith This Food")
+        self.foodInfoBtn.setText("More Info")
 
+        self.foodImage.setPixmap(QtGui.QPixmap(food.image))
+        self.foodImage.setScaledContents(True)
 
-        #connect buttons to methods
-        self.menuBtn.clicked.connect(partial( order, window, self, menu ))
+        # connect buttons
+        self.foodMenuBtn.clicked.connect(partial(menu, window, self, food))
+        self.foodInfoBtn.clicked.connect(partial(moreInfo, window, self, food))
 
+        # add widget to list
+        self.foodsList.append(self.foodWidget)
 
-        #add menu to list
-        self.menuWidgets.append(self.menuWidget)
 
 
 
@@ -220,12 +246,7 @@ class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
 
-
-        #list of menu widgets
-        self.menuWidgets = []
-
-
-
+        self.foodsList = []
 
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(950, 700)
@@ -242,19 +263,6 @@ class Ui_MainWindow(object):
         sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
         self.centralwidget.setSizePolicy(sizePolicy)
         self.centralwidget.setObjectName("centralwidget")
-        self.orderBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.orderBtn.setGeometry(QtCore.QRect(850, 110, 91, 50))
-        self.orderBtn.setStyleSheet("border-color: rgb(4, 84, 83);\n"
-"background-color: rgb(245, 247, 250);\n"
-"border-style : solid;\n"
-"border-bottom-width : 2px;\n"
-"border-right-width : 2px;\n"
-"border-bottom-right-radius: 20px;\n"
-"box-shadow: 10px 10px 5px -5px #666;\n"
-"color : rgb(4, 84, 83);\n"
-"font-weight : 500;\n"
-"font-size: 10pt;")
-        self.orderBtn.setObjectName("orderBtn")
         self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
         self.scrollArea.setGeometry(QtCore.QRect(10, 90, 841, 551))
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
@@ -276,181 +284,49 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents = QtWidgets.QWidget()
         self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 839, 549))
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
-        self.dayEdit = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.dayEdit.setGeometry(QtCore.QRect(210, 20, 51, 31))
-        self.dayEdit.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"padding-left:20px;\n"
-"")
-        self.dayEdit.setObjectName("dayEdit")
-        self.searchDateBtn = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
-        self.searchDateBtn.setGeometry(QtCore.QRect(30, 20, 121, 31))
-        self.searchDateBtn.setStyleSheet("border-width:0px;\n"
-"color: rgb(4, 85, 80);\n"
-"background-color: rgb(52, 163, 21, 100);\n"
-"border-bottom-width : 0px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"font-weight : 500;\n"
-"font-size: 9pt;\n"
-"\n"
-"\n"
-"")
-        self.searchDateBtn.setObjectName("searchDateBtn")
-        self.dayLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-        self.dayLabel.setGeometry(QtCore.QRect(160, 20, 51, 31))
-        self.dayLabel.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(202, 205, 210);\n"
-"\n"
-"")
-        self.dayLabel.setObjectName("dayLabel")
-        self.monthEdit = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.monthEdit.setGeometry(QtCore.QRect(320, 20, 51, 31))
-        self.monthEdit.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"padding-left:20px;\n"
-"")
-        self.monthEdit.setObjectName("monthEdit")
-        self.monthLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-        self.monthLabel.setGeometry(QtCore.QRect(270, 20, 51, 31))
-        self.monthLabel.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(202, 205, 210);\n"
-"\n"
-"")
-        self.monthLabel.setObjectName("monthLabel")
-        self.yearEdit = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
-        self.yearEdit.setGeometry(QtCore.QRect(430, 20, 51, 31))
-        self.yearEdit.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"padding-left:20px;\n"
-"")
-        self.yearEdit.setObjectName("yearEdit")
-        self.yearLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-        self.yearLabel.setGeometry(QtCore.QRect(380, 20, 51, 31))
-        self.yearLabel.setStyleSheet("border-width:0px;\n"
-"border-bottom-width : 1px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(202, 205, 210);\n"
-"\n"
-"")
-        self.yearLabel.setObjectName("yearLabel")
-        self.SearchFoodBtn = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
-        self.SearchFoodBtn.setGeometry(QtCore.QRect(610, 20, 201, 31))
-        self.SearchFoodBtn.setStyleSheet("border-width:0px;\n"
-"color: rgb(4, 85, 80);\n"
-"background-color: rgb(52, 163, 21, 100);\n"
-"border-bottom-width : 0px;\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"font-weight : 500;\n"
-"font-size: 9pt;\n"
-"\n"
-"\n"
-"")
-        self.SearchFoodBtn.setObjectName("SearchFoodBtn")
-        self.foodWidget_2 = QtWidgets.QWidget(self.scrollAreaWidgetContents)
-        self.foodWidget_2.setGeometry(QtCore.QRect(40, 110, 747, 51))
-        self.foodWidget_2.setMinimumSize(QtCore.QSize(0, 51))
-        self.foodWidget_2.setMaximumSize(QtCore.QSize(16777215, 51))
-        self.foodWidget_2.setStyleSheet("background-color: rgb(255, 255, 255);\n"
-"border-width : 2px;\n"
-"border-radius : 0;\n"
-"border-style : solid;\n"
-"border-color: rgb(5, 85, 82);\n"
-"\n"
-"")
-        self.foodWidget_2.setObjectName("foodWidget_2")
-        self.menuDateTitleLabel = QtWidgets.QLabel(self.foodWidget_2)
-        self.menuDateTitleLabel.setGeometry(QtCore.QRect(290, 10, 201, 31))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.menuDateTitleLabel.sizePolicy().hasHeightForWidth())
-        self.menuDateTitleLabel.setSizePolicy(sizePolicy)
-        self.menuDateTitleLabel.setMinimumSize(QtCore.QSize(0, 0))
-        self.menuDateTitleLabel.setStyleSheet("border-width:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"")
-        self.menuDateTitleLabel.setObjectName("menuDateTitleLabel")
-        self.divider1_2 = QtWidgets.QWidget(self.foodWidget_2)
-        self.divider1_2.setGeometry(QtCore.QRect(250, 10, 20, 31))
-        self.divider1_2.setStyleSheet("border-width : 0px;\n"
-"border-right-width : 2px;\n"
-"border-color: rgb(202, 205, 210);")
-        self.divider1_2.setObjectName("divider1_2")
-        self.divider2_2 = QtWidgets.QWidget(self.foodWidget_2)
-        self.divider2_2.setGeometry(QtCore.QRect(500, 10, 20, 31))
-        self.divider2_2.setStyleSheet("border-width : 0px;\n"
-"border-right-width : 2px;\n"
-"border-color: rgb(202, 205, 210);")
-        self.divider2_2.setObjectName("divider2_2")
-        self.orderTitleLabel = QtWidgets.QLabel(self.foodWidget_2)
-        self.orderTitleLabel.setGeometry(QtCore.QRect(30, 10, 211, 31))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.orderTitleLabel.sizePolicy().hasHeightForWidth())
-        self.orderTitleLabel.setSizePolicy(sizePolicy)
-        self.orderTitleLabel.setMinimumSize(QtCore.QSize(0, 0))
-        self.orderTitleLabel.setStyleSheet("border-width:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"")
-        self.orderTitleLabel.setObjectName("orderTitleLabel")
-        self.menuTitleTitleLabel = QtWidgets.QLabel(self.foodWidget_2)
-        self.menuTitleTitleLabel.setGeometry(QtCore.QRect(539, 10, 191, 31))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.menuTitleTitleLabel.sizePolicy().hasHeightForWidth())
-        self.menuTitleTitleLabel.setSizePolicy(sizePolicy)
-        self.menuTitleTitleLabel.setMinimumSize(QtCore.QSize(0, 0))
-        self.menuTitleTitleLabel.setStyleSheet("border-width:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"border-color: rgb(5, 85, 82);\n"
-"border-radius:0px;\n"
-"background-color: rgb(245, 247, 250);\n"
-"")
-        self.menuTitleTitleLabel.setObjectName("menuTitleTitleLabel")
-        self.menusScrollArea = QtWidgets.QScrollArea(self.scrollAreaWidgetContents)
-        self.menusScrollArea.setGeometry(QtCore.QRect(30, 170, 771, 381))
-        self.menusScrollArea.setStyleSheet("border-radius : 0px;\n"
+        self.scrollArea_2 = QtWidgets.QScrollArea(self.scrollAreaWidgetContents)
+        self.scrollArea_2.setGeometry(QtCore.QRect(30, 80, 771, 441))
+        self.scrollArea_2.setStyleSheet("border-radius : 0px;\n"
 "border-width : 0px;\n"
-"border-left-width : 1px;\n"
-"border-right-width : 1px;\n"
+"border-top-width : 1px;\n"
 "background-color: rgb(245, 247, 250);")
-        self.menusScrollArea.setWidgetResizable(True)
-        self.menusScrollArea.setObjectName("menusScrollArea")
+        self.scrollArea_2.setWidgetResizable(True)
+        self.scrollArea_2.setObjectName("scrollArea_2")
         self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 769, 379))
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 769, 439))
         self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_3)
         self.verticalLayout.setObjectName("verticalLayout")
 
+
+
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
         self.verticalLayout.addItem(spacerItem)
-        self.menusScrollArea.setWidget(self.scrollAreaWidgetContents_3)
+        self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_3)
+        self.searchEdit = QtWidgets.QLineEdit(self.scrollAreaWidgetContents)
+        self.searchEdit.setGeometry(QtCore.QRect(140, 20, 441, 41))
+        self.searchEdit.setStyleSheet("border-width:0px;\n"
+"border-bottom-width : 1px;\n"
+"border-color: rgb(5, 85, 82);\n"
+"border-radius:0px;\n"
+"background-color: rgb(245, 247, 250);\n"
+"padding-left:20px;\n"
+"")
+        self.searchEdit.setObjectName("searchEdit")
+        self.searchBtn = QtWidgets.QPushButton(self.scrollAreaWidgetContents)
+        self.searchBtn.setGeometry(QtCore.QRect(580, 20, 121, 41))
+        self.searchBtn.setStyleSheet("border-width:0px;\n"
+"color: rgb(4, 85, 80);\n"
+"background-color: rgb(52, 163, 21, 100);\n"
+"border-bottom-width : 0px;\n"
+"border-color: rgb(5, 85, 82);\n"
+"border-radius:0px;\n"
+"font-weight : 500;\n"
+"font-size: 9pt;\n"
+"\n"
+"\n"
+"")
+        self.searchBtn.setObjectName("searchBtn")
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.historyBtn = QtWidgets.QPushButton(self.centralwidget)
         self.historyBtn.setGeometry(QtCore.QRect(850, 230, 91, 50))
@@ -491,9 +367,9 @@ class Ui_MainWindow(object):
 "font-weight : 500;\n"
 "font-size: 9pt;")
         self.accountBtn.setObjectName("accountBtn")
-        self.cartBtn = QtWidgets.QPushButton(self.centralwidget)
-        self.cartBtn.setGeometry(QtCore.QRect(850, 170, 91, 50))
-        self.cartBtn.setStyleSheet("border-color: rgb(49, 165, 25);\n"
+        self.orderBtn = QtWidgets.QPushButton(self.centralwidget)
+        self.orderBtn.setGeometry(QtCore.QRect(850, 110, 91, 50))
+        self.orderBtn.setStyleSheet("border-color: rgb(49, 165, 25);\n"
 "background-color: rgb(245, 247, 250);\n"
 "border-style : solid;\n"
 "border-bottom-width : 2px;\n"
@@ -503,7 +379,7 @@ class Ui_MainWindow(object):
 "color : rgb(49, 165, 25);\n"
 "font-weight : 500;\n"
 "font-size: 10pt;")
-        self.cartBtn.setObjectName("cartBtn")
+        self.orderBtn.setObjectName("orderBtn")
         self.backBtn = QtWidgets.QPushButton(self.centralwidget)
         self.backBtn.setGeometry(QtCore.QRect(850, 560, 91, 50))
         self.backBtn.setStyleSheet("border-color: rgb(4, 84, 83);\n"
@@ -542,6 +418,19 @@ class Ui_MainWindow(object):
 "text-align: center;\n"
 "color : rgb(49, 165, 25);")
         self.windowTitle.setObjectName("windowTitle")
+        self.cartBtn = QtWidgets.QPushButton(self.centralwidget)
+        self.cartBtn.setGeometry(QtCore.QRect(850, 170, 91, 50))
+        self.cartBtn.setStyleSheet("border-color : rgb(49, 165, 25);\n"
+"background-color: rgb(245, 247, 250);\n"
+"border-style : solid;\n"
+"border-bottom-width : 2px;\n"
+"border-right-width : 2px;\n"
+"border-bottom-right-radius: 20px;\n"
+"box-shadow: 10px 10px 5px -5px #666;\n"
+"color : rgb(49, 165, 25);\n"
+"font-weight : 500;\n"
+"font-size: 10pt;")
+        self.cartBtn.setObjectName("cartBtn")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 950, 26))
@@ -703,9 +592,6 @@ class Ui_MainWindow(object):
         self.statusbar.setObjectName("statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
-
-
-
         # /////////////////////////////connect buttons to methods//////////////////////////////
         self.orderBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "order"))
         self.cartBtn.clicked.connect(partial(Routing.Redirect, MainWindow, "cart"))
@@ -714,8 +600,7 @@ class Ui_MainWindow(object):
         self.logoutBtn.clicked.connect(partial(logout, MainWindow))
         self.backBtn.clicked.connect(partial(Routing.RedirectBack, MainWindow))
 
-        self.searchDateBtn.clicked.connect(partial(searchDate, MainWindow, self))
-        self.SearchFoodBtn.clicked.connect(partial(searchFood, MainWindow, self))
+        self.searchBtn.clicked.connect( partial(search , MainWindow, self) )
 
         self.retranslateUi(MainWindow)
 
@@ -723,43 +608,22 @@ class Ui_MainWindow(object):
         init(MainWindow, self)
 
 
-
-
-
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.orderBtn.setText(_translate("MainWindow", "ORDER"))
-        self.searchDateBtn.setText(_translate("MainWindow", "Search Date"))
-        self.dayLabel.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">day</span></p></body></html>"))
-        self.monthLabel.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">month</span></p></body></html>"))
-        self.yearEdit.setText(_translate("MainWindow", "2022"))
-        self.yearLabel.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">year</span></p></body></html>"))
-        self.SearchFoodBtn.setText(_translate("MainWindow", "Search Food"))
-        self.menuDateTitleLabel.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">menu date</span></p></body></html>"))
-        self.orderTitleLabel.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">order</span></p></body></html>"))
-        self.menuTitleTitleLabel.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">menu title</span></p></body></html>"))
+        self.searchBtn.setText(_translate("MainWindow", "Search"))
         self.historyBtn.setText(_translate("MainWindow", "HISTORY"))
         self.logoutBtn.setText(_translate("MainWindow", "LOG OUT"))
         self.accountBtn.setText(_translate("MainWindow", "ACCOUNT"))
-        self.cartBtn.setText(_translate("MainWindow", "CART"))
+        self.orderBtn.setText(_translate("MainWindow", "ORDER"))
         self.backBtn.setText(_translate("MainWindow", "BACK"))
         self.mainTitle.setToolTip(_translate("MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
         self.mainTitle.setWhatsThis(_translate("MainWindow", "<html><head/><body><p align=\"center\"><br/></p></body></html>"))
         self.mainTitle.setText(_translate("MainWindow", f"<html><head/><body><p align=\"center\"><span style=\" font-size:20pt; color:#055553;\">{Restaurant.Name()}</span></p></body></html>"))
-        self.windowTitle.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#33a415;\">Order</span></p></body></html>"))
-
-
-
-
-
-
-
-
-
-
+        self.windowTitle.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\"><span style=\" font-size:12pt; color:#33a415;\">Search</span></p></body></html>"))
+        self.cartBtn.setText(_translate("MainWindow", "CART"))
 
 
 if __name__ == "__main__":
