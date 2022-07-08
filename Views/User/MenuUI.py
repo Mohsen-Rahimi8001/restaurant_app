@@ -10,6 +10,7 @@ from Models.Food import Food
 from Window import Transfer
 from Models.Menu import Menu
 from Controllers.User.MenuController import MenuController
+from Controllers.User.CartController import Cart
 
 
 
@@ -18,14 +19,61 @@ from Controllers.User.MenuController import MenuController
 # button events
 
 def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
-    pass
+
+    if not Transfer.Exists("menu_id"):
+        return
+
+    #get menu from Transfer
+    menuId = Transfer.Get("menu_id")
+    Transfer.Add("menu_id", menuId)
+
+    #menu = Menu.Get(menuId)
+    menu = menuId
+
+
+
+    #set labels
+    setMenuTitle(ui, menu.title)
+    setMenuDate(ui, menu.date)
+
+    #get foods
+    #foods = menu.getFoods()
+
+    foods = []
+
+    foods.append(Food(1,"1",5,10,15,"1","1","1",Image.DefaultFoodImagePath()))
+    foods.append(Food(2,"2",5,10,15,"1","1","1",Image.DefaultFoodImagePath()))
+    foods.append(Food(3,"3",5,10,15,"1","1","1",Image.DefaultFoodImagePath()))
+
+    for food in foods:
+        ui.addFoodWidget(window, food)
+
+
 
 
 
 
 def addToCart(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
-    pass
 
+    #get menu date
+    menuId = Transfer.Get("menu_id")
+    Transfer.Add("menu_id", menuId)
+    date = Menu.Get(menuId).date
+
+    result = Cart.ReserveFood(food, date)
+
+    if result:
+        Messages.push(Messages.Type.SUCCESS, f"{food.title} added to your cart")
+
+    Routing.Refresh(window)
+
+
+
+
+def moreInfo(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow", food : Food):
+
+    Transfer.Add("food_info_id", food.id)
+    Routing.Redirect(window, "foodInfo")
 
 
 
@@ -41,6 +89,15 @@ def logout(window : QtWidgets.QMainWindow):
 
 
 
+#input functions
+
+
+def setMenuTitle(ui : "Ui_MainWindow", value : str):
+    ui.menuTitleValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{value}</span></p></body></html>")
+
+def setMenuDate(ui : "Ui_MainWindow", value : str):
+    ui.menuDateValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{value}</span></p></body></html>")
+
 
 
 
@@ -53,89 +110,7 @@ class Ui_MainWindow(object):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-    def setupUi(self, MainWindow):
-
-        MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(950, 700)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
-        MainWindow.setSizePolicy(sizePolicy)
-        MainWindow.setStyleSheet("background-color: rgb(225, 230, 239);")
-        self.centralwidget = QtWidgets.QWidget(MainWindow)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
-        self.centralwidget.setSizePolicy(sizePolicy)
-        self.centralwidget.setObjectName("centralwidget")
-        self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
-        self.scrollArea.setGeometry(QtCore.QRect(10, 90, 841, 551))
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
-        self.scrollArea.setSizePolicy(sizePolicy)
-        self.scrollArea.setStyleSheet("border-color: rgb(4, 84, 83);\n"
-                                      "background-color: rgb(255, 255, 255);\n"
-                                      "border-style : solid;\n"
-                                      "border-width : 1px;\n"
-                                      "border-right-width : 0px;\n"
-                                      "border-bottom-width : 0px;\n"
-                                      "border-top-left-radius : 20px;\n"
-                                      "border-bottom-right-radius: 0px;\n"
-                                      "")
-        self.scrollArea.setWidgetResizable(True)
-        self.scrollArea.setObjectName("scrollArea")
-        self.scrollAreaWidgetContents = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 839, 549))
-        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
-        self.menuTitleLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-        self.menuTitleLabel.setGeometry(QtCore.QRect(30, 30, 101, 31))
-        self.menuTitleLabel.setStyleSheet("border-width:0px;\n"
-                                          "border-bottom-width : 1px;\n"
-                                          "border-color: rgb(5, 85, 82);\n"
-                                          "border-radius:0px;\n"
-                                          "background-color: rgb(202, 205, 210);\n"
-                                          "\n"
-                                          "")
-        self.menuTitleLabel.setObjectName("menuTitleLabel")
-        self.menuTitleValue = QtWidgets.QLabel(self.scrollAreaWidgetContents)
-        self.menuTitleValue.setGeometry(QtCore.QRect(130, 30, 221, 31))
-        self.menuTitleValue.setStyleSheet("border-width:0px;\n"
-                                          "border-bottom-width : 1px;\n"
-                                          "border-color: rgb(5, 85, 82);\n"
-                                          "border-radius:0px;\n"
-                                          "background-color: rgb(245, 247, 250);\n"
-                                          "padding-left:20px;\n"
-                                          "")
-        self.menuTitleValue.setObjectName("menuTitleValue")
-        self.scrollArea_2 = QtWidgets.QScrollArea(self.scrollAreaWidgetContents)
-        self.scrollArea_2.setGeometry(QtCore.QRect(30, 80, 771, 441))
-        self.scrollArea_2.setStyleSheet("border-radius : 0px;\n"
-                                        "border-width : 0px;\n"
-                                        "border-top-width : 1px;\n"
-                                        "background-color: rgb(245, 247, 250);")
-        self.scrollArea_2.setWidgetResizable(True)
-        self.scrollArea_2.setObjectName("scrollArea_2")
-        self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
-        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 769, 439))
-        self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
-        self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_3)
-        self.verticalLayout.setObjectName("verticalLayout")
+    def addFoodWidget(self, window : QtWidgets.QMainWindow, food : Food):
 
         self.foodWidget = QtWidgets.QWidget(self.scrollAreaWidgetContents_3)
         self.foodWidget.setMinimumSize(QtCore.QSize(0, 155))
@@ -262,20 +237,121 @@ class Ui_MainWindow(object):
         self.foodInfoBtn.setObjectName("foodInfoBtn")
         self.verticalLayout.addWidget(self.foodWidget)
 
-        self.foodTitleLabel.setText(
-            "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Title : </span></p></body></html>")
-        self.foodStockValue.setText(
-            "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\"></span></p></body></html>")
-        self.foodTitleValue.setText(
-            "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\"></span></p></body></html>")
-        self.foodPriceLabel.setText(
-            "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Price : </span></p></body></html>")
-        self.foodPriceValue.setText(
-            "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\"></span></p></body></html>")
-        self.foodStockLabel.setText(
-            "<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Stock : </span></p></body></html>")
+
+
+        #add label values
+        self.foodTitleLabel.setText("<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Title : </span></p></body></html>")
+        self.foodStockValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\"></span>{food.stock}</p></body></html>")
+        self.foodTitleValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\"></span>{food.title}</p></body></html>")
+        self.foodPriceLabel.setText("<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Price : </span></p></body></html>")
+        self.foodPriceValue.setText(f"<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">{food.sale_price}</span></p></body></html>")
+        self.foodStockLabel.setText("<html><head/><body><p align=\"center\"><span style=\" color:#055552;\">Stock : </span></p></body></html>")
         self.foodAddBtn.setText("Add To Cart")
         self.foodInfoBtn.setText("More Info")
+
+        self.foodImage.setPixmap(QtGui.QPixmap( food.image ))
+        self.foodImage.setScaledContents(True)
+
+
+
+        #connect buttons
+        self.foodAddBtn.clicked.connect( partial( addToCart, window, self, food ) )
+        self.foodInfoBtn.clicked.connect( partial( moreInfo, window, self, food ) )
+
+        #add widget to list
+        self.foodsList.append(self.foodWidget)
+
+
+
+
+
+
+
+
+
+
+
+
+
+    def setupUi(self, MainWindow):
+
+
+        self.foodsList = []
+
+        MainWindow.setObjectName("MainWindow")
+        MainWindow.resize(950, 700)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
+        MainWindow.setSizePolicy(sizePolicy)
+        MainWindow.setStyleSheet("background-color: rgb(225, 230, 239);")
+        self.centralwidget = QtWidgets.QWidget(MainWindow)
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.centralwidget.sizePolicy().hasHeightForWidth())
+        self.centralwidget.setSizePolicy(sizePolicy)
+        self.centralwidget.setObjectName("centralwidget")
+        self.scrollArea = QtWidgets.QScrollArea(self.centralwidget)
+        self.scrollArea.setGeometry(QtCore.QRect(10, 90, 841, 551))
+        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.scrollArea.sizePolicy().hasHeightForWidth())
+        self.scrollArea.setSizePolicy(sizePolicy)
+        self.scrollArea.setStyleSheet("border-color: rgb(4, 84, 83);\n"
+                                      "background-color: rgb(255, 255, 255);\n"
+                                      "border-style : solid;\n"
+                                      "border-width : 1px;\n"
+                                      "border-right-width : 0px;\n"
+                                      "border-bottom-width : 0px;\n"
+                                      "border-top-left-radius : 20px;\n"
+                                      "border-bottom-right-radius: 0px;\n"
+                                      "")
+        self.scrollArea.setWidgetResizable(True)
+        self.scrollArea.setObjectName("scrollArea")
+        self.scrollAreaWidgetContents = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents.setGeometry(QtCore.QRect(0, 0, 839, 549))
+        self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
+        self.menuTitleLabel = QtWidgets.QLabel(self.scrollAreaWidgetContents)
+        self.menuTitleLabel.setGeometry(QtCore.QRect(30, 30, 101, 31))
+        self.menuTitleLabel.setStyleSheet("border-width:0px;\n"
+                                          "border-bottom-width : 1px;\n"
+                                          "border-color: rgb(5, 85, 82);\n"
+                                          "border-radius:0px;\n"
+                                          "background-color: rgb(202, 205, 210);\n"
+                                          "\n"
+                                          "")
+        self.menuTitleLabel.setObjectName("menuTitleLabel")
+        self.menuTitleValue = QtWidgets.QLabel(self.scrollAreaWidgetContents)
+        self.menuTitleValue.setGeometry(QtCore.QRect(130, 30, 221, 31))
+        self.menuTitleValue.setStyleSheet("border-width:0px;\n"
+                                          "border-bottom-width : 1px;\n"
+                                          "border-color: rgb(5, 85, 82);\n"
+                                          "border-radius:0px;\n"
+                                          "background-color: rgb(245, 247, 250);\n"
+                                          "padding-left:20px;\n"
+                                          "")
+        self.menuTitleValue.setObjectName("menuTitleValue")
+        self.scrollArea_2 = QtWidgets.QScrollArea(self.scrollAreaWidgetContents)
+        self.scrollArea_2.setGeometry(QtCore.QRect(30, 80, 771, 441))
+        self.scrollArea_2.setStyleSheet("border-radius : 0px;\n"
+                                        "border-width : 0px;\n"
+                                        "border-top-width : 1px;\n"
+                                        "background-color: rgb(245, 247, 250);")
+        self.scrollArea_2.setWidgetResizable(True)
+        self.scrollArea_2.setObjectName("scrollArea_2")
+        self.scrollAreaWidgetContents_3 = QtWidgets.QWidget()
+        self.scrollAreaWidgetContents_3.setGeometry(QtCore.QRect(0, 0, 769, 439))
+        self.scrollAreaWidgetContents_3.setObjectName("scrollAreaWidgetContents_3")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents_3)
+        self.verticalLayout.setObjectName("verticalLayout")
+
+
+
+
+
 
         spacerItem = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Preferred)
         self.verticalLayout.addItem(spacerItem)

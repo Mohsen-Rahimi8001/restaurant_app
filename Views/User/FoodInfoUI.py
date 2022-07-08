@@ -22,7 +22,6 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
         foodId = Transfer.Get("food_info_id")
         food : Food = Food.Get(foodId)
 
-
         setPageTitle(ui, f"{food.title} Info")
         setTitle(ui, food.title)
         setPrice(ui, food.sale_price)

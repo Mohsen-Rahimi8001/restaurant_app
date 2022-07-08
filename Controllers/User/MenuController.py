@@ -2,6 +2,7 @@ from Controllers.Validation import DateValidator
 from Models.Menu import Menu
 from Lib.DateTools import DateTools
 from Lib.Messages import Messages
+from Controllers.User.CartController import Cart
 
 
 class MenuController:
@@ -46,4 +47,5 @@ class MenuController:
                 result.append(menu)
 
         return result
+
 
