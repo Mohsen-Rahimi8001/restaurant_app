@@ -20,4 +20,4 @@ class Email:
                 server.sendmail(Email.SenderEmail, receiverEmail, message)
 
         except Exception as e:
-            raise e
+            print(str(e))

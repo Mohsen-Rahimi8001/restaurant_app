@@ -32,13 +32,6 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
         # increase row count by one
         ui.tableOrders.setRowCount(ui.tableOrders.rowCount() + 1)
 
-        # create a reject button
-        rejectIcon = QtGui.QIcon(r".\Resources\Images\reject_icon.png")
-        btnReject = QtWidgets.QPushButton()
-        btnReject.setIcon(rejectIcon)
-        btnReject.setIconSize(QtCore.QSize(20, 20))
-        rejectSignal = partial(rejectOrder, order.id, window)
-
         # create a accept button
         acceptIcon = QtGui.QIcon(r".\Resources\Images\accept_icon.png")
         btnAccept = QtWidgets.QPushButton()
@@ -63,9 +56,9 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
         ui.tableOrders.setItem(index, 2, QtWidgets.QTableWidgetItem(str(order.order_date)))
 
         if order.payment_method == 0:
-            ui.tableOrders.setItem(index, 3, QtWidgets.QTableWidgetItem("Cash"))
-        elif order.payment_method == 1:
             ui.tableOrders.setItem(index, 3, QtWidgets.QTableWidgetItem("Online"))
+        elif order.payment_method == 1:
+            ui.tableOrders.setItem(index, 3, QtWidgets.QTableWidgetItem("Cash"))
 
         ui.tableOrders.setItem(index, 4, QtWidgets.QTableWidgetItem(str(order.reference_number)))
         ui.tableOrders.setItem(index, 5, QtWidgets.QTableWidgetItem(str(order.account_number)))
@@ -73,23 +66,15 @@ def setUpInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):
         # add the accept buttons to the table
         ui.tableOrders.setCellWidget(index, 6, btnAccept)
 
-        # add the reject buttons to the table
-        ui.tableOrders.setCellWidget(index, 7, btnReject)
-
         # add the show buttons to the table
-        ui.tableOrders.setCellWidget(index, 8, btnShow)
+        ui.tableOrders.setCellWidget(index, 7, btnShow)
 
         # connect the signals
         btnAccept.clicked.connect(acceptSignal)
-        btnReject.clicked.connect(rejectSignal)
         btnShow.clicked.connect(showSignal)
 
         
 # ////////////////////////////EVENTS////////////////////////////
-def rejectOrder(orderId: int, window: 'QtWidgets.QMainWindow'):
-    pass
-
-
 def acceptOrder(orderId: int, window: 'QtWidgets.QMainWindow'):
     """Accept the order and confirm it"""
 
@@ -185,7 +170,7 @@ class Ui_MainWindow(object):
         
         self.tableOrders = QtWidgets.QTableWidget(self.gridLayoutWidget)
         self.tableOrders.setObjectName("tableOrders")
-        self.tableOrders.setColumnCount(9)
+        self.tableOrders.setColumnCount(8)
         self.tableOrders.setRowCount(0)
         
         item = QtWidgets.QTableWidgetItem()
@@ -211,9 +196,6 @@ class Ui_MainWindow(object):
         
         item = QtWidgets.QTableWidgetItem()
         self.tableOrders.setHorizontalHeaderItem(7, item)
-        
-        item = QtWidgets.QTableWidgetItem()
-        self.tableOrders.setHorizontalHeaderItem(8, item)
         
         self.tableOrders.setEditTriggers(QtWidgets.QTableWidget.NoEditTriggers)
 
@@ -247,8 +229,6 @@ class Ui_MainWindow(object):
         item = self.tableOrders.horizontalHeaderItem(6)
         item.setText(_translate("MainWindow", "Accept"))
         item = self.tableOrders.horizontalHeaderItem(7)
-        item.setText(_translate("MainWindow", "Reject"))
-        item = self.tableOrders.horizontalHeaderItem(8)
         item.setText(_translate("MainWindow", "Show"))
 
         checkForCredentials(MainWindow)
