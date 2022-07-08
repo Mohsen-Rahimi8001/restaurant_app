@@ -60,14 +60,17 @@ class GiftCardController:
             for user, _ in sorted_users:
                 GiftCardController.Send(User.GetUserByEmail(user), giftCard)
             
+            giftCard = GiftCard.Get(giftCard)
+            giftCard.sent = 1
+            GiftCard.Update(giftCard.id, {'sent' : 1})
+            
             Messages.push(Messages.Type.SUCCESS, "Gift card sent successfully.")
             Messages.show()
 
 
-
     @staticmethod
     def Send(user: User, giftCard):
-        """Sends a gift card to a user."""
+        """Sends a gift card to a user. (It doesn't change the gift card to sent state)"""
         
         if isinstance(giftCard, int):
             giftCard = GiftCard.Get(giftCard)
@@ -80,16 +83,14 @@ class GiftCardController:
         
         if giftCard.sent == 1:
             raise ValueError("gift card already sent")
-        else:
-            giftCard.sent = 1
-            GiftCard.Update(giftCard.id, {'sent' : 1})
 
         message = \
         f"""
         Hello Dear {user.first_name}
 
         You are one of our best customers.
-        To appreciate you, dear customer, we have prepared a discount offer for you.
+        To appreciate you, dear customer, 
+        we have prepared a discount offer for you.
         We hope you will enjoy it.
         
         _______________________________________
@@ -118,9 +119,6 @@ class GiftCardController:
         
         if giftCard.sent == 1:
             raise ValueError("gift card already sent")
-        else:
-            giftCard.sent = 1
-            GiftCard.Update(giftCard.id, {'sent' : 1})
 
         users = User.GetAll()
 
@@ -140,3 +138,6 @@ class GiftCardController:
             """
 
             Email.Send(user.email, message)
+        
+        giftCard.sent = 1
+        GiftCard.Update(giftCard.id, {'sent' : 1})

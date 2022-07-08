@@ -20,21 +20,10 @@ def setFoodObject():
 
 # /////////////////////////////EVENTS////////////////////////////
 def checkForCredentials(window: 'QtWidgets.QMainWindow'):
-    """checks if the user is admin"""
-
-    if not Auth.IsUserLoggedIN():
-        # go to the landing page
-        Routing.Redirect(window, 'landingPage')
+    """Checks if the user is logged in and has the admin credentials."""
+    if not Auth.IsUserLoggedIN() or not Auth.CheckAdminCredentials():
+        Routing.Redirect(window, 'main')
         Routing.ClearStack()
-        return
-
-    if not Auth.CheckAdminCredentials():
-        # logout the user
-        Auth.LogOut()
-        # go to the landing page
-        Routing.Redirect(window, 'landingPage')
-        Routing.ClearStack()  # reset the previous window
-        return
 
 
 def setupInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):

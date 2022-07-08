@@ -7,14 +7,10 @@ from Lib.Questions import Questions
 
 
 def checkForCredentials(window: 'QtWidgets.QMainWindow'):
-    """checks if the user is admin"""
-
-    if not Auth.CheckAdminCredentials():
-        # Logout the user
-        Auth.Logout()
-        # Go to the login window
-        Routing.Redirect(window, "landingPage")
-        Routing.ClearStack() # prevent the user from going back to the previous window
+    """Checks if the user is logged in and has the admin credentials."""
+    if not Auth.IsUserLoggedIN() or not Auth.CheckAdminCredentials():
+        Routing.Redirect(window, 'main')
+        Routing.ClearStack()
 
 
 # /////////////////////////////EVENTS////////////////////////////
