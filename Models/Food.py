@@ -72,7 +72,7 @@ class Food(Model):
         if not isinstance(image, str):
             raise TypeError('Image must be a string')
         elif not os.path.isfile(image):
-            raise FileNotFoundError('Image does not exist')
+            return Food.DefaultImage
         
         return image
 
