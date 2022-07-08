@@ -152,6 +152,7 @@ class GiftCardController:
             Messages.push(Messages.Type.WARNING, "gift card code is invalid")
             return False
 
+
         giftCard = GiftCard.GetByKey("code", giftCardCode)
 
         #check for today is after start date

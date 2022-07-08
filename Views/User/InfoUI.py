@@ -6,6 +6,7 @@ from Lib.Messages import Messages
 from Lib.Questions import Questions
 from Lib.Image import Image
 from Models.Restaurant import Restaurant
+from Controllers.User.UserInfoController import UserInfo
 
 
 
