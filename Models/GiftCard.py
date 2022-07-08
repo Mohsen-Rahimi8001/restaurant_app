@@ -55,7 +55,7 @@ class GiftCard(Model):
             return False
     
     @staticmethod
-    def ValidateExpirationDate(expirationDate:str, startDate:dt.datetime):
+    def ValidateExpirationDate(expirationDate:str, startDate:dt.datetime) -> 'dt.datetime | bool':
         """
         :param expirationDate: The expiration date of the gift card
         :return: datatime object of expirationDate if the expiration date is valid, False otherwise
@@ -278,7 +278,7 @@ class GiftCard(Model):
         Database.Delete(GiftCard.TableName, GiftCard.PrimaryKey, id)
 
     @staticmethod
-    def GetByKey(key:str, value) -> 'GiftCard':
+    def GetByKey(key:str, value) -> list['GiftCard']:
         """Gets all the GiftCards that match the given key and value."""
         fetched_data = Database.Read(GiftCard.TableName, key, value)
 

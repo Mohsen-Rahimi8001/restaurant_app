@@ -159,13 +159,13 @@ class GiftCardController:
 
 
         #check for today is after start date
-        if DateTools.Compare(DateTools.GetToday(), str(giftCard.start_date).strip().split()[0]) == 1:
+        if DateTools.Compare(DateTools.GetToday(), giftCard.start_date.strftime("%Y-%m-%d")) == 1:
             Messages.push(Messages.Type.ERROR, "gift card code is invalid")
             return False
 
 
         #check for expiration
-        if DateTools.Compare(DateTools.GetToday(), str(giftCard.expiration_date).strip().split()[0]) == -1:
+        if DateTools.Compare(DateTools.GetToday(), str(giftCard.expiration_date.strftime("%Y-%m-%d"))) == -1:
             Messages.push(Messages.Type.WARNING, "gift card is expired")
             return False
 
