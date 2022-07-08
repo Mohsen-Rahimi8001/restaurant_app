@@ -11,8 +11,8 @@ from functools import partial
 def checkForCredentials(window: "QtWidgets.QMainWindow"):
     """Checks if the user is logged in and has the admin credentials."""
     if not Auth.IsUserLoggedIN() or not Auth.CheckAdminCredentials():
-        Routing.Redirect(window, 'login')
-        Routing.ClearStack()        
+        Routing.Redirect(window, 'main')
+        Routing.ClearStack()
 
 
 def setUpInitInformation(ui: "Ui_MainWindow", window: "QtWidgets.QMainWindow"):

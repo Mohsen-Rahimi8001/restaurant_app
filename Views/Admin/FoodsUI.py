@@ -8,19 +8,16 @@ from Lib.Questions import Questions
 from Lib.Messages import Messages
 
 
+def checkForCredentials(window: 'QtWidgets.QMainWindow'):
+    """Checks if the user is logged in and has the admin credentials."""
+    if not Auth.IsUserLoggedIN() or not Auth.CheckAdminCredentials():
+        Routing.Redirect(window, 'main')
+        Routing.ClearStack()
+
 # ////////////////////////////EVENTS////////////////////////////
 
 def setInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
     """Fetches foods from the database and show them in the table."""
-    
-    # check if the user is admin
-    if not Auth.CheckAdminCredentials():
-        # logout the user
-        Auth.LogOut()
-        # go to the landing page
-        Routing.Redirect(window, 'landingPage')
-        Routing.ClearStack() # reset the previous window
-        return
 
     # get all foods from database
     foods = Food.GetAll()
@@ -205,6 +202,8 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Delete"))
         self.btnBack.setText(_translate("MainWindow", "Back"))
         self.btnAddFood.setText(_translate("MainWindow", "Add Food"))
+
+        checkForCredentials(MainWindow)
 
         # set up initial information
         setInitInformation(self, MainWindow)

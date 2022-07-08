@@ -6,10 +6,10 @@ from Models.Restaurant import Restaurant
 
 
 def checkForCredentials(window: 'QtWidgets.QMainWindow'):
-    """check if user is logged in and has the admin credentials"""
+    """Checks if the user is logged in and has the admin credentials."""
 
     if not Auth.IsUserLoggedIN() or not Auth.CheckAdminCredentials():
-        Routing.Redirect(window, 'login')
+        Routing.Redirect(window, 'main')
         Routing.ClearStack()
 
 

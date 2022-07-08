@@ -5,17 +5,16 @@ from Lib.Questions import Questions
 from Window import Routing
 
 
+def checkForCredentials(window: 'QtWidgets.QMainWindow'):
+    """Checks if the user is logged in and has the admin credentials."""
+    if not Auth.IsUserLoggedIN() or not Auth.CheckAdminCredentials():
+        Routing.Redirect(window, 'main')
+        Routing.ClearStack()
+
+
 # ////////////////////////////EVENTS////////////////////////////
 def setInitInformation(ui: "Ui_MainWindow", window: 'QtWidgets.QMainWindow'):
     """sets admin information and restaurant information in the home page"""
-
-    # check if the user is admin
-    if not Auth.CheckAdminCredentials():
-        # logout the user
-        Auth.LogOut()
-        # redirect to login page
-        Routing.Redirect(window, 'login')
-        Routing.ClearStack() # reset previous window
 
     # get the admin information
     admin = Auth.GetUser()
@@ -376,6 +375,8 @@ class Ui_MainWindow(object):
         self.lblEmail.setText(_translate("MainWindow", "Email: "))
         self.lblPhoneNumber.setText(_translate("MainWindow", "Phone Number: "))
         
+        checkForCredentials(MainWindow)
+
         # set up initial information
         setInitInformation(self, MainWindow)
 

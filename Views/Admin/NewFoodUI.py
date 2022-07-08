@@ -8,19 +8,10 @@ from Window import Routing
 
 # ////////////////////////////EVENTS////////////////////////////
 def checkForCredentials(window: 'QtWidgets.QMainWindow'):
-    """Check if the user is logged in and has admin credentials"""
-    if not Auth.IsUserLoggedIN():
-        Messages.push(Messages.Type.ERROR, "You must be logged in to access this page")
-        Messages.show()
-        Routing.Redirect(window, 'login')
-        return 
-
-    if not Auth.CheckAdminCredentials():
-        # logout the user
-        Auth.LogOut()
-        # go to the landing page
-        Routing.Redirect(window, 'login')
-        Routing.ClearStack() # reset the previous window
+    """Checks if the user is logged in and has the admin credentials."""
+    if not Auth.IsUserLoggedIN() or not Auth.CheckAdminCredentials():
+        Routing.Redirect(window, 'main')
+        Routing.ClearStack()
 
 
 def clearPage(ui: "Ui_MainWindow"):

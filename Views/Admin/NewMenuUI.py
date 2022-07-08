@@ -9,15 +9,9 @@ import datetime as dt
 
 
 def checkForCredentials(window: 'QtWidgets.QMainWindow'):
-    """Check if the user is logged in and has admin access"""
-    if not Auth.IsUserLoggedIN():
-        Routing.Redirect(window, 'login')
-        Routing.ClearStack()
-        return
-    
-    if not Auth.CheckAdminCredentials():
-        Auth.LogOut()
-        Routing.Redirect(window, 'adminHome')
+    """Checks if the user is logged in and has the admin credentials."""
+    if not Auth.IsUserLoggedIN() or not Auth.CheckAdminCredentials():
+        Routing.Redirect(window, 'main')
         Routing.ClearStack()
 
 
