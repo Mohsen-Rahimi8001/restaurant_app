@@ -33,12 +33,7 @@ def init(window : QtWidgets.QMainWindow, ui : "Ui_MainWindow"):
 
     setSearchValue(ui, searchValue)
 
-    foods = FoodSearch.find_by_all({
-        "category" : searchValue,
-        "title" : searchValue,
-        "description" : searchValue,
-        "materials" : searchValue,
-    })
+    foods = FoodSearch.find(FoodSearch.By.TITLE, searchValue)
 
     if not foods:
         Messages.push(Messages.Type.INFO, "there is not food with this specification")
