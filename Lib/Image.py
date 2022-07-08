@@ -75,7 +75,7 @@ class Image:
 
                 destination = os.path.join(Image.BaseDir, name)
 
-            os.system(f"copy {os.path.abspath(path)} {os.path.abspath(destination)}")
+            os.system(f"copy \"{os.path.abspath(path)}\" \"{os.path.abspath(destination)}\"")
 
             return destination
 
