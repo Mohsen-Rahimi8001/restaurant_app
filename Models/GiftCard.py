@@ -281,10 +281,10 @@ class GiftCard(Model):
     def GetByKey(key:str, value) -> 'GiftCard':
         """Gets all the GiftCards that match the given key and value."""
         fetched_data = Database.Read(GiftCard.TableName, key, value)
-        
+
         if not type(fetched_data) == list or not len(fetched_data):
             return None
-        
+
         giftCards = []
         for row in fetched_data:
             giftCards.append(GiftCard(

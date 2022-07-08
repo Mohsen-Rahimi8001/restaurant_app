@@ -148,21 +148,25 @@ class GiftCardController:
     def Evaluate(giftCardCode : str):
 
         #check for gift card exists
+
         if not GiftCard.ExistsByKey("code", giftCardCode):
             Messages.push(Messages.Type.WARNING, "gift card code is invalid")
             return False
 
 
-        giftCard = GiftCard.GetByKey("code", giftCardCode)
+
+        giftCard = GiftCard.GetByKey("code", giftCardCode)[0]
+
 
         #check for today is after start date
-        if DateTools.Compare(DateTools.GetToday(), giftCard.start_date) == 1:
-            Messages.push(Messages.Type.WARNING, "gift card code is invalid")
+        if DateTools.Compare(DateTools.GetToday(), str(giftCard.start_date).strip().split()[0]) == 1:
+            Messages.push(Messages.Type.ERROR, "gift card code is invalid")
             return False
 
+
         #check for expiration
-        if DateTools.Compare(DateTools.GetToday(), giftCard.expiration_date) == -1:
+        if DateTools.Compare(DateTools.GetToday(), str(giftCard.expiration_date).strip().split()[0]) == -1:
             Messages.push(Messages.Type.WARNING, "gift card is expired")
             return False
 
-        return amount
+        return int(giftCard.amount)
