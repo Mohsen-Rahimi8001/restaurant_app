@@ -57,9 +57,6 @@ class TestFood(unittest.TestCase):
         with self.assertRaises(ValueError):
             food.sale_price = -150
         
-        with self.assertRaises(FileNotFoundError):
-            food.image = 'bluh bluh'
-        
         with self.assertRaises(TypeError):
             food.image = 1.5
 
