@@ -187,7 +187,10 @@ class Order(Model):
         foods = []
 
         for foodId in self.foods:
-            foods.append(Food.Get(foodId))
+            food = Food.Get(foodId)
+            
+            if food:     
+                foods.append(Food.Get(foodId))
 
         return foods
 
