@@ -77,7 +77,9 @@ def login(window, ui : "Ui_MainWindow"):
 def forgotPassword(window, ui : "Ui_MainWindow"):
 
     email = getEmail(ui)
-    Auth.SendPasswordByEmail(email)
+    result = Auth.SendPasswordByEmail(email)
+    if result:
+        Messages.push(Messages.Type.SUCCESS, "your password sent to your email")
     Routing.Refresh(window)
 
 

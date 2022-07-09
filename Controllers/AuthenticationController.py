@@ -141,7 +141,13 @@ class Auth:
 
         user = User.GetUserByEmail(email)
 
-        Email.Send(email, f"your password : {user.password}")
+        message = f"""
+            hello {user.first_name}
+            this is your password :
+            {user.password}
+        """
+
+        Email.Send(email, message)
         return True
 
 
